@@ -6,6 +6,26 @@
   <PropertyGroup Condition="'$(HostingMode)' == 'WasmOnly'">
     <DefineConstants>$(DefineConstants);WASM_ONLY</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup>
+    <BaseHref Condition="'$(BaseHref)' == ''">/</BaseHref>
+  </PropertyGroup>
+  <UsingTask TaskName="ReplaceBaseHref" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <FilePath ParameterType="System.String" Required="true" />
+      <NewBaseHref ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Code Type="Fragment" Language="cs"><![CDATA[
+        var text = System.IO.File.ReadAllText(FilePath);
+        text = text.Replace("<base href=\"/\" />", "<base href=\"" + NewBaseHref + "\" />");
+        System.IO.File.WriteAllText(FilePath, text);
+      ]]></Code>
+    </Task>
+  </UsingTask>
+  <Target Name="SetBaseHref" AfterTargets="Publish" Condition="'$(BaseHref)' != '/'">
+    <ReplaceBaseHref FilePath="$(PublishDir)wwwroot/index.html" NewBaseHref="$(BaseHref)"
+                     Condition="Exists('$(PublishDir)wwwroot/index.html')" />
+  </Target>
   <ItemGroup>
     <Compile Include="Main.fs" />
     <Compile Include="Startup.fs" />
