@@ -218,7 +218,11 @@ let router = Router.infer SetPage (fun model -> model.page)
 type Main = Template<"wwwroot/main.html">
 
 let homePage model dispatch =
-    Main.Home().Elt()
+    Main.Home()
+        .CounterUrl(router.Link Counter)
+        .DataUrl(router.Link Data)
+        .EventModelingUrl(router.Link EventModeling)
+        .Elt()
 
 let eventModelingPage model dispatch =
     Main.EventModeling().Elt()
