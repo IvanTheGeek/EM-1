@@ -12,7 +12,13 @@
     <Compile Include="Startup.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MyApp.Client\MyApp.Client.fsproj" />
+    <!-- GlobalPropertiesToRemove prevents HostingMode from propagating into
+         the client build when the server is built. The client must never see
+         WASM_ONLY when built as a server dependency (BookService lives in the
+         client and is required by the server in all server-side modes). -->
+    <ProjectReference Include="..\MyApp.Client\MyApp.Client.fsproj">
+      <GlobalPropertiesToRemove>HostingMode</GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Bolero.Server" Version="0.*" />
