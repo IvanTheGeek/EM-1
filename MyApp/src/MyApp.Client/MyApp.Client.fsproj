@@ -1,7 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(HostingMode)' == 'WasmOnly'">
+    <DefineConstants>$(DefineConstants);WASM_ONLY</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Main.fs" />

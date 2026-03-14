@@ -4,8 +4,10 @@ open System
 open Elmish
 open Bolero
 open Bolero.Html
+#if !WASM_ONLY
 open Bolero.Remoting
 open Bolero.Remoting.Client
+#endif
 open Bolero.Templating.Client
 
 /// Routing endpoints definition.
@@ -48,6 +50,7 @@ let initModel =
         signInFailed = false
     }
 
+#if !WASM_ONLY
 /// Remote service definition.
 type BookService =
     {
@@ -72,6 +75,7 @@ type BookService =
 
     interface IRemoteService with
         member this.BasePath = "/books"
+#endif
 
 /// The Elmish application's update messages.
 type Message =
@@ -92,6 +96,70 @@ type Message =
     | RecvSignOut
     | Error of exn
     | ClearError
+
+#if WASM_ONLY
+
+let sampleBooks =
+    [|
+        { title = "The Fellowship of the Ring"; author = "J.R.R Tolkien";   publishDate = DateTime(1954, 7, 29);  isbn = "978-0345339706" }
+        { title = "The Two Towers";             author = "J.R.R Tolkien";   publishDate = DateTime(1954, 11, 11); isbn = "978-0345339713" }
+        { title = "The Return of the King";     author = "J.R.R Tolkien";   publishDate = DateTime(1955, 10, 20); isbn = "978-0345339737" }
+    |]
+
+let update message model =
+    let onSignIn = function
+        | Some _ -> Cmd.batch [ Cmd.ofMsg GetBooks; Cmd.ofMsg ClearLoginForm ]
+        | None -> Cmd.none
+    match message with
+    | SetPage page ->
+        { model with page = page }, Cmd.none
+
+    | Increment ->
+        { model with counter = model.counter + 1 }, Cmd.none
+    | Decrement ->
+        { model with counter = model.counter - 1 }, Cmd.none
+    | SetCounter value ->
+        { model with counter = value }, Cmd.none
+
+    | GetBooks ->
+        { model with books = Some sampleBooks }, Cmd.none
+    | GotBooks books ->
+        { model with books = Some books }, Cmd.none
+
+    | SetUsername s ->
+        { model with username = s }, Cmd.none
+    | SetPassword s ->
+        { model with password = s }, Cmd.none
+    | ClearLoginForm ->
+        { model with username = ""; password = "" }, Cmd.none
+
+    | GetSignedInAs ->
+        model, Cmd.none
+    | RecvSignedInAs username ->
+        { model with signedInAs = username }, onSignIn username
+
+    | SendSignIn ->
+        let result =
+            if model.password = "password" && model.username <> ""
+            then Some model.username
+            else None
+        { model with signedInAs = result; signInFailed = Option.isNone result },
+        onSignIn result
+    | RecvSignIn username ->
+        { model with signedInAs = username; signInFailed = Option.isNone username },
+        onSignIn username
+
+    | SendSignOut ->
+        { model with signedInAs = None; signInFailed = false; books = None }, Cmd.none
+    | RecvSignOut ->
+        { model with signedInAs = None; signInFailed = false }, Cmd.none
+
+    | Error exn ->
+        { model with error = Some exn.Message }, Cmd.none
+    | ClearError ->
+        { model with error = None }, Cmd.none
+
+#else
 
 let update remote message model =
     let onSignIn = function
@@ -141,6 +209,8 @@ let update remote message model =
         { model with error = Some exn.Message }, Cmd.none
     | ClearError ->
         { model with error = None }, Cmd.none
+
+#endif
 
 /// Connects the routing system to the Elmish application.
 let router = Router.infer SetPage (fun model -> model.page)
@@ -236,9 +306,13 @@ type MyApp() =
     override _.CssScope = CssScopes.MyApp
 
     override this.Program =
+#if WASM_ONLY
+        Program.mkProgram (fun _ -> initModel, Cmd.none) update view
+#else
         let bookService = this.Remote<BookService>()
         let update = update bookService
         Program.mkProgram (fun _ -> initModel, Cmd.ofMsg GetSignedInAs) update view
+#endif
         |> Program.withRouter router
 #if DEBUG
         |> Program.withHotReload

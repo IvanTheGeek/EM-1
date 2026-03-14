@@ -3,6 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(HostingMode)' == 'ServerOnly'">
+    <DefineConstants>$(DefineConstants);SERVER_ONLY</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="BookService.fs" />
     <Compile Include="Index.fs" />

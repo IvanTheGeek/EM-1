@@ -18,7 +18,9 @@ let main args =
 
     builder.Services.AddRazorComponents()
         .AddInteractiveServerComponents()
+#if !SERVER_ONLY
         .AddInteractiveWebAssemblyComponents()
+#endif
     |> ignore
     builder.Services.AddServerSideBlazor() |> ignore
     builder.Services.AddAuthorization()
@@ -33,8 +35,10 @@ let main args =
 
     let app = builder.Build()
 
+#if !SERVER_ONLY
     if app.Environment.IsDevelopment() then
         app.UseWebAssemblyDebugging()
+#endif
 
     app
         .UseAuthentication()
@@ -50,7 +54,9 @@ let main args =
     app.MapBoleroRemoting() |> ignore
     app.MapRazorComponents<Index.Page>()
         .AddInteractiveServerRenderMode()
+#if !SERVER_ONLY
         .AddInteractiveWebAssemblyRenderMode()
+#endif
         .AddAdditionalAssemblies(typeof<Client.Main.MyApp>.Assembly)
     |> ignore
 
