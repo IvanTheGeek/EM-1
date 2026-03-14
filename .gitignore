@@ -1,20 +1,52 @@
-## .NET
+## .NET build output
 bin/
 obj/
 publish/
+artifacts/
+
+## NuGet
+*.nupkg
+*.snupkg
+*.nuget.dgspec.json
+
+## User-specific files
 *.user
 *.suo
-*.cache
+*.userosscache
+*.sln.docstates
 
-## IDE
+## Test results & coverage
+TestResults/
+coverage/
+*.trx
+*.coveragexml
+
+## Logs
+*.log
+logs/
+
+## Secrets / environment
+.env
+.env.*
+appsettings.Secrets.json
+
+## IDE - Visual Studio
 .vs/
+
+## IDE - JetBrains Rider / IntelliJ
 .idea/
+
+## IDE - generic
 *.swp
 *~
 
 ## OS
 Thumbs.db
 .DS_Store
+Desktop.ini
 
-## Claude
+## Node (if JS tooling is ever added)
+node_modules/
+
+## Claude worktrees
 .claude/
