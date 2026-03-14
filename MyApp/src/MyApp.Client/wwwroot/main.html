@@ -49,10 +49,1070 @@
       </template>
 
       <template id="EventModeling">
-        <div class="content">
-          <h2 class="title is-4" style="margin-bottom:0.5rem">Event Modeling</h2>
-          <p style="color:#666">This is where I am experimenting with generating an Event Modeling model with HTML.</p>
-        </div>
+        <div class="em-root">
+          <h2 class="em-main-title">Event Model — Online Store: Browse, Basket &amp; Checkout</h2>
+          <p class="em-subtitle">10 slices tracing a complete user journey. Blue = state change (user-initiated). Green = state view (derived from prior events). Example data flows end-to-end.</p>
+
+          <div class="em-legend">
+            <span class="em-legend-item"><span class="em-legend-dot em-dot-change"></span> State Change</span>
+            <span class="em-legend-item"><span class="em-legend-dot em-dot-view"></span> State View</span>
+            <span class="em-legend-item"><span class="em-legend-dot em-dot-screen"></span> Screen</span>
+            <span class="em-legend-item"><span class="em-legend-dot em-dot-command"></span> Command</span>
+            <span class="em-legend-item"><span class="em-legend-dot em-dot-event"></span> Event</span>
+            <span class="em-legend-item"><span class="em-legend-dot em-dot-rm"></span> Read Model</span>
+          </div>
+
+          <div class="em-timeline">
+
+            <!-- ═══════════════════════════════════════════ -->
+            <!-- SLICE 1 · VIEW · Product Catalog            -->
+            <!-- ═══════════════════════════════════════════ -->
+            <div class="em-slice">
+              <div class="em-slice-header em-slice-header--view">
+                <span class="em-slice-badge">State View</span>
+                <span class="em-slice-num">Slice 1</span>
+              </div>
+
+              <div class="em-comp em-screen">
+                <div class="em-comp-label">Screen</div>
+                <div class="em-sc-title">Product Catalog</div>
+                <div class="em-field"><span class="em-lbl">Search</span><input class="em-inp" value="Search products…" readonly></div>
+                <div class="em-field"><span class="em-lbl">Category</span><select class="em-sel"><option>All Categories</option></select></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Noise-Cancelling Headphones</div><div class="em-prod-desc">Over-ear · 30hr battery</div></div><div style="text-align:right"><div class="em-prod-price">£89.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Wireless Keyboard</div><div class="em-prod-desc">Compact TKL · 2.4GHz</div></div><div style="text-align:right"><div class="em-prod-price">£44.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">USB-C Hub 7-Port</div><div class="em-prod-desc">HDMI · USB-A · SD card</div></div><div style="text-align:right"><div class="em-prod-price">£29.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Mechanical Mouse</div><div class="em-prod-desc">RGB · 16000 DPI</div></div><div style="text-align:right"><div class="em-prod-price">£34.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">27" LED Monitor</div><div class="em-prod-desc">IPS · 144Hz · HDMI</div></div><div style="text-align:right"><div class="em-prod-price">£249.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Laptop Stand Aluminium</div><div class="em-prod-desc">Adjustable · universal</div></div><div style="text-align:right"><div class="em-prod-price">£39.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Webcam 1080p</div><div class="em-prod-desc">Auto-focus · built-in mic</div></div><div style="text-align:right"><div class="em-prod-price">£59.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Desk Lamp with USB</div><div class="em-prod-desc">LED · touch dimmer</div></div><div style="text-align:right"><div class="em-prod-price">£24.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Cable Management Kit</div><div class="em-prod-desc">50pcs clips &amp; ties</div></div><div style="text-align:right"><div class="em-prod-price">£12.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Ergonomic Chair Cushion</div><div class="em-prod-desc">Memory foam · washable</div></div><div style="text-align:right"><div class="em-prod-price">£49.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+              </div>
+
+              <div class="em-comp em-rm">
+                <div class="em-comp-label">Read Model</div>
+                <div class="em-comp-name">ProductCatalog</div>
+                <pre class="em-data">{
+  basketId: "b-4821",
+  products: [
+    { productId: "p-0042",
+      name: "Noise-Cancelling Headphones",
+      price: 89.99, inStock: true },
+    { productId: "p-0017",
+      name: "Wireless Keyboard",
+      price: 44.99, inStock: true },
+    { productId: "p-0031",
+      name: "USB-C Hub 7-Port",
+      price: 29.99, inStock: true },
+    { productId: "p-0055",
+      name: "Mechanical Mouse",
+      price: 34.99, inStock: true },
+    { productId: "p-0008",
+      name: "27\" LED Monitor",
+      price: 249.99, inStock: true },
+    { productId: "p-0063",
+      name: "Laptop Stand Aluminium",
+      price: 39.99, inStock: true },
+    { productId: "p-0029",
+      name: "Webcam 1080p",
+      price: 59.99, inStock: true },
+    { productId: "p-0071",
+      name: "Desk Lamp with USB",
+      price: 24.99, inStock: true },
+    { productId: "p-0014",
+      name: "Cable Management Kit",
+      price: 12.99, inStock: true },
+    { productId: "p-0088",
+      name: "Ergonomic Chair Cushion",
+      price: 49.99, inStock: true }
+  ]
+}</pre>
+              </div>
+
+              <div class="em-comp em-evtrefs">
+                <div class="em-comp-label">Events</div>
+                <span class="em-none">None — product catalogue is seeded data.</span>
+              </div>
+              <div class="em-ref">⏮ Start of model</div>
+            </div><!-- /slice 1 -->
+
+
+            <!-- ═══════════════════════════════════════════ -->
+            <!-- SLICE 2 · CHANGE · Add Headphones           -->
+            <!-- ═══════════════════════════════════════════ -->
+            <div class="em-slice">
+              <div class="em-slice-header em-slice-header--change">
+                <span class="em-slice-badge">State Change</span>
+                <span class="em-slice-num">Slice 2</span>
+              </div>
+
+              <!-- Repeated screen (shared with Slice 1) — active button highlighted -->
+              <div class="em-comp em-screen">
+                <div class="em-comp-label">Screen (shared with Slice 1)</div>
+                <div class="em-sc-title">Product Catalog</div>
+                <div class="em-field"><span class="em-lbl">Search</span><input class="em-inp" value="Search products…" readonly></div>
+                <div class="em-field"><span class="em-lbl">Category</span><select class="em-sel"><option>All Categories</option></select></div>
+                <div class="em-prod-card em-prod-card--hl"><div><div class="em-prod-name">Noise-Cancelling Headphones ◀ clicked</div><div class="em-prod-desc">Over-ear · 30hr battery</div></div><div style="text-align:right"><div class="em-prod-price">£89.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Wireless Keyboard</div><div class="em-prod-desc">Compact TKL · 2.4GHz</div></div><div style="text-align:right"><div class="em-prod-price">£44.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">USB-C Hub 7-Port</div><div class="em-prod-desc">HDMI · USB-A · SD card</div></div><div style="text-align:right"><div class="em-prod-price">£29.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Mechanical Mouse</div><div class="em-prod-desc">RGB · 16000 DPI</div></div><div style="text-align:right"><div class="em-prod-price">£34.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">27" LED Monitor</div><div class="em-prod-desc">IPS · 144Hz · HDMI</div></div><div style="text-align:right"><div class="em-prod-price">£249.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Laptop Stand Aluminium</div><div class="em-prod-desc">Adjustable · universal</div></div><div style="text-align:right"><div class="em-prod-price">£39.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Webcam 1080p</div><div class="em-prod-desc">Auto-focus · built-in mic</div></div><div style="text-align:right"><div class="em-prod-price">£59.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Desk Lamp with USB</div><div class="em-prod-desc">LED · touch dimmer</div></div><div style="text-align:right"><div class="em-prod-price">£24.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Cable Management Kit</div><div class="em-prod-desc">50pcs clips &amp; ties</div></div><div style="text-align:right"><div class="em-prod-price">£12.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Ergonomic Chair Cushion</div><div class="em-prod-desc">Memory foam · washable</div></div><div style="text-align:right"><div class="em-prod-price">£49.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+              </div>
+
+              <div class="em-comp em-command">
+                <div class="em-comp-label">Command</div>
+                <div class="em-comp-name">AddItemToBasket</div>
+                <pre class="em-data">{
+  basketId:   "b-4821",
+  customerId: "c-1093",
+  productId:  "p-0042",
+  quantity:   1
+}</pre>
+              </div>
+
+              <div class="em-comp em-event">
+                <div class="em-comp-label">Event</div>
+                <div class="em-comp-name">ItemAddedToBasket</div>
+                <pre class="em-data">{
+  basketId:    "b-4821",
+  customerId:  "c-1093",
+  productId:   "p-0042",
+  productName: "Noise-Cancelling Headphones",
+  price:       89.99,
+  quantity:    1,
+  addedAt:     "2024-11-15T09:23:10Z"
+}</pre>
+              </div>
+
+              <div class="em-ref">← Slice 1 — Product Catalog</div>
+            </div><!-- /slice 2 -->
+
+
+            <!-- ═══════════════════════════════════════════ -->
+            <!-- SLICE 3 · CHANGE · Add Wireless Keyboard    -->
+            <!-- ═══════════════════════════════════════════ -->
+            <div class="em-slice">
+              <div class="em-slice-header em-slice-header--change">
+                <span class="em-slice-badge">State Change</span>
+                <span class="em-slice-num">Slice 3</span>
+              </div>
+
+              <!-- Repeated screen (shared with Slices 1 & 2) -->
+              <div class="em-comp em-screen">
+                <div class="em-comp-label">Screen (shared with Slices 1 &amp; 2)</div>
+                <div class="em-sc-title">Product Catalog</div>
+                <div class="em-field"><span class="em-lbl">Search</span><input class="em-inp" value="Search products…" readonly></div>
+                <div class="em-field"><span class="em-lbl">Category</span><select class="em-sel"><option>All Categories</option></select></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Noise-Cancelling Headphones ✓ In basket</div><div class="em-prod-desc">Over-ear · 30hr battery</div></div><div style="text-align:right"><div class="em-prod-price">£89.99</div><button class="em-btn em-btn-secondary em-btn-sm">✓ Added</button></div></div>
+                <div class="em-prod-card em-prod-card--hl"><div><div class="em-prod-name">Wireless Keyboard ◀ clicked</div><div class="em-prod-desc">Compact TKL · 2.4GHz</div></div><div style="text-align:right"><div class="em-prod-price">£44.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">USB-C Hub 7-Port</div><div class="em-prod-desc">HDMI · USB-A · SD card</div></div><div style="text-align:right"><div class="em-prod-price">£29.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Mechanical Mouse</div><div class="em-prod-desc">RGB · 16000 DPI</div></div><div style="text-align:right"><div class="em-prod-price">£34.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">27" LED Monitor</div><div class="em-prod-desc">IPS · 144Hz · HDMI</div></div><div style="text-align:right"><div class="em-prod-price">£249.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Laptop Stand Aluminium</div><div class="em-prod-desc">Adjustable · universal</div></div><div style="text-align:right"><div class="em-prod-price">£39.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Webcam 1080p</div><div class="em-prod-desc">Auto-focus · built-in mic</div></div><div style="text-align:right"><div class="em-prod-price">£59.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Desk Lamp with USB</div><div class="em-prod-desc">LED · touch dimmer</div></div><div style="text-align:right"><div class="em-prod-price">£24.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Cable Management Kit</div><div class="em-prod-desc">50pcs clips &amp; ties</div></div><div style="text-align:right"><div class="em-prod-price">£12.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+                <div class="em-prod-card"><div><div class="em-prod-name">Ergonomic Chair Cushion</div><div class="em-prod-desc">Memory foam · washable</div></div><div style="text-align:right"><div class="em-prod-price">£49.99</div><button class="em-btn em-btn-primary em-btn-sm">+ Basket</button></div></div>
+              </div>
+
+              <div class="em-comp em-command">
+                <div class="em-comp-label">Command</div>
+                <div class="em-comp-name">AddItemToBasket</div>
+                <pre class="em-data">{
+  basketId:   "b-4821",
+  customerId: "c-1093",
+  productId:  "p-0017",
+  quantity:   1
+}</pre>
+              </div>
+
+              <div class="em-comp em-event">
+                <div class="em-comp-label">Event</div>
+                <div class="em-comp-name">ItemAddedToBasket</div>
+                <pre class="em-data">{
+  basketId:    "b-4821",
+  customerId:  "c-1093",
+  productId:   "p-0017",
+  productName: "Wireless Keyboard",
+  price:       44.99,
+  quantity:    1,
+  addedAt:     "2024-11-15T09:24:05Z"
+}</pre>
+              </div>
+
+              <div class="em-ref">← Slice 2 — Add Headphones</div>
+            </div><!-- /slice 3 -->
+
+
+            <!-- ═══════════════════════════════════════════ -->
+            <!-- SLICE 4 · VIEW · Basket (2 items)          -->
+            <!-- ═══════════════════════════════════════════ -->
+            <div class="em-slice">
+              <div class="em-slice-header em-slice-header--view">
+                <span class="em-slice-badge">State View</span>
+                <span class="em-slice-num">Slice 4</span>
+              </div>
+
+              <div class="em-comp em-screen">
+                <div class="em-comp-label">Screen</div>
+                <div class="em-sc-title">Your Basket (2 items)</div>
+                <div class="em-basket-item"><span>Noise-Cancelling Headphones<br><small style="color:#94a3b8">Qty: 1</small></span><span><strong>£89.99</strong> <button class="em-btn em-btn-danger em-btn-sm">Remove</button></span></div>
+                <div class="em-basket-item"><span>Wireless Keyboard<br><small style="color:#94a3b8">Qty: 1</small></span><span><strong>£44.99</strong> <button class="em-btn em-btn-danger em-btn-sm">Remove</button></span></div>
+                <div class="em-basket-total">Total: £134.98</div>
+                <div class="em-btns">
+                  <button class="em-btn em-btn-secondary">← Continue Shopping</button>
+                  <button class="em-btn em-btn-success">Proceed to Checkout →</button>
+                </div>
+              </div>
+
+              <div class="em-comp em-rm">
+                <div class="em-comp-label">Read Model</div>
+                <div class="em-comp-name">BasketSummary</div>
+                <pre class="em-data">{
+  basketId:   "b-4821",
+  customerId: "c-1093",
+  itemCount:  2,
+  items: [
+    { productId: "p-0042",
+      name:  "Noise-Cancelling Headphones",
+      price: 89.99, quantity: 1 },
+    { productId: "p-0017",
+      name:  "Wireless Keyboard",
+      price: 44.99, quantity: 1 }
+  ],
+  total: 134.98
+}</pre>
+              </div>
+
+              <div class="em-comp em-evtrefs">
+                <div class="em-comp-label">Events feeding this view</div>
+                <span class="em-tag">ItemAddedToBasket (Slice 2)</span>
+                <span class="em-tag">ItemAddedToBasket (Slice 3)</span>
+              </div>
+              <div class="em-ref">← Slice 3 — Add Keyboard</div>
+            </div><!-- /slice 4 -->
+
+
+            <!-- ═══════════════════════════════════════════ -->
+            <!-- SLICE 5 · CHANGE · Remove Wireless Keyboard -->
+            <!-- ═══════════════════════════════════════════ -->
+            <div class="em-slice">
+              <div class="em-slice-header em-slice-header--change">
+                <span class="em-slice-badge">State Change</span>
+                <span class="em-slice-num">Slice 5</span>
+              </div>
+
+              <!-- Repeated screen (shared with Slice 4) — Remove clicked on Keyboard -->
+              <div class="em-comp em-screen">
+                <div class="em-comp-label">Screen (shared with Slice 4)</div>
+                <div class="em-sc-title">Your Basket (2 items)</div>
+                <div class="em-basket-item"><span>Noise-Cancelling Headphones<br><small style="color:#94a3b8">Qty: 1</small></span><span><strong>£89.99</strong> <button class="em-btn em-btn-danger em-btn-sm">Remove</button></span></div>
+                <div class="em-basket-item em-basket-item--hl"><span>Wireless Keyboard ◀ Remove clicked<br><small style="color:#94a3b8">Qty: 1</small></span><span><strong>£44.99</strong> <button class="em-btn em-btn-danger em-btn-sm">Remove</button></span></div>
+                <div class="em-basket-total">Total: £134.98</div>
+                <div class="em-btns">
+                  <button class="em-btn em-btn-secondary">← Continue Shopping</button>
+                  <button class="em-btn em-btn-success">Proceed to Checkout →</button>
+                </div>
+              </div>
+
+              <div class="em-comp em-command">
+                <div class="em-comp-label">Command</div>
+                <div class="em-comp-name">RemoveItemFromBasket</div>
+                <pre class="em-data">{
+  basketId:  "b-4821",
+  productId: "p-0017"
+}</pre>
+              </div>
+
+              <div class="em-comp em-event">
+                <div class="em-comp-label">Event</div>
+                <div class="em-comp-name">ItemRemovedFromBasket</div>
+                <pre class="em-data">{
+  basketId:    "b-4821",
+  productId:   "p-0017",
+  productName: "Wireless Keyboard",
+  price:       44.99,
+  quantity:    1,
+  removedAt:   "2024-11-15T09:26:33Z"
+}</pre>
+              </div>
+
+              <div class="em-ref">← Slice 4 — Basket (2 items)</div>
+            </div><!-- /slice 5 -->
+
+
+            <!-- ═══════════════════════════════════════════ -->
+            <!-- SLICE 6 · VIEW · Basket (1 item)           -->
+            <!-- ═══════════════════════════════════════════ -->
+            <div class="em-slice">
+              <div class="em-slice-header em-slice-header--view">
+                <span class="em-slice-badge">State View</span>
+                <span class="em-slice-num">Slice 6</span>
+              </div>
+
+              <div class="em-comp em-screen">
+                <div class="em-comp-label">Screen</div>
+                <div class="em-sc-title">Your Basket (1 item)</div>
+                <div class="em-basket-item"><span>Noise-Cancelling Headphones<br><small style="color:#94a3b8">Qty: 1</small></span><span><strong>£89.99</strong> <button class="em-btn em-btn-danger em-btn-sm">Remove</button></span></div>
+                <div class="em-basket-total">Total: £89.99</div>
+                <div class="em-btns">
+                  <button class="em-btn em-btn-secondary">← Continue Shopping</button>
+                  <button class="em-btn em-btn-success">Proceed to Checkout →</button>
+                </div>
+              </div>
+
+              <div class="em-comp em-rm">
+                <div class="em-comp-label">Read Model</div>
+                <div class="em-comp-name">BasketSummary</div>
+                <pre class="em-data">{
+  basketId:   "b-4821",
+  customerId: "c-1093",
+  itemCount:  1,
+  items: [
+    { productId: "p-0042",
+      name:  "Noise-Cancelling Headphones",
+      price: 89.99, quantity: 1 }
+  ],
+  total: 89.99
+}</pre>
+              </div>
+
+              <div class="em-comp em-evtrefs">
+                <div class="em-comp-label">Events feeding this view</div>
+                <span class="em-tag">ItemAddedToBasket (Slice 2)</span>
+                <span class="em-tag">ItemAddedToBasket (Slice 3)</span>
+                <span class="em-tag">ItemRemovedFromBasket (Slice 5)</span>
+              </div>
+              <div class="em-ref">← Slice 5 — Remove Keyboard</div>
+            </div><!-- /slice 6 -->
+
+
+            <!-- ═══════════════════════════════════════════ -->
+            <!-- SLICE 7 · CHANGE · Place Order             -->
+            <!-- ═══════════════════════════════════════════ -->
+            <div class="em-slice">
+              <div class="em-slice-header em-slice-header--change">
+                <span class="em-slice-badge">State Change</span>
+                <span class="em-slice-num">Slice 7</span>
+              </div>
+
+              <div class="em-comp em-screen">
+                <div class="em-comp-label">Screen</div>
+                <div class="em-sc-title">Checkout</div>
+                <div class="em-field"><span class="em-lbl">Address line 1</span><input class="em-inp" value="14 Maple Street" readonly></div>
+                <div class="em-row">
+                  <div class="em-field" style="flex:1"><span class="em-lbl">City</span><input class="em-inp" value="Brighton" readonly></div>
+                  <div class="em-field" style="flex:1"><span class="em-lbl">Postcode</span><input class="em-inp" value="BN1 4GH" readonly></div>
+                </div>
+                <div class="em-field"><span class="em-lbl">Payment</span>
+                  <div class="em-radio"><input type="radio" checked readonly> Credit / Debit Card</div>
+                  <div class="em-radio"><input type="radio" readonly> PayPal</div>
+                </div>
+                <div class="em-field"><span class="em-lbl">Card number</span><input class="em-inp" value="**** **** **** 4521" readonly></div>
+                <div class="em-row">
+                  <div class="em-field" style="flex:1"><span class="em-lbl">Expiry</span><input class="em-inp" value="09/27" readonly></div>
+                  <div class="em-field" style="flex:1"><span class="em-lbl">CVV</span><input class="em-inp" value="***" readonly></div>
+                </div>
+                <div class="em-order-summary">
+                  <strong>Order summary</strong><br>
+                  Noise-Cancelling Headphones x1 — £89.99<br>
+                  <strong>Total: £89.99</strong>
+                </div>
+                <div class="em-btns"><button class="em-btn em-btn-success">Place Order &amp; Pay £89.99</button></div>
+              </div>
+
+              <div class="em-comp em-command">
+                <div class="em-comp-label">Command</div>
+                <div class="em-comp-name">PlaceOrder</div>
+                <pre class="em-data">{
+  orderId:    "ord-7734",
+  basketId:   "b-4821",
+  customerId: "c-1093",
+  shipping: {
+    line1:    "14 Maple Street",
+    city:     "Brighton",
+    postcode: "BN1 4GH"
+  },
+  paymentToken: "tok_visa_4521"
+}</pre>
+              </div>
+
+              <div class="em-comp em-event">
+                <div class="em-comp-label">Event</div>
+                <div class="em-comp-name">OrderPlaced</div>
+                <pre class="em-data">{
+  orderId:    "ord-7734",
+  basketId:   "b-4821",
+  customerId: "c-1093",
+  items: [
+    { productId: "p-0042",
+      name:  "Noise-Cancelling Headphones",
+      price: 89.99, quantity: 1 }
+  ],
+  total:         89.99,
+  paymentMethod: "Visa *4521",
+  shipping: {
+    line1:    "14 Maple Street",
+    city:     "Brighton",
+    postcode: "BN1 4GH"
+  },
+  placedAt: "2024-11-15T09:31:47Z"
+}</pre>
+              </div>
+
+              <div class="em-ref">← Slice 6 — Basket (1 item)</div>
+            </div><!-- /slice 7 -->
+
+
+            <!-- ═══════════════════════════════════════════ -->
+            <!-- SLICE 8 · VIEW · Order Confirmation        -->
+            <!-- ═══════════════════════════════════════════ -->
+            <div class="em-slice">
+              <div class="em-slice-header em-slice-header--view">
+                <span class="em-slice-badge">State View</span>
+                <span class="em-slice-num">Slice 8</span>
+              </div>
+
+              <div class="em-comp em-screen">
+                <div class="em-comp-label">Screen</div>
+                <div class="em-confirm-hero">
+                  <div class="em-check">✅</div>
+                  <div class="em-confirm-title">Order Confirmed!</div>
+                  <div class="em-order-num">Reference: ord-7734</div>
+                </div>
+                <div class="em-order-summary">
+                  Noise-Cancelling Headphones x1 — £89.99<br>
+                  <strong>Total: £89.99</strong><br>
+                  <small style="color:#64748b">Visa *4521 · 14 Maple Street, Brighton, BN1 4GH</small>
+                </div>
+                <div class="em-btns">
+                  <button class="em-btn em-btn-secondary em-btn-sm">View Invoice History</button>
+                  <button class="em-btn em-btn-primary em-btn-sm">Continue Shopping</button>
+                </div>
+              </div>
+
+              <div class="em-comp em-rm">
+                <div class="em-comp-label">Read Model</div>
+                <div class="em-comp-name">OrderConfirmation</div>
+                <pre class="em-data">{
+  orderId:    "ord-7734",
+  customerId: "c-1093",
+  items: [
+    { productId: "p-0042",
+      name:  "Noise-Cancelling Headphones",
+      price: 89.99, quantity: 1 }
+  ],
+  total:         89.99,
+  paymentMethod: "Visa *4521",
+  shipping:      "14 Maple Street, Brighton, BN1 4GH",
+  placedAt:      "2024-11-15T09:31:47Z"
+}</pre>
+              </div>
+
+              <div class="em-comp em-evtrefs">
+                <div class="em-comp-label">Events feeding this view</div>
+                <span class="em-tag">OrderPlaced (Slice 7)</span>
+              </div>
+              <div class="em-ref">← Slice 7 — Place Order</div>
+            </div><!-- /slice 8 -->
+
+
+            <!-- ═══════════════════════════════════════════ -->
+            <!-- SLICE 9 · VIEW · Invoice History           -->
+            <!-- ═══════════════════════════════════════════ -->
+            <div class="em-slice">
+              <div class="em-slice-header em-slice-header--view">
+                <span class="em-slice-badge">State View</span>
+                <span class="em-slice-num">Slice 9</span>
+              </div>
+
+              <div class="em-comp em-screen">
+                <div class="em-comp-label">Screen</div>
+                <div class="em-sc-title">My Orders</div>
+                <div class="em-invoice-card">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.2rem">
+                    <strong>ord-7734</strong>
+                    <span class="em-status-ok">Confirmed</span>
+                  </div>
+                  <div style="font-size:0.68rem;color:#64748b;margin-bottom:0.25rem">15 Nov 2024 · Visa *4521</div>
+                  <div style="font-size:0.7rem">Noise-Cancelling Headphones x1 — £89.99</div>
+                  <div style="font-size:0.68rem;color:#64748b">14 Maple Street, Brighton, BN1 4GH</div>
+                  <div style="text-align:right;font-weight:700;font-size:0.78rem;margin-top:0.2rem">Total: £89.99</div>
+                  <div class="em-btns"><button class="em-btn em-btn-secondary em-btn-sm">View Details</button></div>
+                </div>
+              </div>
+
+              <div class="em-comp em-rm">
+                <div class="em-comp-label">Read Model</div>
+                <div class="em-comp-name">InvoiceHistory</div>
+                <pre class="em-data">{
+  customerId: "c-1093",
+  invoices: [
+    { orderId:   "ord-7734",
+      placedAt:  "2024-11-15T09:31:47Z",
+      items: [
+        { productId: "p-0042",
+          name:  "Noise-Cancelling Headphones",
+          price: 89.99, quantity: 1 }
+      ],
+      total:         89.99,
+      paymentMethod: "Visa *4521",
+      shipping:      "14 Maple Street, Brighton, BN1 4GH",
+      status:        "Confirmed" }
+  ]
+}</pre>
+              </div>
+
+              <div class="em-comp em-evtrefs">
+                <div class="em-comp-label">Events feeding this view</div>
+                <span class="em-tag">OrderPlaced (Slice 7)</span>
+              </div>
+              <div class="em-ref">← Slice 8 — Order Confirmation</div>
+            </div><!-- /slice 9 -->
+
+
+            <!-- ═══════════════════════════════════════════ -->
+            <!-- SLICE 10 · VIEW · Inventory (Internal)     -->
+            <!-- ═══════════════════════════════════════════ -->
+            <div class="em-slice">
+              <div class="em-slice-header em-slice-header--view">
+                <span class="em-slice-badge">State View</span>
+                <span class="em-slice-num">Slice 10</span>
+              </div>
+
+              <div class="em-comp em-screen">
+                <div class="em-comp-label">Screen</div>
+                <div class="em-internal-note">⚙ Internal system view — not visible to end users</div>
+                <div class="em-sc-title">Inventory Dashboard</div>
+                <div class="em-inv-row"><span>Noise-Cancelling Headphones</span><span>47 → <strong>46</strong></span></div>
+                <div class="em-inv-row"><span>Wireless Keyboard</span><span>134 → <strong>134</strong></span></div>
+                <div class="em-inv-row"><span>USB-C Hub 7-Port</span><span>89 → <strong>89</strong></span></div>
+                <div class="em-inv-row"><span>Mechanical Mouse</span><span>62 → <strong>62</strong></span></div>
+                <div class="em-inv-row"><span>27" LED Monitor</span><span>23 → <strong>23</strong></span></div>
+                <div class="em-inv-row"><span>Laptop Stand Aluminium</span><span>78 → <strong>78</strong></span></div>
+                <div class="em-inv-row"><span>Webcam 1080p</span><span>55 → <strong>55</strong></span></div>
+                <div class="em-inv-row"><span>Desk Lamp with USB</span><span>103 → <strong>103</strong></span></div>
+                <div class="em-inv-row"><span>Cable Management Kit</span><span>200 → <strong>200</strong></span></div>
+                <div class="em-inv-row"><span>Ergonomic Chair Cushion</span><span>41 → <strong>41</strong></span></div>
+                <div style="font-size:0.62rem;color:#64748b;margin-top:0.3rem">as of 2024-11-15T09:31:47Z</div>
+              </div>
+
+              <div class="em-comp em-rm">
+                <div class="em-comp-label">Read Model</div>
+                <div class="em-comp-name">InventorySnapshot</div>
+                <pre class="em-data">{
+  asOf: "2024-11-15T09:31:47Z",
+  items: [
+    { productId: "p-0042",
+      name: "Noise-Cancelling Headphones",
+      initialStock: 47, unitsSold: 1,
+      available: 46 },
+    { productId: "p-0017",
+      name: "Wireless Keyboard",
+      initialStock: 134, unitsSold: 0,
+      available: 134 },
+    { productId: "p-0031",
+      name: "USB-C Hub 7-Port",
+      initialStock: 89, unitsSold: 0,
+      available: 89 },
+    { productId: "p-0055",
+      name: "Mechanical Mouse",
+      initialStock: 62, unitsSold: 0,
+      available: 62 },
+    { productId: "p-0008",
+      name: "27\" LED Monitor",
+      initialStock: 23, unitsSold: 0,
+      available: 23 },
+    { productId: "p-0063",
+      name: "Laptop Stand Aluminium",
+      initialStock: 78, unitsSold: 0,
+      available: 78 },
+    { productId: "p-0029",
+      name: "Webcam 1080p",
+      initialStock: 55, unitsSold: 0,
+      available: 55 },
+    { productId: "p-0071",
+      name: "Desk Lamp with USB",
+      initialStock: 103, unitsSold: 0,
+      available: 103 },
+    { productId: "p-0014",
+      name: "Cable Management Kit",
+      initialStock: 200, unitsSold: 0,
+      available: 200 },
+    { productId: "p-0088",
+      name: "Ergonomic Chair Cushion",
+      initialStock: 41, unitsSold: 0,
+      available: 41 }
+  ]
+}</pre>
+                <div style="font-size:0.68rem;color:#64748b;margin-top:0.3rem">Derived by reducing InventoryStocked seed events and all OrderPlaced events. No explicit inventory adjustment commands exist.</div>
+              </div>
+
+              <div class="em-comp em-evtrefs">
+                <div class="em-comp-label">Events feeding this view</div>
+                <span class="em-tag">InventoryStocked (seed — all 10 products)</span>
+                <span class="em-tag">OrderPlaced (Slice 7)</span>
+              </div>
+              <div class="em-ref">← Slice 9 — Invoice History</div>
+            </div><!-- /slice 10 -->
+
+          </div><!-- /em-timeline -->
+
+
+          <!-- ═══════════════════════════════════════════════════════ -->
+          <!-- TESTS                                                   -->
+          <!-- ═══════════════════════════════════════════════════════ -->
+          <div class="em-tests">
+            <div class="em-tests-title">Tests</div>
+            <p class="em-tests-sub">Commands use Given / When / Then. Read Models use Given / Then (no When — they are pure reducers).</p>
+
+
+            <!-- ─── AddItemToBasket ─── -->
+            <div class="em-test-group">
+              <div class="em-group-title">Command: AddItemToBasket</div>
+              <div class="em-tests-grid">
+
+                <div class="em-test">
+                  <div class="em-test-title em-test-title--pass">1 — Success: first item added to empty basket</div>
+                  <div class="em-gwt em-gwt-given"><div class="em-gwt-lbl">Given</div><pre class="em-gwt-body">[] — no prior events</pre></div>
+                  <div class="em-gwt em-gwt-when"><div class="em-gwt-lbl">When</div><pre class="em-gwt-body">AddItemToBasket {
+  basketId:   "b-4821",
+  customerId: "c-1093",
+  productId:  "p-0042",
+  quantity:   1
+}</pre></div>
+                  <div class="em-gwt em-gwt-then"><div class="em-gwt-lbl">Then</div><pre class="em-gwt-body">ItemAddedToBasket {
+  basketId:    "b-4821",
+  customerId:  "c-1093",
+  productId:   "p-0042",
+  productName: "Noise-Cancelling Headphones",
+  price:       89.99,
+  quantity:    1,
+  addedAt:     "2024-11-15T09:23:10Z"
+}</pre></div>
+                </div>
+
+                <div class="em-test">
+                  <div class="em-test-title em-test-title--pass">2 — Success: second different item added</div>
+                  <div class="em-gwt em-gwt-given"><div class="em-gwt-lbl">Given</div><pre class="em-gwt-body">ItemAddedToBasket {
+  basketId: "b-4821", productId: "p-0042"
+}</pre></div>
+                  <div class="em-gwt em-gwt-when"><div class="em-gwt-lbl">When</div><pre class="em-gwt-body">AddItemToBasket {
+  basketId:   "b-4821",
+  customerId: "c-1093",
+  productId:  "p-0017",
+  quantity:   1
+}</pre></div>
+                  <div class="em-gwt em-gwt-then"><div class="em-gwt-lbl">Then</div><pre class="em-gwt-body">ItemAddedToBasket {
+  basketId:    "b-4821",
+  customerId:  "c-1093",
+  productId:   "p-0017",
+  productName: "Wireless Keyboard",
+  price:       44.99,
+  quantity:    1,
+  addedAt:     "2024-11-15T09:24:05Z"
+}</pre></div>
+                </div>
+
+                <div class="em-test">
+                  <div class="em-test-title em-test-title--fail">3 — Failure: product already in basket</div>
+                  <div class="em-gwt em-gwt-given"><div class="em-gwt-lbl">Given</div><pre class="em-gwt-body">ItemAddedToBasket {
+  basketId: "b-4821", productId: "p-0042"
+}</pre></div>
+                  <div class="em-gwt em-gwt-when"><div class="em-gwt-lbl">When</div><pre class="em-gwt-body">AddItemToBasket {
+  basketId:  "b-4821",
+  productId: "p-0042",
+  quantity:  1
+}</pre></div>
+                  <div class="em-gwt em-gwt-then--fail"><div class="em-gwt-lbl">Then</div><pre class="em-gwt-body"><span class="em-exc">Exception: Product p-0042 is already
+in basket b-4821.</span></pre></div>
+                </div>
+
+              </div>
+            </div><!-- /AddItemToBasket -->
+
+
+            <!-- ─── RemoveItemFromBasket ─── -->
+            <div class="em-test-group">
+              <div class="em-group-title">Command: RemoveItemFromBasket</div>
+              <div class="em-tests-grid">
+
+                <div class="em-test">
+                  <div class="em-test-title em-test-title--pass">1 — Success: item present in basket is removed</div>
+                  <div class="em-gwt em-gwt-given"><div class="em-gwt-lbl">Given</div><pre class="em-gwt-body">ItemAddedToBasket {
+  basketId: "b-4821", productId: "p-0017",
+  productName: "Wireless Keyboard",
+  price: 44.99, quantity: 1
+}</pre></div>
+                  <div class="em-gwt em-gwt-when"><div class="em-gwt-lbl">When</div><pre class="em-gwt-body">RemoveItemFromBasket {
+  basketId:  "b-4821",
+  productId: "p-0017"
+}</pre></div>
+                  <div class="em-gwt em-gwt-then"><div class="em-gwt-lbl">Then</div><pre class="em-gwt-body">ItemRemovedFromBasket {
+  basketId:    "b-4821",
+  productId:   "p-0017",
+  productName: "Wireless Keyboard",
+  price:       44.99,
+  quantity:    1,
+  removedAt:   "2024-11-15T09:26:33Z"
+}</pre></div>
+                </div>
+
+                <div class="em-test">
+                  <div class="em-test-title em-test-title--fail">2 — Failure: item not in basket</div>
+                  <div class="em-gwt em-gwt-given"><div class="em-gwt-lbl">Given</div><pre class="em-gwt-body">[] — no prior events</pre></div>
+                  <div class="em-gwt em-gwt-when"><div class="em-gwt-lbl">When</div><pre class="em-gwt-body">RemoveItemFromBasket {
+  basketId:  "b-4821",
+  productId: "p-0017"
+}</pre></div>
+                  <div class="em-gwt em-gwt-then--fail"><div class="em-gwt-lbl">Then</div><pre class="em-gwt-body"><span class="em-exc">Exception: Product p-0017 is not
+in basket b-4821.</span></pre></div>
+                </div>
+
+                <div class="em-test">
+                  <div class="em-test-title em-test-title--fail">3 — Failure: item in a different basket</div>
+                  <div class="em-gwt em-gwt-given"><div class="em-gwt-lbl">Given</div><pre class="em-gwt-body">ItemAddedToBasket {
+  basketId: "b-9999", productId: "p-0017"
+}</pre></div>
+                  <div class="em-gwt em-gwt-when"><div class="em-gwt-lbl">When</div><pre class="em-gwt-body">RemoveItemFromBasket {
+  basketId:  "b-4821",
+  productId: "p-0017"
+}</pre></div>
+                  <div class="em-gwt em-gwt-then--fail"><div class="em-gwt-lbl">Then</div><pre class="em-gwt-body"><span class="em-exc">Exception: Product p-0017 is not
+in basket b-4821.</span></pre></div>
+                </div>
+
+              </div>
+            </div><!-- /RemoveItemFromBasket -->
+
+
+            <!-- ─── PlaceOrder ─── -->
+            <div class="em-test-group">
+              <div class="em-group-title">Command: PlaceOrder</div>
+              <div class="em-tests-grid">
+
+                <div class="em-test">
+                  <div class="em-test-title em-test-title--pass">1 — Success: basket with one item</div>
+                  <div class="em-gwt em-gwt-given"><div class="em-gwt-lbl">Given</div><pre class="em-gwt-body">ItemAddedToBasket {
+  basketId: "b-4821", customerId: "c-1093",
+  productId: "p-0042",
+  productName: "Noise-Cancelling Headphones",
+  price: 89.99, quantity: 1
+}</pre></div>
+                  <div class="em-gwt em-gwt-when"><div class="em-gwt-lbl">When</div><pre class="em-gwt-body">PlaceOrder {
+  orderId:    "ord-7734",
+  basketId:   "b-4821",
+  customerId: "c-1093",
+  shipping: {
+    line1: "14 Maple Street",
+    city: "Brighton", postcode: "BN1 4GH"
+  },
+  paymentToken: "tok_visa_4521"
+}</pre></div>
+                  <div class="em-gwt em-gwt-then"><div class="em-gwt-lbl">Then</div><pre class="em-gwt-body">OrderPlaced {
+  orderId: "ord-7734", basketId: "b-4821",
+  customerId: "c-1093",
+  items: [{ productId: "p-0042",
+    name: "Noise-Cancelling Headphones",
+    price: 89.99, quantity: 1 }],
+  total: 89.99,
+  paymentMethod: "Visa *4521",
+  shipping: {
+    line1: "14 Maple Street",
+    city: "Brighton", postcode: "BN1 4GH" },
+  placedAt: "2024-11-15T09:31:47Z"
+}</pre></div>
+                </div>
+
+                <div class="em-test">
+                  <div class="em-test-title em-test-title--pass">2 — Success: basket with multiple items</div>
+                  <div class="em-gwt em-gwt-given"><div class="em-gwt-lbl">Given</div><pre class="em-gwt-body">ItemAddedToBasket { basketId: "b-4821",
+  productId: "p-0042", price: 89.99 }
+ItemAddedToBasket { basketId: "b-4821",
+  productId: "p-0017", price: 44.99 }</pre></div>
+                  <div class="em-gwt em-gwt-when"><div class="em-gwt-lbl">When</div><pre class="em-gwt-body">PlaceOrder {
+  orderId: "ord-7735", basketId: "b-4821",
+  customerId: "c-1093",
+  shipping: { line1: "14 Maple Street",
+    city: "Brighton", postcode: "BN1 4GH" },
+  paymentToken: "tok_visa_4521"
+}</pre></div>
+                  <div class="em-gwt em-gwt-then"><div class="em-gwt-lbl">Then</div><pre class="em-gwt-body">OrderPlaced {
+  orderId: "ord-7735", total: 134.98,
+  items: [
+    { productId: "p-0042", price: 89.99 },
+    { productId: "p-0017", price: 44.99 }
+  ], ...
+}</pre></div>
+                </div>
+
+                <div class="em-test">
+                  <div class="em-test-title em-test-title--fail">3 — Failure: basket is empty</div>
+                  <div class="em-gwt em-gwt-given"><div class="em-gwt-lbl">Given</div><pre class="em-gwt-body">[] — no prior events</pre></div>
+                  <div class="em-gwt em-gwt-when"><div class="em-gwt-lbl">When</div><pre class="em-gwt-body">PlaceOrder {
+  orderId:  "ord-7734",
+  basketId: "b-4821",
+  ...
+}</pre></div>
+                  <div class="em-gwt em-gwt-then--fail"><div class="em-gwt-lbl">Then</div><pre class="em-gwt-body"><span class="em-exc">Exception: Cannot place order —
+basket b-4821 is empty.</span></pre></div>
+                </div>
+
+                <div class="em-test">
+                  <div class="em-test-title em-test-title--fail">4 — Failure: duplicate order ID</div>
+                  <div class="em-gwt em-gwt-given"><div class="em-gwt-lbl">Given</div><pre class="em-gwt-body">ItemAddedToBasket { basketId: "b-4821",
+  productId: "p-0042", price: 89.99 }
+OrderPlaced { orderId: "ord-7734",
+  basketId: "b-4821" }</pre></div>
+                  <div class="em-gwt em-gwt-when"><div class="em-gwt-lbl">When</div><pre class="em-gwt-body">PlaceOrder {
+  orderId:  "ord-7734",
+  basketId: "b-4821",
+  ...
+}</pre></div>
+                  <div class="em-gwt em-gwt-then--fail"><div class="em-gwt-lbl">Then</div><pre class="em-gwt-body"><span class="em-exc">Exception: Order ord-7734
+already exists.</span></pre></div>
+                </div>
+
+              </div>
+            </div><!-- /PlaceOrder -->
+
+
+            <!-- ─── Read Model: ProductCatalog ─── -->
+            <div class="em-test-group">
+              <div class="em-group-title em-group-title--rm">Read Model: ProductCatalog</div>
+              <div class="em-tests-grid">
+
+                <div class="em-test">
+                  <div class="em-test-title em-test-title--pass">1 — Default catalogue (no events)</div>
+                  <div class="em-gwt em-gwt-given"><div class="em-gwt-lbl">Given</div><pre class="em-gwt-body">[] — no prior events</pre></div>
+                  <div class="em-gwt em-gwt-then"><div class="em-gwt-lbl">Then</div><pre class="em-gwt-body">ProductCatalog {
+  basketId: "b-4821",
+  products: [
+    { productId: "p-0042",
+      name: "Noise-Cancelling Headphones",
+      price: 89.99, inStock: true },
+    /* … 9 more seeded products … */
+  ]
+}</pre></div>
+                </div>
+
+              </div>
+            </div><!-- /ProductCatalog -->
+
+
+            <!-- ─── Read Model: BasketSummary ─── -->
+            <div class="em-test-group">
+              <div class="em-group-title em-group-title--rm">Read Model: BasketSummary</div>
+              <div class="em-tests-grid">
+
+                <div class="em-test">
+                  <div class="em-test-title em-test-title--pass">1 — Empty basket (no events)</div>
+                  <div class="em-gwt em-gwt-given"><div class="em-gwt-lbl">Given</div><pre class="em-gwt-body">[] — no prior events</pre></div>
+                  <div class="em-gwt em-gwt-then"><div class="em-gwt-lbl">Then</div><pre class="em-gwt-body">BasketSummary {
+  basketId: "b-4821",
+  customerId: "c-1093",
+  items: [], itemCount: 0, total: 0.00
+}</pre></div>
+                </div>
+
+                <div class="em-test">
+                  <div class="em-test-title em-test-title--pass">2 — One item added</div>
+                  <div class="em-gwt em-gwt-given"><div class="em-gwt-lbl">Given</div><pre class="em-gwt-body">ItemAddedToBasket {
+  basketId: "b-4821", customerId: "c-1093",
+  productId: "p-0042",
+  productName: "Noise-Cancelling Headphones",
+  price: 89.99, quantity: 1
+}</pre></div>
+                  <div class="em-gwt em-gwt-then"><div class="em-gwt-lbl">Then</div><pre class="em-gwt-body">BasketSummary {
+  basketId: "b-4821", itemCount: 1,
+  items: [{ productId: "p-0042",
+    name: "Noise-Cancelling Headphones",
+    price: 89.99, quantity: 1 }],
+  total: 89.99
+}</pre></div>
+                </div>
+
+                <div class="em-test">
+                  <div class="em-test-title em-test-title--pass">3 — Two items added</div>
+                  <div class="em-gwt em-gwt-given"><div class="em-gwt-lbl">Given</div><pre class="em-gwt-body">ItemAddedToBasket {
+  basketId: "b-4821",
+  productId: "p-0042", price: 89.99 }
+ItemAddedToBasket {
+  basketId: "b-4821",
+  productId: "p-0017", price: 44.99 }</pre></div>
+                  <div class="em-gwt em-gwt-then"><div class="em-gwt-lbl">Then</div><pre class="em-gwt-body">BasketSummary {
+  basketId: "b-4821", itemCount: 2,
+  items: [
+    { productId: "p-0042", price: 89.99 },
+    { productId: "p-0017", price: 44.99 }
+  ],
+  total: 134.98
+}</pre></div>
+                </div>
+
+                <div class="em-test">
+                  <div class="em-test-title em-test-title--pass">4 — Item added then removed</div>
+                  <div class="em-gwt em-gwt-given"><div class="em-gwt-lbl">Given</div><pre class="em-gwt-body">ItemAddedToBasket {
+  basketId: "b-4821",
+  productId: "p-0042", price: 89.99 }
+ItemAddedToBasket {
+  basketId: "b-4821",
+  productId: "p-0017", price: 44.99 }
+ItemRemovedFromBasket {
+  basketId: "b-4821", productId: "p-0017" }</pre></div>
+                  <div class="em-gwt em-gwt-then"><div class="em-gwt-lbl">Then</div><pre class="em-gwt-body">BasketSummary {
+  basketId: "b-4821", itemCount: 1,
+  items: [{ productId: "p-0042",
+    name: "Noise-Cancelling Headphones",
+    price: 89.99, quantity: 1 }],
+  total: 89.99
+}</pre></div>
+                </div>
+
+              </div>
+            </div><!-- /BasketSummary -->
+
+
+            <!-- ─── Read Model: OrderConfirmation ─── -->
+            <div class="em-test-group">
+              <div class="em-group-title em-group-title--rm">Read Model: OrderConfirmation</div>
+              <div class="em-tests-grid">
+
+                <div class="em-test">
+                  <div class="em-test-title em-test-title--pass">1 — Confirmation populated from OrderPlaced</div>
+                  <div class="em-gwt em-gwt-given"><div class="em-gwt-lbl">Given</div><pre class="em-gwt-body">OrderPlaced {
+  orderId: "ord-7734", basketId: "b-4821",
+  customerId: "c-1093",
+  items: [{ productId: "p-0042",
+    name: "Noise-Cancelling Headphones",
+    price: 89.99, quantity: 1 }],
+  total: 89.99,
+  paymentMethod: "Visa *4521",
+  shipping: "14 Maple Street, Brighton, BN1 4GH",
+  placedAt: "2024-11-15T09:31:47Z"
+}</pre></div>
+                  <div class="em-gwt em-gwt-then"><div class="em-gwt-lbl">Then</div><pre class="em-gwt-body">OrderConfirmation {
+  orderId:       "ord-7734",
+  customerId:    "c-1093",
+  items: [{ productId: "p-0042",
+    name: "Noise-Cancelling Headphones",
+    price: 89.99, quantity: 1 }],
+  total:         89.99,
+  paymentMethod: "Visa *4521",
+  shipping:      "14 Maple Street, Brighton, BN1 4GH",
+  placedAt:      "2024-11-15T09:31:47Z"
+}</pre></div>
+                </div>
+
+              </div>
+            </div><!-- /OrderConfirmation -->
+
+
+            <!-- ─── Read Model: InvoiceHistory ─── -->
+            <div class="em-test-group">
+              <div class="em-group-title em-group-title--rm">Read Model: InvoiceHistory</div>
+              <div class="em-tests-grid">
+
+                <div class="em-test">
+                  <div class="em-test-title em-test-title--pass">1 — No orders yet</div>
+                  <div class="em-gwt em-gwt-given"><div class="em-gwt-lbl">Given</div><pre class="em-gwt-body">[] — no prior events</pre></div>
+                  <div class="em-gwt em-gwt-then"><div class="em-gwt-lbl">Then</div><pre class="em-gwt-body">InvoiceHistory {
+  customerId: "c-1093",
+  invoices: []
+}</pre></div>
+                </div>
+
+                <div class="em-test">
+                  <div class="em-test-title em-test-title--pass">2 — One order placed</div>
+                  <div class="em-gwt em-gwt-given"><div class="em-gwt-lbl">Given</div><pre class="em-gwt-body">OrderPlaced {
+  orderId: "ord-7734",
+  customerId: "c-1093",
+  items: [{ productId: "p-0042",
+    name: "Noise-Cancelling Headphones",
+    price: 89.99, quantity: 1 }],
+  total: 89.99,
+  paymentMethod: "Visa *4521",
+  placedAt: "2024-11-15T09:31:47Z"
+}</pre></div>
+                  <div class="em-gwt em-gwt-then"><div class="em-gwt-lbl">Then</div><pre class="em-gwt-body">InvoiceHistory {
+  customerId: "c-1093",
+  invoices: [{
+    orderId:       "ord-7734",
+    placedAt:      "2024-11-15T09:31:47Z",
+    total:         89.99,
+    paymentMethod: "Visa *4521",
+    status:        "Confirmed"
+  }]
+}</pre></div>
+                </div>
+
+              </div>
+            </div><!-- /InvoiceHistory -->
+
+
+            <!-- ─── Read Model: InventorySnapshot ─── -->
+            <div class="em-test-group">
+              <div class="em-group-title em-group-title--rm">Read Model: InventorySnapshot</div>
+              <div class="em-tests-grid">
+
+                <div class="em-test">
+                  <div class="em-test-title em-test-title--pass">1 — Seed stock only, no orders</div>
+                  <div class="em-gwt em-gwt-given"><div class="em-gwt-lbl">Given</div><pre class="em-gwt-body">InventoryStocked { productId: "p-0042",
+  name: "Noise-Cancelling Headphones",
+  quantity: 47 }
+InventoryStocked { productId: "p-0017",
+  name: "Wireless Keyboard", quantity: 134 }
+/* … 8 more InventoryStocked events … */</pre></div>
+                  <div class="em-gwt em-gwt-then"><div class="em-gwt-lbl">Then</div><pre class="em-gwt-body">InventorySnapshot {
+  items: [
+    { productId: "p-0042",
+      initialStock: 47, unitsSold: 0,
+      available: 47 },
+    { productId: "p-0017",
+      initialStock: 134, unitsSold: 0,
+      available: 134 },
+    /* … */
+  ]
+}</pre></div>
+                </div>
+
+                <div class="em-test">
+                  <div class="em-test-title em-test-title--pass">2 — Stock reduced after OrderPlaced</div>
+                  <div class="em-gwt em-gwt-given"><div class="em-gwt-lbl">Given</div><pre class="em-gwt-body">InventoryStocked { productId: "p-0042",
+  name: "Noise-Cancelling Headphones",
+  quantity: 47 }
+InventoryStocked { productId: "p-0017",
+  name: "Wireless Keyboard", quantity: 134 }
+/* … 8 more InventoryStocked events … */
+OrderPlaced { orderId: "ord-7734",
+  items: [{ productId: "p-0042",
+    quantity: 1 }]
+}</pre></div>
+                  <div class="em-gwt em-gwt-then"><div class="em-gwt-lbl">Then</div><pre class="em-gwt-body">InventorySnapshot {
+  items: [
+    { productId: "p-0042",
+      initialStock: 47, unitsSold: 1,
+      available: 46 },
+    { productId: "p-0017",
+      initialStock: 134, unitsSold: 0,
+      available: 134 },
+    /* … others unchanged … */
+  ]
+}</pre></div>
+                </div>
+
+              </div>
+            </div><!-- /InventorySnapshot -->
+
+          </div><!-- /em-tests -->
+
+        </div><!-- /em-root -->
       </template>
 
       <template id="Counter">
