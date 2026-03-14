@@ -1,0 +1,338 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "MyApp.Server/1.0.0": {
+        "dependencies": {
+          "Bolero.HotReload.Server": "0.24.5",
+          "Bolero.Server": "0.24.39",
+          "FSharp.Core": "10.1.201",
+          "Microsoft.AspNetCore.Components.WebAssembly.Server": "8.0.25",
+          "MyApp.Client": "1.0.0"
+        },
+        "runtime": {
+          "MyApp.Server.dll": {}
+        }
+      },
+      "Bolero/0.24.39": {
+        "dependencies": {
+          "Elmish": "4.0.1",
+          "FSharp.Core": "10.1.201",
+          "FSharp.SystemTextJson": "0.19.13",
+          "Microsoft.AspNetCore.Components.WebAssembly": "8.0.0",
+          "Microsoft.JSInterop.WebAssembly": "8.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/Bolero.Html.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          },
+          "lib/net8.0/Bolero.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Bolero.HotReload/0.24.5": {
+        "dependencies": {
+          "Bolero": "0.24.39",
+          "FSharp.Core": "10.1.201",
+          "HtmlAgilityPack": "1.11.39",
+          "Microsoft.AspNetCore.SignalR.Client": "6.0.0"
+        },
+        "runtime": {
+          "lib/net6.0/Bolero.Templating.dll": {
+            "assemblyVersion": "0.24.0.0",
+            "fileVersion": "0.24.5.47841"
+          }
+        }
+      },
+      "Bolero.HotReload.Server/0.24.5": {
+        "dependencies": {
+          "Bolero.HotReload": "0.24.5",
+          "Bolero.Server": "0.24.39",
+          "FSharp.Core": "10.1.201"
+        },
+        "runtime": {
+          "lib/net6.0/Bolero.Templating.Server.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Bolero.Server/0.24.39": {
+        "dependencies": {
+          "Bolero": "0.24.39",
+          "FSharp.Core": "10.1.201",
+          "FSharp.SystemTextJson": "0.19.13",
+          "Microsoft.AspNetCore.Components.WebAssembly": "8.0.0",
+          "Microsoft.JSInterop.WebAssembly": "8.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/Bolero.Server.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Elmish/4.0.1": {
+        "runtime": {
+          "lib/netstandard2.0/Elmish.dll": {
+            "assemblyVersion": "4.0.1.0",
+            "fileVersion": "4.0.1.0"
+          }
+        }
+      },
+      "FSharp.Core/10.1.201": {
+        "runtime": {
+          "lib/netstandard2.1/FSharp.Core.dll": {
+            "assemblyVersion": "10.1.0.0",
+            "fileVersion": "10.102.126.15422"
+          }
+        },
+        "resources": {
+          "lib/netstandard2.1/cs/FSharp.Core.resources.dll": {
+            "locale": "cs"
+          },
+          "lib/netstandard2.1/de/FSharp.Core.resources.dll": {
+            "locale": "de"
+          },
+          "lib/netstandard2.1/es/FSharp.Core.resources.dll": {
+            "locale": "es"
+          },
+          "lib/netstandard2.1/fr/FSharp.Core.resources.dll": {
+            "locale": "fr"
+          },
+          "lib/netstandard2.1/it/FSharp.Core.resources.dll": {
+            "locale": "it"
+          },
+          "lib/netstandard2.1/ja/FSharp.Core.resources.dll": {
+            "locale": "ja"
+          },
+          "lib/netstandard2.1/ko/FSharp.Core.resources.dll": {
+            "locale": "ko"
+          },
+          "lib/netstandard2.1/pl/FSharp.Core.resources.dll": {
+            "locale": "pl"
+          },
+          "lib/netstandard2.1/pt-BR/FSharp.Core.resources.dll": {
+            "locale": "pt-BR"
+          },
+          "lib/netstandard2.1/ru/FSharp.Core.resources.dll": {
+            "locale": "ru"
+          },
+          "lib/netstandard2.1/tr/FSharp.Core.resources.dll": {
+            "locale": "tr"
+          },
+          "lib/netstandard2.1/zh-Hans/FSharp.Core.resources.dll": {
+            "locale": "zh-Hans"
+          },
+          "lib/netstandard2.1/zh-Hant/FSharp.Core.resources.dll": {
+            "locale": "zh-Hant"
+          }
+        }
+      },
+      "FSharp.SystemTextJson/0.19.13": {
+        "dependencies": {
+          "FSharp.Core": "10.1.201"
+        },
+        "runtime": {
+          "lib/netstandard2.0/FSharp.SystemTextJson.dll": {
+            "assemblyVersion": "0.19.0.0",
+            "fileVersion": "0.19.13.43978"
+          }
+        }
+      },
+      "HtmlAgilityPack/1.11.39": {
+        "runtime": {
+          "lib/netstandard2.0/HtmlAgilityPack.dll": {
+            "assemblyVersion": "1.11.39.0",
+            "fileVersion": "1.11.39.0"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Components.WebAssembly/8.0.0": {
+        "dependencies": {
+          "Microsoft.JSInterop.WebAssembly": "8.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.AspNetCore.Components.WebAssembly.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53112"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Components.WebAssembly.Server/8.0.25": {
+        "runtime": {
+          "lib/net8.0/Microsoft.AspNetCore.Components.WebAssembly.Server.dll": {
+            "assemblyVersion": "8.0.25.0",
+            "fileVersion": "8.0.2526.11225"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Http.Connections.Client/6.0.0": {
+        "runtime": {
+          "lib/net6.0/Microsoft.AspNetCore.Http.Connections.Client.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.21.52608"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.SignalR.Client/6.0.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Connections.Client": "6.0.0",
+          "Microsoft.AspNetCore.SignalR.Client.Core": "6.0.0"
+        },
+        "runtime": {
+          "lib/net6.0/Microsoft.AspNetCore.SignalR.Client.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.21.52608"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.SignalR.Client.Core/6.0.0": {
+        "runtime": {
+          "lib/net6.0/Microsoft.AspNetCore.SignalR.Client.Core.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.21.52608"
+          }
+        }
+      },
+      "Microsoft.JSInterop.WebAssembly/8.0.0": {
+        "runtime": {
+          "lib/net8.0/Microsoft.JSInterop.WebAssembly.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53112"
+          }
+        }
+      },
+      "MyApp.Client/1.0.0": {
+        "dependencies": {
+          "Bolero": "0.24.39",
+          "Bolero.HotReload": "0.24.5",
+          "FSharp.Core": "10.1.201"
+        },
+        "runtime": {
+          "MyApp.Client.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "MyApp.Server/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Bolero/0.24.39": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-uF1eUgWMFz5J5zwqo5oHr6PnvM0ur9GHr2kX4Jhl1phPwDrAoNLYaCnQdEXJ6lJO5hS5L4rCsENeRwgWXmp+7w==",
+      "path": "bolero/0.24.39",
+      "hashPath": "bolero.0.24.39.nupkg.sha512"
+    },
+    "Bolero.HotReload/0.24.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3HO7p1jFZd4b3RsKqaH0P7hT2DSm2ogHdBKvi9XEEWh1ljojLpX+ZzOeLIHbTre/5aayaZpnVFbWKzxeMV4v0A==",
+      "path": "bolero.hotreload/0.24.5",
+      "hashPath": "bolero.hotreload.0.24.5.nupkg.sha512"
+    },
+    "Bolero.HotReload.Server/0.24.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XItwMJTQjea1Ey8MqL6X9ybUM/XuBFNSzDtyIEqlP1WJU4MQBc/p1Y6GZqA41uAyCWBA+o4pGSIb3DvrSI1alA==",
+      "path": "bolero.hotreload.server/0.24.5",
+      "hashPath": "bolero.hotreload.server.0.24.5.nupkg.sha512"
+    },
+    "Bolero.Server/0.24.39": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-T4/pq2e+5DVxwUxRakMCh17xaSXH9Tj9zlfQMhCbVL+NdcJOuSr6yDe7UwF1fdgNd5EdStJF3D9YhNkOkao79w==",
+      "path": "bolero.server/0.24.39",
+      "hashPath": "bolero.server.0.24.39.nupkg.sha512"
+    },
+    "Elmish/4.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6AI++9Ula33yMUG9F83iVrZClurQn5cgriwK7aX9FvlhJFXgRB6IYybD+wx26NNhdPOKQIvfBYZYWwRWWWqJmA==",
+      "path": "elmish/4.0.1",
+      "hashPath": "elmish.4.0.1.nupkg.sha512"
+    },
+    "FSharp.Core/10.1.201": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-s5w9LWYurZ9yZdIppoIaYLkRadyT5s3u0wbQCb0J4bQd3ubIlIWQ3Nd5+ll1y3pv5OnTS373dP8T1S/BP46QXg==",
+      "path": "fsharp.core/10.1.201",
+      "hashPath": "fsharp.core.10.1.201.nupkg.sha512"
+    },
+    "FSharp.SystemTextJson/0.19.13": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-q6KzrtNR2d8w9UzMyII3w6Kz91i9gomhUPRqSxm9nzezd26uiAowDnv4J+QVhGPDkJ7oGW4bpbbWTYEZ/OF+Kw==",
+      "path": "fsharp.systemtextjson/0.19.13",
+      "hashPath": "fsharp.systemtextjson.0.19.13.nupkg.sha512"
+    },
+    "HtmlAgilityPack/1.11.39": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9xk8l+68NaHe3RmfzAOO0A5DcotDO4lAilUnmZpu6h/EpBCfDVrxr7aNClIGK/p3vPiypVzpUCENm72UKfIVjg==",
+      "path": "htmlagilitypack/1.11.39",
+      "hashPath": "htmlagilitypack.1.11.39.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Components.WebAssembly/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qHrccD3+jPesOla0pYhhI7T0qDrIJjffy8L37c7H6R+l88jU7xHdkdBmvmMMsI+r9/vTk6He88IQwy4zAKZmWw==",
+      "path": "microsoft.aspnetcore.components.webassembly/8.0.0",
+      "hashPath": "microsoft.aspnetcore.components.webassembly.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Components.WebAssembly.Server/8.0.25": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-VOJZo777u9epoJcJEMRxtKxeRwQSF0uHlWVc1tF1WOJhsA+g2JOFlsxfnm2Wx/Dlc8Wp65Vqku104EfhKCb/vA==",
+      "path": "microsoft.aspnetcore.components.webassembly.server/8.0.25",
+      "hashPath": "microsoft.aspnetcore.components.webassembly.server.8.0.25.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Http.Connections.Client/6.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3KtBO0/c8IoQRbH3gitSlJHEc4QpvCa4C0L1XyJAsKjNXTbKQeSxc9ONnZCAm6gIS7b3x+gxnQt7lz7AvUhHKA==",
+      "path": "microsoft.aspnetcore.http.connections.client/6.0.0",
+      "hashPath": "microsoft.aspnetcore.http.connections.client.6.0.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.SignalR.Client/6.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GytHtL5QoZ5uHbi6lJd9thNBxyRKEQdnf1d+a0ZzxkE3EjWECXSbnodJ33TmWwyUNHFS/XzpWA8qUxpqt5Fguw==",
+      "path": "microsoft.aspnetcore.signalr.client/6.0.0",
+      "hashPath": "microsoft.aspnetcore.signalr.client.6.0.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.SignalR.Client.Core/6.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hUyRpqfa2rnXVduN0XxiZQjRJzim+KZdf41VbKupo8hYCKHhNZ7bJJXoN2DPhVqLiu4rpBFmi+qHGyKbh9E6LA==",
+      "path": "microsoft.aspnetcore.signalr.client.core/6.0.0",
+      "hashPath": "microsoft.aspnetcore.signalr.client.core.6.0.0.nupkg.sha512"
+    },
+    "Microsoft.JSInterop.WebAssembly/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-i7rDTUTwtEnZzukY6qCScCzuvDVANs5tRmeUl84HgY3UvLrVaYVDk8cdipfizc/GfxwUF1TvP8PCmvkHdflMBw==",
+      "path": "microsoft.jsinterop.webassembly/8.0.0",
+      "hashPath": "microsoft.jsinterop.webassembly.8.0.0.nupkg.sha512"
+    },
+    "MyApp.Client/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
