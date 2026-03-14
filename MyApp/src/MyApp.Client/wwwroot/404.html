@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <script>
+        // SPA fallback for GitHub Pages: redirect 404 to index.html with path preserved
+        var path = window.location.pathname;
+        window.location.replace('/' + '?p=' + encodeURIComponent(path));
+    </script>
+</head>
+<body></body>
+</html>
