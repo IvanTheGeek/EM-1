@@ -1,5 +1,6 @@
 html, body {
   height: 100%;
+  overflow-x: hidden;   /* prevent page-level horizontal scroll so inner containers can scroll */
 }
 
 body {
@@ -18,6 +19,7 @@ body {
 /* Allow the content column to shrink so child scroll containers work */
 #main > .columns > .column:not(.sidebar) {
   min-width: 0;
+  overflow: hidden;
 }
 
 .sidebar {
@@ -27,7 +29,7 @@ body {
 }
 
 /* ===== Event Model ===== */
-.em-root { padding: 0.5rem 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; overflow-x: auto; min-width: 0; }
+.em-root { padding: 0.5rem 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-width: 0; }
 .em-main-title { font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 0.2rem; }
 .em-subtitle { color: #64748b; font-size: 0.82rem; margin-bottom: 1rem; }
 
