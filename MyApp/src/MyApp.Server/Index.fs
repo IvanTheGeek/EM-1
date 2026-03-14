@@ -12,7 +12,7 @@ let page = doctypeHtml {
         meta { attr.charset "UTF-8" }
         meta { attr.name "viewport"; attr.content "width=device-width, initial-scale=1.0" }
         title { "Bolero Application" }
-        ``base`` { attr.href "/" }
+        ``base`` { attr.href "./" }
         link { attr.rel "stylesheet"; attr.href "css/bulma.min.css" }
         link { attr.rel "stylesheet"; attr.href "css/index.css" }
         link { attr.rel "stylesheet"; attr.href "MyApp.Client.styles.css" }

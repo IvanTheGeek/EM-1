@@ -58,14 +58,8 @@ cd MyApp
 dotnet publish src/MyApp.Client/MyApp.Client.fsproj -c Release -p:HostingMode=WasmOnly -o publish/wasm
 ```
 
-If your static host serves files from a subdirectory (e.g. `/wwwroot/`),
-pass `-p:BaseHref=/wwwroot/` so that the published `index.html` resolves
-assets correctly:
-
-```bash
-cd MyApp
-dotnet publish src/MyApp.Client/MyApp.Client.fsproj -c Release -p:HostingMode=WasmOnly -p:BaseHref=/wwwroot/ -o publish/wasm
-```
+The published output uses `<base href="./" />` (dot-relative), so it works
+when deployed to any subdirectory without extra configuration.
 
 ### Deploy
 
@@ -76,7 +70,7 @@ host:
 - **Netlify / Vercel** — point to the `wwwroot/` folder
 - **Azure Static Web Apps** — deploy the `wwwroot/` folder
 - **AWS S3 + CloudFront** — upload to an S3 bucket with static hosting
-- **Fastmail Files** — upload to the `wwwroot/` folder, use `-p:BaseHref=/wwwroot/`
+- **Fastmail Files** — upload the `wwwroot/` folder contents
 - **Any web server** — Nginx, Apache, Caddy serving static files
 
 ### SPA routing
