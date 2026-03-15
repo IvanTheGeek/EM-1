@@ -1,0 +1,41 @@
+# LaundryLog - Open App Command Slice
+
+[slice]
+id = "019644a1-b1a0-7000-8000-000000000100"
+type = "CommandSlice"
+name = "OpenApp"
+system = "LaundryLog"
+description = "Truck driver opens the LaundryLog app"
+
+[[origins]]
+id = "019644a1-b1a0-7000-8000-000000000110"
+name = "Splash Screen"
+swimlane = "TruckDriver"
+snapshot = "app-splash-screen.png"
+
+[command]
+id = "019644a1-b1a0-7000-8000-000000000120"
+name = "OpenApp"
+fields = []
+
+[handler]
+id = "019644a1-b1a0-7000-8000-000000000130"
+name = "OpenAppHandler"
+
+[[event]]
+id = "019644a1-b1a0-7000-8000-000000000140"
+name = "AppOpened"
+fields = [
+    { name = "openedAt", type = "datetime" },
+]
+
+# GWT rules are match-ordered: first match wins, like F# pattern matching.
+# Most specific rules first, catch-all last.
+
+[[handler.gwt]]
+id = "019644a1-b1a0-7000-8000-000000000150"
+name = "OpenApp"
+given = "Unit"
+when = "OpenApp"
+then = "AppOpened"
+description = "No prior state needed. App opened, session identity established."
