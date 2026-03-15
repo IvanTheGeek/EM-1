@@ -18,4 +18,13 @@
     <PackageReference Include="Bolero.HotReload" Version="0.*" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.*" />
   </ItemGroup>
+  <Target Name="CopyServerData" BeforeTargets="Build"
+          Condition="'$(HostingMode)' == 'WasmOnly'">
+    <ItemGroup>
+      <ServerDataFiles Include="..\MyApp.Server\data\model\**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ServerDataFiles)"
+          DestinationFolder="wwwroot\data\model\%(RecursiveDir)"
+          SkipUnchangedFiles="true" />
+  </Target>
 </Project>

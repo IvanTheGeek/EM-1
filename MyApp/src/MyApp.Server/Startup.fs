@@ -1,7 +1,6 @@
 module MyApp.Server.Program
 
 open Microsoft.AspNetCore
-open Microsoft.AspNetCore.Authentication.Cookies
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.DependencyInjection
@@ -23,11 +22,7 @@ let main args =
 #endif
     |> ignore
     builder.Services.AddServerSideBlazor() |> ignore
-    builder.Services.AddAuthorization()
-        .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-        .AddCookie()
-    |> ignore
-    builder.Services.AddBoleroRemoting<BookService>() |> ignore
+    builder.Services.AddBoleroRemoting<ModelService>() |> ignore
     builder.Services.AddBoleroComponents() |> ignore
 #if DEBUG
     builder.Services.AddHotReload(templateDir = __SOURCE_DIRECTORY__ + "/../MyApp.Client") |> ignore
@@ -41,10 +36,8 @@ let main args =
 #endif
 
     app
-        .UseAuthentication()
         .UseStaticFiles()
         .UseRouting()
-        .UseAuthorization()
         .UseAntiforgery()
     |> ignore
 

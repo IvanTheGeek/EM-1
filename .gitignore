@@ -51,4 +51,7 @@ node_modules/
 ## Claude worktrees
 .claude/
 
+## WASM_ONLY build copies server data here
+MyApp/src/MyApp.Client/wwwroot/data/
+
 .fake

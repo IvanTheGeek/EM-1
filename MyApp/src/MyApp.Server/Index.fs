@@ -11,7 +11,7 @@ let page = doctypeHtml {
     head {
         meta { attr.charset "UTF-8" }
         meta { attr.name "viewport"; attr.content "width=device-width, initial-scale=1.0" }
-        title { "Bolero Application" }
+        title { "Event Modeling Experiment" }
         ``base`` { attr.href "./" }
         link { attr.rel "stylesheet"; attr.href "css/bulma.min.css" }
         link { attr.rel "stylesheet"; attr.href "css/index.css" }
@@ -28,7 +28,7 @@ let page = doctypeHtml {
                     attr.``class`` "navbar-item has-text-weight-bold is-size-5"
                     attr.href "https://fsbolero.io"
                     img { attr.style "height:40px"; attr.src "https://github.com/fsbolero/website/raw/master/src/Website/img/wasm-fsharp.png" }
-                    "  Bolero"
+                    "  Event Modeling Experiment"
                 }
             }
         }
