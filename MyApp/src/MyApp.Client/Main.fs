@@ -228,9 +228,6 @@ let homePage model dispatch =
 let eventModelingPage model dispatch =
     Main.EventModeling().Elt()
 
-let boardExperimentPage model dispatch =
-    Main.BoardExperiment().Elt()
-
 let counterPage model dispatch =
     Main.Counter()
         .Decrement(fun _ -> dispatch Decrement)
@@ -293,7 +290,7 @@ let view model dispatch =
             | Home -> homePage model dispatch
             | Counter -> counterPage model dispatch
             | EventModeling -> eventModelingPage model dispatch
-            | BoardExperiment -> boardExperimentPage model dispatch
+            | BoardExperiment -> EmBoard.boardExperimentPage model dispatch
             | Data ->
                 cond model.signedInAs <| function
                 | Some username -> dataPage model username dispatch
