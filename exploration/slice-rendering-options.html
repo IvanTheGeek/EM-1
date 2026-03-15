@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS Slice Rendering Options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f0a;
+    --surface: #131a13;
+    --surface-hover: #1a231a;
+    --border: #2a3a2a;
+    --border-bright: #3a5a3a;
+    --text: #c8d8c8;
+    --text-dim: #6a7a6a;
+    --text-bright: #e0f0e0;
+    
+    /* EM Colors - traditional sticky note palette */
+    --command-bg: #3b82f6;
+    --command-text: #ffffff;
+    --event-bg: #f59e0b;
+    --event-text: #1a1000;
+    --view-bg: #84cc16;
+    --view-text: #0a1a00;
+    --error-bg: #ef4444;
+    --error-text: #ffffff;
+    --handler-bg: #1e293b;
+    --handler-text: #94a3b8;
+    --gwt-bg: #1a1a2e;
+    --gwt-border: #2a2a4e;
+    
+    --mono: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    padding: 2rem;
+    line-height: 1.5;
+  }
+
+  h1 {
+    font-family: var(--mono);
+    color: var(--text-bright);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin-bottom: 3rem;
+    font-family: var(--mono);
+  }
+
+  .option-label {
+    font-family: var(--mono);
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .option-desc {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    max-width: 1400px;
+  }
+
+  .option {
+    padding: 2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+
+  /* ============================================
+     OPTION A: Sticky Notes (Adam's traditional)
+     ============================================ */
+  .sticky-slice {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    position: relative;
+  }
+
+  .sticky-swimlane {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    width: 100%;
+    text-align: center;
+    padding: 0.3rem 0;
+    border-bottom: 1px dashed var(--border);
+    margin-bottom: 0.5rem;
+  }
+
+  .sticky-origin {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+
+  .sticky-origin .screen-icon {
+    width: 32px;
+    height: 24px;
+    border: 1.5px solid var(--border-bright);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.5rem;
+    color: var(--text-dim);
+  }
+
+  .sticky-note {
+    padding: 0.75rem 1rem;
+    border-radius: 2px;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 0.85rem;
+    min-width: 140px;
+    text-align: center;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .sticky-note:hover {
+    transform: translateY(-2px);
+    box-shadow: 3px 4px 10px rgba(0,0,0,0.4);
+  }
+
+  .sticky-note.command { background: var(--command-bg); color: var(--command-text); }
+  .sticky-note.event { background: var(--event-bg); color: var(--event-text); }
+  .sticky-note.view { background: var(--view-bg); color: var(--view-text); }
+
+  .sticky-note .fields {
+    font-size: 0.65rem;
+    font-weight: 400;
+    font-family: var(--mono);
+    margin-top: 0.4rem;
+    text-align: left;
+    opacity: 0.8;
+  }
+
+  .sticky-arrow {
+    color: var(--text-dim);
+    font-size: 1.2rem;
+    line-height: 1;
+  }
+
+  .sticky-gwt {
+    width: 100%;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed var(--border);
+  }
+
+  .sticky-gwt-item {
+    background: var(--gwt-bg);
+    border: 1px solid var(--gwt-border);
+    border-radius: 3px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.7rem;
+    font-family: var(--mono);
+    color: var(--text-dim);
+    margin-bottom: 0.4rem;
+  }
+
+  .sticky-gwt-item span { color: var(--text); font-weight: 500; }
+
+  /* ============================================
+     OPTION B: Horizontal Flow (pipeline style)
+     ============================================ */
+  .flow-slice {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 1rem 0;
+  }
+
+  .flow-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .flow-badge {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    margin-bottom: 0.3rem;
+  }
+
+  .flow-box {
+    padding: 0.6rem 1rem;
+    border-radius: 3px;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    position: relative;
+  }
+
+  .flow-box.command { background: var(--command-bg); color: var(--command-text); }
+  .flow-box.handler {
+    background: transparent;
+    border: 1.5px dashed var(--border-bright);
+    color: var(--text-dim);
+    font-weight: 400;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+  }
+  .flow-box.event { background: var(--event-bg); color: var(--event-text); }
+  .flow-box.view { background: var(--view-bg); color: var(--view-text); }
+
+  .flow-connector {
+    width: 40px;
+    height: 2px;
+    background: var(--border-bright);
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .flow-connector::after {
+    content: '▸';
+    position: absolute;
+    right: -4px;
+    top: -8px;
+    color: var(--border-bright);
+    font-size: 0.8rem;
+  }
+
+  .flow-origin {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+    font-family: var(--mono);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .flow-origin .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border-bright);
+  }
+
+  .flow-gwt-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .flow-gwt-chip {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    padding: 0.3rem 0.6rem;
+    background: var(--gwt-bg);
+    border: 1px solid var(--gwt-border);
+    border-radius: 12px;
+    color: var(--text-dim);
+  }
+
+  .flow-gwt-chip b { color: var(--text); font-weight: 500; }
+
+  /* ============================================
+     OPTION C: Nested Blocks (structural/outline)
+     ============================================ */
+  .block-slice {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    font-family: var(--mono);
+  }
+
+  .block-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.8rem;
+    background: var(--surface-hover);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .block-header .type-tag {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+    font-weight: 600;
+  }
+
+  .block-header .type-tag.cmd { background: var(--command-bg); color: var(--command-text); }
+  .block-header .type-tag.viw { background: var(--view-bg); color: var(--view-text); }
+
+  .block-header .name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-bright);
+  }
+
+  .block-section {
+    padding: 0.5rem 0.8rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.75rem;
+  }
+
+  .block-section:last-child { border-bottom: none; }
+
+  .block-section-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    margin-bottom: 0.3rem;
+  }
+
+  .block-section-content {
+    color: var(--text);
+  }
+
+  .block-field {
+    display: inline-block;
+    color: var(--text-dim);
+    font-size: 0.65rem;
+  }
+
+  .block-field .fname { color: var(--text); }
+  .block-field .ftype { color: var(--command-bg); }
+
+  .block-event-name {
+    color: var(--event-bg);
+    font-weight: 600;
+  }
+
+  .block-command-name {
+    color: var(--command-bg);
+    font-weight: 600;
+  }
+
+  .block-view-name {
+    color: var(--view-bg);
+    font-weight: 600;
+  }
+
+  .block-gwt {
+    background: var(--gwt-bg);
+    padding: 0.5rem 0.8rem;
+    font-size: 0.7rem;
+  }
+
+  .block-gwt-label {
+    color: var(--text-dim);
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.25rem;
+  }
+
+  .block-gwt-rule {
+    color: var(--text-dim);
+    margin-bottom: 0.2rem;
+  }
+
+  .block-gwt-rule .kw { color: #a78bfa; font-weight: 500; }
+  .block-gwt-rule .val { color: var(--text); }
+
+  /* ============================================
+     OPTION D: Card + Expandable (interactive)
+     ============================================ */
+  .card-slice {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .card-slice:hover {
+    border-color: var(--border-bright);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .card-type-bar {
+    width: 4px;
+    flex-shrink: 0;
+  }
+
+  .card-type-bar.cmd { background: var(--command-bg); }
+  .card-type-bar.viw { background: var(--view-bg); }
+
+  .card-main {
+    flex: 1;
+    padding: 0.8rem 1rem;
+  }
+
+  .card-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-title {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-bright);
+  }
+
+  .card-type-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .card-flow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-pill {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+
+  .card-pill.command { background: rgba(59,130,246,0.15); color: var(--command-bg); border: 1px solid rgba(59,130,246,0.3); }
+  .card-pill.event { background: rgba(245,158,11,0.15); color: var(--event-bg); border: 1px solid rgba(245,158,11,0.3); }
+  .card-pill.view { background: rgba(132,204,22,0.15); color: var(--view-bg); border: 1px solid rgba(132,204,22,0.3); }
+  .card-pill.handler { background: transparent; color: var(--text-dim); border: 1px dashed var(--border); }
+
+  .card-arrow {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+  }
+
+  .card-origin {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    margin-bottom: 0.5rem;
+  }
+
+  .card-origin span { color: var(--text); }
+
+  .card-expandable {
+    border-top: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .card-expand-toggle {
+    width: 100%;
+    background: var(--surface-hover);
+    border: none;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    padding: 0.4rem 1rem;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.15s;
+  }
+
+  .card-expand-toggle:hover {
+    color: var(--text);
+  }
+
+  .card-expand-toggle .chevron {
+    transition: transform 0.2s;
+    font-size: 0.7rem;
+  }
+
+  .card-expand-toggle.open .chevron {
+    transform: rotate(90deg);
+  }
+
+  .card-expand-content {
+    padding: 0.6rem 1rem;
+    background: var(--gwt-bg);
+    display: none;
+  }
+
+  .card-expand-content.show {
+    display: block;
+  }
+
+  .card-gwt-line {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    padding: 0.2rem 0;
+  }
+
+  .card-gwt-line .kw { color: #a78bfa; }
+  .card-gwt-line .val { color: var(--text-bright); }
+
+  .card-fields {
+    display: none;
+    padding: 0.5rem 1rem;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    background: rgba(0,0,0,0.2);
+  }
+
+  .card-fields.show { display: block; }
+
+  .card-field-item {
+    color: var(--text-dim);
+    padding: 0.1rem 0;
+  }
+
+  .card-field-item .fn { color: var(--text); }
+  .card-field-item .ft { color: var(--command-bg); }
+
+  /* Shared */
+  section { margin-bottom: 3rem; }
+</style>
+</head>
+<body>
+
+<h1>NEXUS // Slice Rendering Options</h1>
+<p class="subtitle">LaundryLog → LogExpense CommandSlice</p>
+
+<div class="options-grid">
+
+  <!-- OPTION A: Sticky Notes -->
+  <section class="option">
+    <div class="option-label">Option A — Sticky Notes</div>
+    <p class="option-desc">Closest to Adam's EM diagrams. Visual, familiar to EM practitioners. Good for workshops.</p>
+
+    <div class="sticky-slice">
+      <div class="sticky-swimlane">TruckDriver</div>
+      <div class="sticky-origin">
+        <div class="screen-icon">📱</div>
+        Expense Entry Screen
+      </div>
+      <div class="sticky-arrow">↓</div>
+      <div class="sticky-note command">
+        LogExpense
+        <div class="fields">
+          machineType: string<br>
+          quantity: int<br>
+          pricePerMachine: decimal<br>
+          paymentMethod: string<br>
+          location: string
+        </div>
+      </div>
+      <div class="sticky-arrow">↓</div>
+      <div class="sticky-note event">
+        LaundryExpenseLogged
+        <div class="fields">
+          expenseId: guid<br>
+          machineType: string<br>
+          totalCost: decimal<br>
+          loggedAt: datetime
+        </div>
+      </div>
+
+      <div class="sticky-gwt">
+        <div class="sticky-gwt-item">
+          <span>GIVEN</span> [LocationSet]
+          <span>WHEN</span> LogExpense
+          <span>THEN</span> LaundryExpenseLogged
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION B: Horizontal Flow -->
+  <section class="option">
+    <div class="option-label">Option B — Horizontal Flow</div>
+    <p class="option-desc">Pipeline style. Reads left-to-right like the EM timeline. Compact, shows the transformation.</p>
+
+    <div>
+      <div class="flow-origin">
+        <div class="dot"></div>
+        TruckDriver → Expense Entry Screen
+      </div>
+      <div class="flow-slice">
+        <div class="flow-node">
+          <div class="flow-badge">command</div>
+          <div class="flow-box command">LogExpense</div>
+        </div>
+        <div class="flow-connector"></div>
+        <div class="flow-node">
+          <div class="flow-badge">handler</div>
+          <div class="flow-box handler">LogExpenseHandler</div>
+        </div>
+        <div class="flow-connector"></div>
+        <div class="flow-node">
+          <div class="flow-badge">event</div>
+          <div class="flow-box event">LaundryExpenseLogged</div>
+        </div>
+      </div>
+      <div class="flow-gwt-row">
+        <div class="flow-gwt-chip"><b>G</b> [LocationSet]</div>
+        <div class="flow-gwt-chip"><b>W</b> LogExpense</div>
+        <div class="flow-gwt-chip"><b>T</b> LaundryExpenseLogged</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION C: Nested Blocks -->
+  <section class="option">
+    <div class="option-label">Option C — Nested Blocks</div>
+    <p class="option-desc">Structural/outline view. Dense, scannable, everything visible. Good for devs and spec review.</p>
+
+    <div class="block-slice">
+      <div class="block-header">
+        <span class="name">LogExpense</span>
+        <span class="type-tag cmd">Command</span>
+      </div>
+      <div class="block-section">
+        <div class="block-section-label">origin</div>
+        <div class="block-section-content">TruckDriver → Expense Entry Screen</div>
+      </div>
+      <div class="block-section">
+        <div class="block-section-label">command</div>
+        <div class="block-section-content">
+          <span class="block-command-name">LogExpense</span><br>
+          <span class="block-field"><span class="fname">machineType</span>:<span class="ftype">string</span></span> ·
+          <span class="block-field"><span class="fname">quantity</span>:<span class="ftype">int</span></span> ·
+          <span class="block-field"><span class="fname">pricePerMachine</span>:<span class="ftype">decimal</span></span> ·
+          <span class="block-field"><span class="fname">paymentMethod</span>:<span class="ftype">string</span></span> ·
+          <span class="block-field"><span class="fname">location</span>:<span class="ftype">string</span></span>
+        </div>
+      </div>
+      <div class="block-section">
+        <div class="block-section-label">event</div>
+        <div class="block-section-content">
+          <span class="block-event-name">LaundryExpenseLogged</span><br>
+          <span class="block-field"><span class="fname">expenseId</span>:<span class="ftype">guid</span></span> ·
+          <span class="block-field"><span class="fname">machineType</span>:<span class="ftype">string</span></span> ·
+          <span class="block-field"><span class="fname">quantity</span>:<span class="ftype">int</span></span> ·
+          <span class="block-field"><span class="fname">pricePerMachine</span>:<span class="ftype">decimal</span></span> ·
+          <span class="block-field"><span class="fname">totalCost</span>:<span class="ftype">decimal</span></span> ·
+          <span class="block-field"><span class="fname">location</span>:<span class="ftype">string</span></span> ·
+          <span class="block-field"><span class="fname">loggedAt</span>:<span class="ftype">datetime</span></span>
+        </div>
+      </div>
+      <div class="block-gwt">
+        <div class="block-gwt-label">gwt</div>
+        <div class="block-gwt-rule">
+          <span class="kw">given</span> <span class="val">[LocationSet]</span>
+          <span class="kw">when</span> <span class="val">LogExpense</span>
+          <span class="kw">then</span> <span class="val">LaundryExpenseLogged</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION D: Card + Expandable -->
+  <section class="option">
+    <div class="option-label">Option D — Card + Expandable</div>
+    <p class="option-desc">Interactive. Compact by default, reveals detail on demand. Best for facet toggling.</p>
+
+    <div class="card-slice">
+      <div class="card-top">
+        <div class="card-type-bar cmd"></div>
+        <div class="card-main">
+          <div class="card-origin">
+            <span>TruckDriver</span> · Expense Entry Screen
+          </div>
+          <div class="card-title-row">
+            <span class="card-title">LogExpense</span>
+            <span class="card-type-label">CommandSlice</span>
+          </div>
+          <div class="card-flow">
+            <span class="card-pill command">LogExpense</span>
+            <span class="card-arrow">→</span>
+            <span class="card-pill handler">Handler</span>
+            <span class="card-arrow">→</span>
+            <span class="card-pill event">LaundryExpenseLogged</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-expandable">
+        <button class="card-expand-toggle" onclick="toggleExpand(this, 'gwt1')">
+          <span class="chevron">▸</span> GWT Rules (1)
+        </button>
+        <div class="card-expand-content" id="gwt1">
+          <div class="card-gwt-line">
+            <span class="kw">given</span> <span class="val">[LocationSet]</span>
+          </div>
+          <div class="card-gwt-line">
+            <span class="kw">when</span> <span class="val">LogExpense</span>
+          </div>
+          <div class="card-gwt-line">
+            <span class="kw">then</span> <span class="val">LaundryExpenseLogged</span>
+          </div>
+          <div class="card-gwt-line" style="color: var(--text-dim); font-style: italic; margin-top: 0.3rem;">
+            Location must be established. Driver logs expense details.
+          </div>
+        </div>
+      </div>
+
+      <div class="card-expandable">
+        <button class="card-expand-toggle" onclick="toggleExpand(this, 'fields1')">
+          <span class="chevron">▸</span> Fields
+        </button>
+        <div class="card-expand-content" id="fields1">
+          <div class="card-gwt-line" style="color: var(--command-bg); margin-bottom: 0.3rem;">command fields:</div>
+          <div class="card-field-item"><span class="fn">machineType</span> : <span class="ft">string</span></div>
+          <div class="card-field-item"><span class="fn">quantity</span> : <span class="ft">int</span></div>
+          <div class="card-field-item"><span class="fn">pricePerMachine</span> : <span class="ft">decimal</span></div>
+          <div class="card-field-item"><span class="fn">paymentMethod</span> : <span class="ft">string</span></div>
+          <div class="card-field-item"><span class="fn">location</span> : <span class="ft">string</span></div>
+          <div class="card-gwt-line" style="color: var(--event-bg); margin-top: 0.5rem; margin-bottom: 0.3rem;">event fields:</div>
+          <div class="card-field-item"><span class="fn">expenseId</span> : <span class="ft">guid</span></div>
+          <div class="card-field-item"><span class="fn">machineType</span> : <span class="ft">string</span></div>
+          <div class="card-field-item"><span class="fn">totalCost</span> : <span class="ft">decimal</span></div>
+          <div class="card-field-item"><span class="fn">loggedAt</span> : <span class="ft">datetime</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+function toggleExpand(btn, id) {
+  const content = document.getElementById(id);
+  btn.classList.toggle('open');
+  content.classList.toggle('show');
+}
+</script>
+
+</body>
+</html>

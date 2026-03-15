@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS Slice Renderer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f5f0;
+    --surface: #ffffff;
+    --surface-alt: #fafaf7;
+    --border: #e0ddd5;
+    --border-strong: #c8c4ba;
+    --text: #2a2a28;
+    --text-secondary: #6b6960;
+    --text-dim: #9a968c;
+
+    --command-bg: #3b6fe0;
+    --command-bg-soft: #eef3fc;
+    --command-border: #b8cff0;
+    --command-text: #ffffff;
+
+    --event-bg: #e68a00;
+    --event-bg-soft: #fef5e7;
+    --event-border: #f0d5a0;
+    --event-text: #ffffff;
+
+    --view-bg: #2a8c4a;
+    --view-bg-soft: #edf7f0;
+    --view-border: #b0dbbe;
+    --view-text: #ffffff;
+
+    --error-bg: #d63031;
+    --error-text: #d63031;
+
+    --handler-bg: #f0ede6;
+    --handler-border: #d8d4ca;
+    --handler-text: var(--text-secondary);
+
+    --gwt-given: #2a8c4a;
+    --gwt-when: var(--command-bg);
+    --gwt-then: var(--event-bg);
+
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', system-ui, sans-serif;
+    --radius: 6px;
+    --radius-sm: 4px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    padding: 2rem;
+    line-height: 1.5;
+  }
+
+  .page-header {
+    margin-bottom: 2rem;
+  }
+
+  .page-header h1 {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.05em;
+  }
+
+  .layout-toggle {
+    display: flex;
+    gap: 0.25rem;
+    margin-top: 0.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.2rem;
+    display: inline-flex;
+  }
+
+  .layout-toggle button {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    padding: 0.35rem 0.75rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    background: transparent;
+    color: var(--text-secondary);
+    transition: all 0.15s;
+  }
+
+  .layout-toggle button.active {
+    background: var(--text);
+    color: var(--surface);
+  }
+
+  /* =====================
+     VERTICAL LAYOUT
+     ===================== */
+  .slices-vertical {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .slice-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    width: 320px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  /* Type stripe at top */
+  .slice-card-stripe {
+    height: 4px;
+  }
+  .slice-card-stripe.command { background: var(--command-bg); }
+  .slice-card-stripe.view { background: var(--view-bg); }
+
+  /* Header */
+  .slice-card-header {
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .slice-card-header .title {
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .slice-type-badge {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    color: white;
+  }
+  .slice-type-badge.command { background: var(--command-bg); }
+  .slice-type-badge.view { background: var(--view-bg); }
+
+  /* Sections */
+  .slice-section {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .slice-section:last-child { border-bottom: none; }
+
+  .slice-section-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.55rem 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--sans);
+    font-size: 0.8rem;
+    color: var(--text);
+    text-align: left;
+    transition: background 0.1s;
+  }
+
+  .slice-section-toggle:hover {
+    background: var(--surface-alt);
+  }
+
+  .slice-section-toggle .label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    min-width: 70px;
+  }
+
+  .slice-section-toggle .value {
+    flex: 1;
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+
+  .slice-section-toggle .value.cmd-color { color: var(--command-bg); }
+  .slice-section-toggle .value.evt-color { color: var(--event-bg); }
+  .slice-section-toggle .value.view-color { color: var(--view-bg); }
+
+  .slice-section-toggle .chevron {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    transition: transform 0.2s;
+    margin-left: 0.5rem;
+  }
+
+  .slice-section-toggle.open .chevron {
+    transform: rotate(90deg);
+  }
+
+  /* Non-collapsible row */
+  .slice-section-static {
+    padding: 0.55rem 1rem;
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .slice-section-static .label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    min-width: 70px;
+  }
+
+  .slice-section-static .value {
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  /* Expandable content */
+  .slice-section-content {
+    display: none;
+    padding: 0 1rem 0.75rem 1rem;
+  }
+
+  .slice-section-content.show {
+    display: block;
+  }
+
+  /* Fields */
+  .field-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .field-item {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    padding: 0.15rem 0;
+  }
+
+  .field-name { color: var(--text); font-weight: 500; }
+  .field-type { color: var(--text-dim); }
+
+  /* Screen preview */
+  .screen-ref {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+
+  .screen-thumb {
+    width: 48px;
+    height: 36px;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.55rem;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    flex-shrink: 0;
+  }
+
+  /* GWT Card */
+  .gwt-card {
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .gwt-card:last-child { margin-bottom: 0; }
+
+  .gwt-card-title {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .gwt-line {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    padding: 0.15rem 0;
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+  }
+
+  .gwt-kw {
+    font-weight: 600;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    min-width: 40px;
+  }
+
+  .gwt-kw.given { color: var(--gwt-given); }
+  .gwt-kw.when { color: var(--gwt-when); }
+  .gwt-kw.then { color: var(--gwt-then); }
+
+  .gwt-val {
+    color: var(--text);
+  }
+
+  .gwt-desc {
+    font-size: 0.7rem;
+    font-style: italic;
+    color: var(--text-dim);
+    margin-top: 0.3rem;
+    font-family: var(--sans);
+  }
+
+  .gwt-error .gwt-val {
+    color: var(--error-text);
+  }
+
+  /* Events feeding (for ViewSlice) */
+  .events-feeding {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .event-ref-chip {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    font-weight: 500;
+    padding: 0.2rem 0.5rem;
+    background: var(--event-bg-soft);
+    border: 1px solid var(--event-border);
+    color: var(--event-bg);
+    border-radius: 3px;
+  }
+
+  /* =====================
+     HORIZONTAL LAYOUT
+     ===================== */
+  .slices-horizontal {
+    display: none;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+  }
+
+  .slices-horizontal.active { display: flex; }
+  .slices-vertical.active { display: flex; }
+
+  .h-timeline {
+    display: flex;
+    gap: 0;
+    align-items: flex-start;
+  }
+
+  .h-slice {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    min-width: 240px;
+    max-width: 280px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    flex-shrink: 0;
+  }
+
+  .h-connector {
+    display: flex;
+    align-items: center;
+    padding: 0 0.25rem;
+    margin-top: 2rem;
+    color: var(--border-strong);
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .h-connector svg {
+    width: 32px;
+    height: 16px;
+  }
+
+  .h-stripe {
+    height: 3px;
+  }
+  .h-stripe.command { background: var(--command-bg); }
+  .h-stripe.view { background: var(--view-bg); }
+
+  .h-header {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .h-header .title {
+    font-weight: 700;
+    font-size: 0.8rem;
+  }
+
+  .h-type-badge {
+    font-family: var(--mono);
+    font-size: 0.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.15rem 0.4rem;
+    border-radius: 2px;
+    color: white;
+  }
+  .h-type-badge.command { background: var(--command-bg); }
+  .h-type-badge.view { background: var(--view-bg); }
+
+  .h-body {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .h-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    padding: 0.2rem 0;
+    font-size: 0.72rem;
+  }
+
+  .h-row .h-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    min-width: 55px;
+    flex-shrink: 0;
+  }
+
+  .h-row .h-val {
+    font-weight: 600;
+  }
+
+  .h-row .h-val.cmd { color: var(--command-bg); }
+  .h-row .h-val.evt { color: var(--event-bg); }
+  .h-row .h-val.viw { color: var(--view-bg); }
+
+  .h-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0.4rem 0;
+  }
+
+  .h-gwt-compact {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    padding: 0.2rem 0;
+  }
+
+  .h-gwt-compact .kw { font-weight: 600; }
+  .h-gwt-compact .kw.g { color: var(--gwt-given); }
+  .h-gwt-compact .kw.w { color: var(--gwt-when); }
+  .h-gwt-compact .kw.t { color: var(--gwt-then); }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>NEXUS // LaundryLog Walking Skeleton</h1>
+  <div class="layout-toggle">
+    <button class="active" onclick="setLayout('vertical', this)">Vertical</button>
+    <button onclick="setLayout('horizontal', this)">Horizontal</button>
+  </div>
+</div>
+
+<!-- ========================
+     VERTICAL LAYOUT
+     ======================== -->
+<div class="slices-vertical active" id="vertical">
+
+  <!-- OpenApp CommandSlice -->
+  <div class="slice-card">
+    <div class="slice-card-stripe command"></div>
+    <div class="slice-card-header">
+      <span class="title">OpenApp</span>
+      <span class="slice-type-badge command">Command</span>
+    </div>
+
+    <div class="slice-section-static">
+      <span class="label">Origin</span>
+      <span class="value">Splash Screen</span>
+    </div>
+
+    <div class="slice-section">
+      <button class="slice-section-toggle" onclick="toggle(this)">
+        <span class="label">Command</span>
+        <span class="value cmd-color">OpenApp</span>
+        <span class="chevron">▸</span>
+      </button>
+      <div class="slice-section-content">
+        <div class="field-list">
+          <div class="field-item" style="color: var(--text-dim); font-style: italic;">no fields</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slice-section">
+      <button class="slice-section-toggle" onclick="toggle(this)">
+        <span class="label">Event</span>
+        <span class="value evt-color">AppOpened</span>
+        <span class="chevron">▸</span>
+      </button>
+      <div class="slice-section-content">
+        <div class="field-list">
+          <div class="field-item">
+            <span class="field-name">openedAt</span>
+            <span class="field-type">: datetime</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slice-section">
+      <button class="slice-section-toggle" onclick="toggle(this)">
+        <span class="label">GWT</span>
+        <span class="value" style="font-weight: 400; font-size: 0.75rem; color: var(--text-secondary);">1 rule</span>
+        <span class="chevron">▸</span>
+      </button>
+      <div class="slice-section-content">
+        <div class="gwt-card">
+          <div class="gwt-card-title">OpenApp</div>
+          <div class="gwt-line">
+            <span class="gwt-kw given">Given</span>
+            <span class="gwt-val">Unit</span>
+          </div>
+          <div class="gwt-line">
+            <span class="gwt-kw when">When</span>
+            <span class="gwt-val">OpenApp</span>
+          </div>
+          <div class="gwt-line">
+            <span class="gwt-kw then">Then</span>
+            <span class="gwt-val">AppOpened</span>
+          </div>
+          <div class="gwt-desc">No prior state needed. App opened.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SetLocation CommandSlice -->
+  <div class="slice-card">
+    <div class="slice-card-stripe command"></div>
+    <div class="slice-card-header">
+      <span class="title">SetLocation</span>
+      <span class="slice-type-badge command">Command</span>
+    </div>
+
+    <div class="slice-section">
+      <button class="slice-section-toggle" onclick="toggle(this)">
+        <span class="label">Origin</span>
+        <span class="value">Get Location Screen</span>
+        <span class="chevron">▸</span>
+      </button>
+      <div class="slice-section-content">
+        <div class="screen-ref">
+          <div class="screen-thumb">PNG</div>
+          <span>get-location-screen.png</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="slice-section">
+      <button class="slice-section-toggle" onclick="toggle(this)">
+        <span class="label">Command</span>
+        <span class="value cmd-color">SetLocation</span>
+        <span class="chevron">▸</span>
+      </button>
+      <div class="slice-section-content">
+        <div class="field-list">
+          <div class="field-item">
+            <span class="field-name">location</span>
+            <span class="field-type">: string</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slice-section">
+      <button class="slice-section-toggle" onclick="toggle(this)">
+        <span class="label">Event</span>
+        <span class="value evt-color">LocationSet</span>
+        <span class="chevron">▸</span>
+      </button>
+      <div class="slice-section-content">
+        <div class="field-list">
+          <div class="field-item">
+            <span class="field-name">location</span>
+            <span class="field-type">: string</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slice-section">
+      <button class="slice-section-toggle" onclick="toggle(this)">
+        <span class="label">GWT</span>
+        <span class="value" style="font-weight: 400; font-size: 0.75rem; color: var(--text-secondary);">1 rule</span>
+        <span class="chevron">▸</span>
+      </button>
+      <div class="slice-section-content">
+        <div class="gwt-card">
+          <div class="gwt-card-title">SetLocation</div>
+          <div class="gwt-line">
+            <span class="gwt-kw given">Given</span>
+            <span class="gwt-val">[AppOpened]</span>
+          </div>
+          <div class="gwt-line">
+            <span class="gwt-kw when">When</span>
+            <span class="gwt-val">SetLocation</span>
+          </div>
+          <div class="gwt-line">
+            <span class="gwt-kw then">Then</span>
+            <span class="gwt-val">LocationSet</span>
+          </div>
+          <div class="gwt-desc">App has been opened, driver provides location.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CurrentLocation ViewSlice -->
+  <div class="slice-card">
+    <div class="slice-card-stripe view"></div>
+    <div class="slice-card-header">
+      <span class="title">CurrentLocation</span>
+      <span class="slice-type-badge view">View</span>
+    </div>
+
+    <div class="slice-section-static">
+      <span class="label">Origin</span>
+      <span class="value" style="color: var(--text-dim);">NoScreen</span>
+    </div>
+
+    <div class="slice-section">
+      <button class="slice-section-toggle" onclick="toggle(this)">
+        <span class="label">View</span>
+        <span class="value view-color">CurrentLocation</span>
+        <span class="chevron">▸</span>
+      </button>
+      <div class="slice-section-content">
+        <div class="field-list">
+          <div class="field-item">
+            <span class="field-name">location</span>
+            <span class="field-type">: string</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slice-section">
+      <button class="slice-section-toggle" onclick="toggle(this)">
+        <span class="label">Events</span>
+        <span class="value" style="font-weight: 400; font-size: 0.75rem;">feeding this view</span>
+        <span class="chevron">▸</span>
+      </button>
+      <div class="slice-section-content">
+        <div class="events-feeding">
+          <span class="event-ref-chip">LocationSet</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="slice-section">
+      <button class="slice-section-toggle" onclick="toggle(this)">
+        <span class="label">GWT</span>
+        <span class="value" style="font-weight: 400; font-size: 0.75rem; color: var(--text-secondary);">1 rule</span>
+        <span class="chevron">▸</span>
+      </button>
+      <div class="slice-section-content">
+        <div class="gwt-card">
+          <div class="gwt-card-title">LocationAvailable</div>
+          <div class="gwt-line">
+            <span class="gwt-kw given">Given</span>
+            <span class="gwt-val">[LocationSet]</span>
+          </div>
+          <div class="gwt-line">
+            <span class="gwt-kw then">Then</span>
+            <span class="gwt-val">CurrentLocation</span>
+          </div>
+          <div class="gwt-desc">Location has been set, provide it for expense entry.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LogExpense CommandSlice -->
+  <div class="slice-card">
+    <div class="slice-card-stripe command"></div>
+    <div class="slice-card-header">
+      <span class="title">LogExpense</span>
+      <span class="slice-type-badge command">Command</span>
+    </div>
+
+    <div class="slice-section">
+      <button class="slice-section-toggle" onclick="toggle(this)">
+        <span class="label">Origin</span>
+        <span class="value">Expense Entry Screen</span>
+        <span class="chevron">▸</span>
+      </button>
+      <div class="slice-section-content">
+        <div class="screen-ref">
+          <div class="screen-thumb">PNG</div>
+          <span>expense-entry-screen.png</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="slice-section">
+      <button class="slice-section-toggle" onclick="toggle(this)">
+        <span class="label">Command</span>
+        <span class="value cmd-color">LogExpense</span>
+        <span class="chevron">▸</span>
+      </button>
+      <div class="slice-section-content">
+        <div class="field-list">
+          <div class="field-item"><span class="field-name">machineType</span><span class="field-type">: string</span></div>
+          <div class="field-item"><span class="field-name">quantity</span><span class="field-type">: int</span></div>
+          <div class="field-item"><span class="field-name">pricePerMachine</span><span class="field-type">: decimal</span></div>
+          <div class="field-item"><span class="field-name">paymentMethod</span><span class="field-type">: string</span></div>
+          <div class="field-item"><span class="field-name">location</span><span class="field-type">: string</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slice-section">
+      <button class="slice-section-toggle" onclick="toggle(this)">
+        <span class="label">Event</span>
+        <span class="value evt-color">LaundryExpenseLogged</span>
+        <span class="chevron">▸</span>
+      </button>
+      <div class="slice-section-content">
+        <div class="field-list">
+          <div class="field-item"><span class="field-name">expenseId</span><span class="field-type">: guid</span></div>
+          <div class="field-item"><span class="field-name">machineType</span><span class="field-type">: string</span></div>
+          <div class="field-item"><span class="field-name">quantity</span><span class="field-type">: int</span></div>
+          <div class="field-item"><span class="field-name">pricePerMachine</span><span class="field-type">: decimal</span></div>
+          <div class="field-item"><span class="field-name">totalCost</span><span class="field-type">: decimal</span></div>
+          <div class="field-item"><span class="field-name">paymentMethod</span><span class="field-type">: string</span></div>
+          <div class="field-item"><span class="field-name">location</span><span class="field-type">: string</span></div>
+          <div class="field-item"><span class="field-name">loggedAt</span><span class="field-type">: datetime</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slice-section">
+      <button class="slice-section-toggle" onclick="toggle(this)">
+        <span class="label">GWT</span>
+        <span class="value" style="font-weight: 400; font-size: 0.75rem; color: var(--text-secondary);">1 rule</span>
+        <span class="chevron">▸</span>
+      </button>
+      <div class="slice-section-content">
+        <div class="gwt-card">
+          <div class="gwt-card-title">LogNewExpense</div>
+          <div class="gwt-line">
+            <span class="gwt-kw given">Given</span>
+            <span class="gwt-val">[LocationSet]</span>
+          </div>
+          <div class="gwt-line">
+            <span class="gwt-kw when">When</span>
+            <span class="gwt-val">LogExpense</span>
+          </div>
+          <div class="gwt-line">
+            <span class="gwt-kw then">Then</span>
+            <span class="gwt-val">LaundryExpenseLogged</span>
+          </div>
+          <div class="gwt-desc">Location must be established. Driver logs expense details.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RecentExpenses ViewSlice -->
+  <div class="slice-card">
+    <div class="slice-card-stripe view"></div>
+    <div class="slice-card-header">
+      <span class="title">RecentExpenses</span>
+      <span class="slice-type-badge view">View</span>
+    </div>
+
+    <div class="slice-section-static">
+      <span class="label">Origin</span>
+      <span class="value" style="color: var(--text-dim);">NoScreen</span>
+    </div>
+
+    <div class="slice-section">
+      <button class="slice-section-toggle" onclick="toggle(this)">
+        <span class="label">View</span>
+        <span class="value view-color">RecentExpenses</span>
+        <span class="chevron">▸</span>
+      </button>
+      <div class="slice-section-content">
+        <div class="field-list">
+          <div class="field-item"><span class="field-name">expenses</span><span class="field-type">: list</span></div>
+          <div class="field-item"><span class="field-name">totalSpent</span><span class="field-type">: decimal</span></div>
+          <div class="field-item"><span class="field-name">expenseCount</span><span class="field-type">: int</span></div>
+          <div class="field-item"><span class="field-name">location</span><span class="field-type">: string</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slice-section">
+      <button class="slice-section-toggle" onclick="toggle(this)">
+        <span class="label">Events</span>
+        <span class="value" style="font-weight: 400; font-size: 0.75rem;">feeding this view</span>
+        <span class="chevron">▸</span>
+      </button>
+      <div class="slice-section-content">
+        <div class="events-feeding">
+          <span class="event-ref-chip">LaundryExpenseLogged</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="slice-section">
+      <button class="slice-section-toggle" onclick="toggle(this)">
+        <span class="label">GWT</span>
+        <span class="value" style="font-weight: 400; font-size: 0.75rem; color: var(--text-secondary);">1 rule</span>
+        <span class="chevron">▸</span>
+      </button>
+      <div class="slice-section-content">
+        <div class="gwt-card">
+          <div class="gwt-card-title">RecentExpensesWithinWindow</div>
+          <div class="gwt-line">
+            <span class="gwt-kw given">Given</span>
+            <span class="gwt-val">[LaundryExpenseLogged]</span>
+          </div>
+          <div class="gwt-line">
+            <span class="gwt-kw when">When</span>
+            <span class="gwt-val">loggedAt within 3 hours</span>
+          </div>
+          <div class="gwt-line">
+            <span class="gwt-kw then">Then</span>
+            <span class="gwt-val">RecentExpenses</span>
+          </div>
+          <div class="gwt-desc">Shows all expenses logged within the last 3 hours.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ========================
+     HORIZONTAL LAYOUT
+     ======================== -->
+<div class="slices-horizontal" id="horizontal">
+  <div class="h-timeline">
+
+    <div class="h-slice">
+      <div class="h-stripe command"></div>
+      <div class="h-header">
+        <span class="title">OpenApp</span>
+        <span class="h-type-badge command">C</span>
+      </div>
+      <div class="h-body">
+        <div class="h-row"><span class="h-label">origin</span><span class="h-val">Splash Screen</span></div>
+        <div class="h-row"><span class="h-label">command</span><span class="h-val cmd">OpenApp</span></div>
+        <div class="h-row"><span class="h-label">event</span><span class="h-val evt">AppOpened</span></div>
+        <hr class="h-divider">
+        <div class="h-gwt-compact">
+          <span class="kw g">G</span> Unit
+          <span class="kw w">W</span> OpenApp
+          <span class="kw t">T</span> AppOpened
+        </div>
+      </div>
+    </div>
+
+    <div class="h-connector">
+      <svg viewBox="0 0 32 16"><path d="M0 8 L24 8 M20 4 L26 8 L20 12" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+    </div>
+
+    <div class="h-slice">
+      <div class="h-stripe command"></div>
+      <div class="h-header">
+        <span class="title">SetLocation</span>
+        <span class="h-type-badge command">C</span>
+      </div>
+      <div class="h-body">
+        <div class="h-row"><span class="h-label">origin</span><span class="h-val">Get Location Screen</span></div>
+        <div class="h-row"><span class="h-label">command</span><span class="h-val cmd">SetLocation</span></div>
+        <div class="h-row"><span class="h-label">event</span><span class="h-val evt">LocationSet</span></div>
+        <hr class="h-divider">
+        <div class="h-gwt-compact">
+          <span class="kw g">G</span> [AppOpened]
+          <span class="kw w">W</span> SetLocation
+          <span class="kw t">T</span> LocationSet
+        </div>
+      </div>
+    </div>
+
+    <div class="h-connector">
+      <svg viewBox="0 0 32 16"><path d="M0 8 L24 8 M20 4 L26 8 L20 12" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+    </div>
+
+    <div class="h-slice">
+      <div class="h-stripe view"></div>
+      <div class="h-header">
+        <span class="title">CurrentLocation</span>
+        <span class="h-type-badge view">V</span>
+      </div>
+      <div class="h-body">
+        <div class="h-row"><span class="h-label">view</span><span class="h-val viw">CurrentLocation</span></div>
+        <div class="h-row"><span class="h-label">reads</span><span class="h-val evt">LocationSet</span></div>
+        <hr class="h-divider">
+        <div class="h-gwt-compact">
+          <span class="kw g">G</span> [LocationSet]
+          <span class="kw t">T</span> CurrentLocation
+        </div>
+      </div>
+    </div>
+
+    <div class="h-connector">
+      <svg viewBox="0 0 32 16"><path d="M0 8 L24 8 M20 4 L26 8 L20 12" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+    </div>
+
+    <div class="h-slice">
+      <div class="h-stripe command"></div>
+      <div class="h-header">
+        <span class="title">LogExpense</span>
+        <span class="h-type-badge command">C</span>
+      </div>
+      <div class="h-body">
+        <div class="h-row"><span class="h-label">origin</span><span class="h-val">Expense Entry</span></div>
+        <div class="h-row"><span class="h-label">command</span><span class="h-val cmd">LogExpense</span></div>
+        <div class="h-row"><span class="h-label">event</span><span class="h-val evt">LaundryExpenseLogged</span></div>
+        <hr class="h-divider">
+        <div class="h-gwt-compact">
+          <span class="kw g">G</span> [LocationSet]
+          <span class="kw w">W</span> LogExpense
+          <span class="kw t">T</span> LaundryExpenseLogged
+        </div>
+      </div>
+    </div>
+
+    <div class="h-connector">
+      <svg viewBox="0 0 32 16"><path d="M0 8 L24 8 M20 4 L26 8 L20 12" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+    </div>
+
+    <div class="h-slice">
+      <div class="h-stripe view"></div>
+      <div class="h-header">
+        <span class="title">RecentExpenses</span>
+        <span class="h-type-badge view">V</span>
+      </div>
+      <div class="h-body">
+        <div class="h-row"><span class="h-label">view</span><span class="h-val viw">RecentExpenses</span></div>
+        <div class="h-row"><span class="h-label">reads</span><span class="h-val evt">LaundryExpenseLogged</span></div>
+        <hr class="h-divider">
+        <div class="h-gwt-compact">
+          <span class="kw g">G</span> [LaundryExpenseLogged]
+          <span class="kw w">W</span> within 3hrs
+          <span class="kw t">T</span> RecentExpenses
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function toggle(btn) {
+  btn.classList.toggle('open');
+  const content = btn.nextElementSibling;
+  content.classList.toggle('show');
+}
+
+function setLayout(mode, btn) {
+  document.querySelectorAll('.layout-toggle button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  
+  document.getElementById('vertical').classList.toggle('active', mode === 'vertical');
+  document.getElementById('horizontal').classList.toggle('active', mode === 'horizontal');
+}
+</script>
+
+</body>
+</html>
