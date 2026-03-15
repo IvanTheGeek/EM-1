@@ -1,0 +1,325 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaundryLog Event Model Board</title>
+    <style>
+        :root {
+            --bg-canvas: #f0f2f5;
+            --command-blue: #2563eb;
+            --view-green: #10b981;
+            --text-main: #1f2937;
+            --card-bg: #ffffff;
+            --border-light: #e5e7eb;
+            --gwt-bg: #fffbeb;
+            --gwt-border: #f59e0b;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-canvas);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        /* The horizontal board */
+        .board {
+            display: flex;
+            gap: 24px;
+            padding-bottom: 40px;
+            align-items: flex-start;
+        }
+
+        /* Modern, Touch-friendly Slice Column */
+        .slice-column {
+            min-width: 340px;
+            max-width: 340px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease;
+        }
+
+        /* Header logic based on Slice Type */
+        .slice-header {
+            padding: 16px;
+            border-radius: 12px 12px 0 0;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-command { background-color: var(--command-blue); }
+        .header-view { background-color: var(--view-green); }
+
+        .slice-title { font-weight: 700; font-size: 1.1rem; }
+        .slice-id { font-size: 0.75rem; opacity: 0.8; font-family: monospace; }
+
+        .content-area { padding: 16px; }
+
+        /* Snapshot styling */
+        .snapshot-container {
+            background: #f9fafb;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            margin-bottom: 16px;
+            text-align: center;
+            overflow: hidden;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .snapshot-placeholder {
+            color: #9ca3af;
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        /* Collapsible Data Sections */
+        details {
+            margin-bottom: 12px;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        summary {
+            padding: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        summary::after { content: '＋'; font-size: 0.8rem; color: #6b7280; }
+        details[open] summary::after { content: '－'; }
+
+        .field-list {
+            padding: 0 12px 12px 12px;
+            margin: 0;
+            list-style: none;
+            font-size: 0.9rem;
+        }
+
+        .field-item {
+            padding: 4px 0;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .field-type { color: #6b7280; font-size: 0.8rem; }
+
+        /* GWT Section */
+        .gwt-toggle-bar {
+            background: #f3f4f6;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .gwt-block {
+            padding: 16px;
+            background: var(--gwt-bg);
+            border-top: 2px solid var(--gwt-border);
+            display: none; /* Collapsed by default */
+        }
+
+        .gwt-block.visible { display: block; }
+
+        .gwt-line { margin-bottom: 8px; font-size: 0.85rem; }
+        .gwt-label { font-weight: 800; color: #b45309; margin-right: 4px; }
+
+        /* Theme Variations */
+        .theme-glass { backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.8); }
+    </style>
+</head>
+<body>
+
+<h1 style="margin-bottom: 30px;">LaundryLog: System Event Model</h1>
+
+<div class="board">
+
+    <div class="slice-column">
+        <div class="slice-header header-command">
+            <span class="slice-title">OpenApp</span>
+            <span class="slice-id">...0100</span>
+        </div>
+        <div class="content-area">
+            <div class="snapshot-container">
+                <span class="snapshot-placeholder">app-splash-screen.png</span>
+            </div>
+            <details>
+                <summary>Command Details</summary>
+                <ul class="field-list"><li class="field-item">Unit <span class="field-type">None</span></li></ul>
+            </details>
+            <details>
+                <summary>Event: AppOpened</summary>
+                <ul class="field-list">
+                    <li class="field-item">openedAt <span class="field-type">datetime</span></li>
+                </ul>
+            </details>
+        </div>
+        <div class="gwt-toggle-bar" onclick="toggleGWT(this)">
+            <span>GWT Logic Gate</span>
+            <span>👁️</span>
+        </div>
+        <div class="gwt-block">
+            <div class="gwt-line"><span class="gwt-label">GIVEN</span> Unit</div>
+            <div class="gwt-line"><span class="gwt-label">WHEN</span> OpenApp</div>
+            <div class="gwt-line"><span class="gwt-label">THEN</span> AppOpened</div>
+        </div>
+    </div>
+
+    <div class="slice-column">
+        <div class="slice-header header-command">
+            <span class="slice-title">SetLocation</span>
+            <span class="slice-id">...0300</span>
+        </div>
+        <div class="content-area">
+            <div class="snapshot-container">
+                <span class="snapshot-placeholder">get-location-screen.png</span>
+            </div>
+            <details>
+                <summary>Command Fields</summary>
+                <ul class="field-list">
+                    <li class="field-item">location <span class="field-type">string</span></li>
+                </ul>
+            </details>
+            <details>
+                <summary>Event: LocationSet</summary>
+                <ul class="field-list">
+                    <li class="field-item">location <span class="field-type">string</span></li>
+                </ul>
+            </details>
+        </div>
+        <div class="gwt-toggle-bar" onclick="toggleGWT(this)">
+            <span>GWT Logic Gate</span>
+            <span>👁️</span>
+        </div>
+        <div class="gwt-block">
+            <div class="gwt-line"><span class="gwt-label">GIVEN</span> AppOpened</div>
+            <div class="gwt-line"><span class="gwt-label">WHEN</span> SetLocation</div>
+            <div class="gwt-line"><span class="gwt-label">THEN</span> LocationSet</div>
+        </div>
+    </div>
+
+    <div class="slice-column">
+        <div class="slice-header header-view">
+            <span class="slice-title">CurrentLocation</span>
+            <span class="slice-id">...0400</span>
+        </div>
+        <div class="content-area">
+            <div class="snapshot-container">
+                <span class="snapshot-placeholder">(Implicit View)</span>
+            </div>
+            <details open>
+                <summary>View Model</summary>
+                <ul class="field-list">
+                    <li class="field-item">location <span class="field-type">string</span></li>
+                </ul>
+            </details>
+        </div>
+        <div class="gwt-toggle-bar" onclick="toggleGWT(this)">
+            <span>GWT Logic Gate</span>
+            <span>👁️</span>
+        </div>
+        <div class="gwt-block">
+            <div class="gwt-line"><span class="gwt-label">GIVEN</span> LocationSet</div>
+            <div class="gwt-line"><span class="gwt-label">THEN</span> CurrentLocation</div>
+        </div>
+    </div>
+
+    <div class="slice-column">
+        <div class="slice-header header-command">
+            <span class="slice-title">LogExpense</span>
+            <span class="slice-id">...0500</span>
+        </div>
+        <div class="content-area">
+            <div class="snapshot-container">
+                <span class="snapshot-placeholder">expense-entry-screen.png</span>
+            </div>
+            <details>
+                <summary>Command Fields</summary>
+                <ul class="field-list">
+                    <li class="field-item">machineType <span class="field-type">string</span></li>
+                    <li class="field-item">quantity <span class="field-type">int</span></li>
+                    <li class="field-item">pricePerMachine <span class="field-type">decimal</span></li>
+                    <li class="field-item">paymentMethod <span class="field-type">string</span></li>
+                </ul>
+            </details>
+            <details>
+                <summary>Event: ExpenseLogged</summary>
+                <ul class="field-list">
+                    <li class="field-item">expenseId <span class="field-type">guid</span></li>
+                    <li class="field-item">totalCost <span class="field-type">decimal</span></li>
+                </ul>
+            </details>
+        </div>
+        <div class="gwt-toggle-bar" onclick="toggleGWT(this)">
+            <span>GWT Logic Gate</span>
+            <span>👁️</span>
+        </div>
+        <div class="gwt-block">
+            <div class="gwt-line"><span class="gwt-label">GIVEN</span> LocationSet</div>
+            <div class="gwt-line"><span class="gwt-label">WHEN</span> LogExpense</div>
+            <div class="gwt-line"><span class="gwt-label">THEN</span> LaundryExpenseLogged</div>
+        </div>
+    </div>
+
+    <div class="slice-column">
+        <div class="slice-header header-view">
+            <span class="slice-title">RecentExpenses</span>
+            <span class="slice-id">...0600</span>
+        </div>
+        <div class="content-area">
+            <div class="snapshot-container">
+                <span class="snapshot-placeholder">(No Screen)</span>
+            </div>
+            <details open>
+                <summary>Read Model</summary>
+                <ul class="field-list">
+                    <li class="field-item">expenses <span class="field-type">list</span></li>
+                    <li class="field-item">totalSpent <span class="field-type">decimal</span></li>
+                    <li class="field-item">expenseCount <span class="field-type">int</span></li>
+                </ul>
+            </details>
+        </div>
+        <div class="gwt-toggle-bar" onclick="toggleGWT(this)">
+            <span>GWT Logic Gate</span>
+            <span>👁️</span>
+        </div>
+        <div class="gwt-block">
+            <div class="gwt-line"><span class="gwt-label">GIVEN</span> LaundryExpenseLogged</div>
+            <div class="gwt-line"><span class="gwt-label">WHEN</span> loggedAt < 3hrs</div>
+            <div class="gwt-line"><span class="gwt-label">THEN</span> RecentExpenses</div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function toggleGWT(element) {
+        const block = element.nextElementSibling;
+        block.classList.toggle('visible');
+    }
+</script>
+
+</body>
+</html>

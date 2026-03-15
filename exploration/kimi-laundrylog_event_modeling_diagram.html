@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaundryLog Event Modeling Diagram</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Theme 1: Soft Pastel (Default) */
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #5a6c7d;
+            --border-color: #e1e8ed;
+            --shadow: rgba(0, 0, 0, 0.08);
+
+            /* Slice Type Colors */
+            --command-slice: #fff3e0;
+            --command-header: #ff9800;
+            --view-slice: #e3f2fd;
+            --view-header: #2196f3;
+
+            /* Section Colors */
+            --origin-bg: #f3e5f5;
+            --origin-border: #9c27b0;
+            --command-bg: #e8f5e9;
+            --command-border: #4caf50;
+            --event-bg: #fff8e1;
+            --event-border: #ffc107;
+            --handler-bg: #fce4ec;
+            --handler-border: #e91e63;
+            --projector-bg: #e0f2f1;
+            --projector-border: #009688;
+            --view-bg: #e8eaf6;
+            --view-border: #3f51b5;
+            --gwt-bg: #fbe9e7;
+            --gwt-border: #ff5722;
+
+            /* Accent */
+            --accent: #607d8b;
+            --accent-hover: #455a64;
+        }
+
+        /* Theme 2: Clean Minimalist */
+        [data-theme="minimal"] {
+            --bg-primary: #fafafa;
+            --bg-secondary: #ffffff;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --border-color: #e0e0e0;
+            --shadow: rgba(0, 0, 0, 0.06);
+
+            --command-slice: #ffffff;
+            --command-header: #424242;
+            --view-slice: #ffffff;
+            --view-header: #616161;
+
+            --origin-bg: #f5f5f5;
+            --origin-border: #9e9e9e;
+            --command-bg: #fafafa;
+            --command-border: #bdbdbd;
+            --event-bg: #fafafa;
+            --event-border: #bdbdbd;
+            --handler-bg: #fafafa;
+            --handler-border: #bdbdbd;
+            --projector-bg: #fafafa;
+            --projector-border: #bdbdbd;
+            --view-bg: #fafafa;
+            --view-border: #bdbdbd;
+            --gwt-bg: #fafafa;
+            --gwt-border: #757575;
+
+            --accent: #212121;
+            --accent-hover: #000000;
+        }
+
+        /* Theme 3: Warm Professional */
+        [data-theme="warm"] {
+            --bg-primary: #fdfbf7;
+            --bg-secondary: #ffffff;
+            --text-primary: #3d2914;
+            --text-secondary: #6b5b4f;
+            --border-color: #e8e0d5;
+            --shadow: rgba(61, 41, 20, 0.08);
+
+            --command-slice: #fef9f3;
+            --command-header: #d4a574;
+            --view-slice: #f5f0e8;
+            --view-header: #8b7355;
+
+            --origin-bg: #faf5f0;
+            --origin-border: #c4a77d;
+            --command-bg: #f5f0e8;
+            --command-border: #a89080;
+            --event-bg: #fcf8f3;
+            --event-border: #d4b896;
+            --handler-bg: #faf5f0;
+            --handler-border: #b8a090;
+            --projector-bg: #f5f0e8;
+            --projector-border: #9a8b7a;
+            --view-bg: #faf8f5;
+            --view-border: #a89080;
+            --gwt-bg: #fdf8f3;
+            --gwt-border: #c9a87c;
+
+            --accent: #6b5b4f;
+            --accent-hover: #3d2914;
+        }
+
+        /* Theme 4: Fresh Mint */
+        [data-theme="mint"] {
+            --bg-primary: #f0f7f4;
+            --bg-secondary: #ffffff;
+            --text-primary: #1b4332;
+            --text-secondary: #52796f;
+            --border-color: #d4e7e0;
+            --shadow: rgba(27, 67, 50, 0.08);
+
+            --command-slice: #e8f5e9;
+            --command-header: #2e7d32;
+            --view-slice: #e0f2f1;
+            --view-header: #00695c;
+
+            --origin-bg: #f1f8e9;
+            --origin-border: #689f38;
+            --command-bg: #e8f5e9;
+            --command-border: #4caf50;
+            --event-bg: #fffde7;
+            --event-border: #fbc02d;
+            --handler-bg: #e0f7fa;
+            --handler-border: #00acc1;
+            --projector-bg: #e8f5e9;
+            --projector-border: #43a047;
+            --view-bg: #e0f2f1;
+            --view-border: #00897b;
+            --gwt-bg: #f3e5f5;
+            --gwt-border: #8e24aa;
+
+            --accent: #52796f;
+            --accent-hover: #1b4332;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: auto;
+            min-height: 100vh;
+        }
+
+        /* Theme Switcher */
+        .theme-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--bg-secondary);
+            padding: 12px 16px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            max-width: 300px;
+        }
+
+        .theme-btn {
+            padding: 8px 16px;
+            border: 2px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            touch-action: manipulation;
+        }
+
+        .theme-btn:hover, .theme-btn.active {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Header */
+        .diagram-header {
+            padding: 30px 40px 20px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .diagram-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .diagram-header .subtitle {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        /* Diagram Container */
+        .diagram-container {
+            display: flex;
+            gap: 24px;
+            padding: 30px 40px 60px;
+            min-width: max-content;
+            align-items: flex-start;
+        }
+
+        /* Slice Column */
+        .slice-column {
+            width: 340px;
+            flex-shrink: 0;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            box-shadow: 0 4px 24px var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .slice-column:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px var(--shadow);
+        }
+
+        .slice-column.command-slice {
+            background: var(--command-slice);
+        }
+
+        .slice-column.view-slice {
+            background: var(--view-slice);
+        }
+
+        /* Slice Header */
+        .slice-header {
+            padding: 20px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .command-slice .slice-header {
+            background: var(--command-header);
+        }
+
+        .view-slice .slice-header {
+            background: var(--view-header);
+        }
+
+        .slice-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .slice-type-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: rgba(255,255,255,0.25);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .slice-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .slice-description {
+            font-size: 13px;
+            opacity: 0.95;
+            line-height: 1.5;
+        }
+
+        .slice-id {
+            font-size: 10px;
+            opacity: 0.7;
+            margin-top: 8px;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+
+        /* Slice Content */
+        .slice-content {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Collapsible Section */
+        .collapsible-section {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s ease;
+            touch-action: manipulation;
+        }
+
+        .section-header:hover {
+            background: rgba(0,0,0,0.02);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .section-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .origin-section .section-icon { background: var(--origin-bg); color: var(--origin-border); }
+        .command-section .section-icon { background: var(--command-bg); color: var(--command-border); }
+        .event-section .section-icon { background: var(--event-bg); color: var(--event-border); }
+        .handler-section .section-icon { background: var(--handler-bg); color: var(--handler-border); }
+        .projector-section .section-icon { background: var(--projector-bg); color: var(--projector-border); }
+        .view-section .section-icon { background: var(--view-bg); color: var(--view-border); }
+        .gwt-section .section-icon { background: var(--gwt-bg); color: var(--gwt-border); }
+
+        .toggle-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+            color: var(--text-secondary);
+        }
+
+        .collapsible-section.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+
+        .section-content {
+            max-height: 1000px;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .collapsible-section.collapsed .section-content {
+            max-height: 0;
+        }
+
+        .section-inner {
+            padding: 0 16px 16px;
+        }
+
+        /* Screen Snapshot */
+        .screen-snapshot {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .screen-snapshot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .screen-placeholder {
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .screen-placeholder .icon {
+            font-size: 40px;
+            margin-bottom: 8px;
+            opacity: 0.5;
+        }
+
+        .screen-placeholder span {
+            font-size: 12px;
+        }
+
+        .view-btn {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.95);
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transition: all 0.2s ease;
+        }
+
+        .view-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Data Fields */
+        .data-field {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: rgba(0,0,0,0.02);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            border-left: 3px solid var(--border-color);
+        }
+
+        .data-field:last-child {
+            margin-bottom: 0;
+        }
+
+        .field-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .field-type {
+            color: var(--text-secondary);
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 11px;
+            background: rgba(0,0,0,0.05);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* GWT Block */
+        .gwt-block {
+            background: var(--gwt-bg);
+            border: 1px solid var(--gwt-border);
+            border-radius: 10px;
+            padding: 14px;
+            margin-top: 8px;
+        }
+
+        .gwt-title {
+            font-weight: 700;
+            font-size: 12px;
+            color: var(--gwt-border);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .gwt-rule {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 10px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+
+        .gwt-rule:last-child {
+            margin-bottom: 0;
+        }
+
+        .gwt-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .gwt-value {
+            font-size: 13px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .gwt-description {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: 4px;
+            padding-top: 6px;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        /* GWT Toggle Button */
+        .gwt-toggle-btn {
+            width: 100%;
+            padding: 10px;
+            background: var(--gwt-bg);
+            border: 1px solid var(--gwt-border);
+            border-radius: 8px;
+            color: var(--gwt-border);
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            margin-top: 12px;
+            touch-action: manipulation;
+        }
+
+        .gwt-toggle-btn:hover {
+            background: var(--gwt-border);
+            color: white;
+        }
+
+        .gwt-toggle-btn.hidden-gwt {
+            opacity: 0.6;
+        }
+
+        /* Swimlane Tag */
+        .swimlane-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 20px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+        }
+
+        /* Facets */
+        .facets-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .facet-tag {
+            padding: 3px 8px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 4px;
+            font-size: 10px;
+            color: var(--text-secondary);
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            animation: modalSlide 0.3s ease;
+        }
+
+        @keyframes modalSlide {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(0,0,0,0.05);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(0,0,0,0.1);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            max-height: calc(90vh - 80px);
+        }
+
+        .modal-image {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .diagram-container {
+                padding: 20px;
+                gap: 16px;
+            }
+
+            .slice-column {
+                width: 300px;
+            }
+
+            .theme-switcher {
+                top: 10px;
+                right: 10px;
+                padding: 8px 12px;
+            }
+
+            .theme-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        }
+
+        /* Connection Lines (Visual Only) */
+        .connection-indicator {
+            position: absolute;
+            right: -24px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 2px;
+            background: var(--border-color);
+        }
+
+        .slice-column {
+            position: relative;
+        }
+
+        /* Expand All / Collapse All */
+        .global-controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 500;
+            background: var(--bg-secondary);
+            padding: 12px 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 20px var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .control-btn {
+            padding: 10px 20px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            touch-action: manipulation;
+        }
+
+        .control-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Switcher -->
+    <div class="theme-switcher">
+        <button class="theme-btn active" data-theme="default">Soft Pastel</button>
+        <button class="theme-btn" data-theme="minimal">Minimalist</button>
+        <button class="theme-btn" data-theme="warm">Warm Pro</button>
+        <button class="theme-btn" data-theme="mint">Fresh Mint</button>
+    </div>
+
+    <!-- Header -->
+    <div class="diagram-header">
+        <h1>🧺 LaundryLog Event Modeling Diagram</h1>
+        <div class="subtitle">Truck Driver Laundry Expense Tracking System</div>
+    </div>
+
+    <!-- Diagram Container -->
+    <div class="diagram-container">
+
+        <!-- Slice 1: OpenApp (Command Slice) -->
+        <div class="slice-column command-slice" data-slice-id="019644a1-b1a0-7000-8000-000000000100">
+            <div class="slice-header">
+                <div class="slice-type-badge">Command Slice</div>
+                <div class="slice-title">OpenApp</div>
+                <div class="slice-description">Truck driver opens the LaundryLog app</div>
+                <div class="slice-id">019644a1-b1a0-7000-8000-000000000100</div>
+            </div>
+
+            <div class="slice-content">
+                <!-- Origin Section -->
+                <div class="collapsible-section origin-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">📱</div>
+                            <span>Origin: Splash Screen</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="screen-snapshot">
+                                <div class="screen-placeholder">
+                                    <div class="icon">📱</div>
+                                    <span>app-splash-screen.png</span>
+                                </div>
+                                <button class="view-btn" onclick="openModal('Splash Screen', 'app-splash-screen.png')">View</button>
+                            </div>
+                            <div class="swimlane-tag">👤 TruckDriver</div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                                <span class="facet-tag">emd</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Command Section -->
+                <div class="collapsible-section command-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">⚡</div>
+                            <span>Command</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="data-field">
+                                <span class="field-name">Name</span>
+                                <span class="field-type">OpenApp</span>
+                            </div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                                <span class="facet-tag">emd</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Handler Section -->
+                <div class="collapsible-section handler-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">🔧</div>
+                            <span>Handler</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="data-field">
+                                <span class="field-name">Name</span>
+                                <span class="field-type">OpenAppHandler</span>
+                            </div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event Section -->
+                <div class="collapsible-section event-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">📢</div>
+                            <span>Event: AppOpened</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="data-field">
+                                <span class="field-name">openedAt</span>
+                                <span class="field-type">datetime</span>
+                            </div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                                <span class="facet-tag">emd</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GWT Section (Toggleable) -->
+                <button class="gwt-toggle-btn" onclick="toggleGWT(this)">
+                    <span>🔒</span>
+                    <span>Hide GWT Rules</span>
+                </button>
+
+                <div class="gwt-section collapsible-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">🎯</div>
+                            <span>GWT Rules</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="gwt-block">
+                                <div class="gwt-title">Rule: OpenApp</div>
+                                <div class="gwt-rule">
+                                    <span class="gwt-label">Given</span>
+                                    <span class="gwt-value">Unit</span>
+                                </div>
+                                <div class="gwt-rule">
+                                    <span class="gwt-label">When</span>
+                                    <span class="gwt-value">OpenApp</span>
+                                </div>
+                                <div class="gwt-rule">
+                                    <span class="gwt-label">Then</span>
+                                    <span class="gwt-value">AppOpened</span>
+                                </div>
+                                <div class="gwt-description">No prior state needed. App opened.</div>
+                            </div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                                <span class="facet-tag">emd</span>
+                                <span class="facet-tag">gwt</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slice 2: SetLocation (Command Slice) -->
+        <div class="slice-column command-slice" data-slice-id="019644a1-b1a0-7000-8000-000000000300">
+            <div class="slice-header">
+                <div class="slice-type-badge">Command Slice</div>
+                <div class="slice-title">SetLocation</div>
+                <div class="slice-description">Truck driver provides the laundromat location</div>
+                <div class="slice-id">019644a1-b1a0-7000-8000-000000000300</div>
+            </div>
+
+            <div class="slice-content">
+                <div class="collapsible-section origin-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">📍</div>
+                            <span>Origin: Get Location</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="screen-snapshot">
+                                <div class="screen-placeholder">
+                                    <div class="icon">📍</div>
+                                    <span>get-location-screen.png</span>
+                                </div>
+                                <button class="view-btn" onclick="openModal('Get Location Screen', 'get-location-screen.png')">View</button>
+                            </div>
+                            <div class="swimlane-tag">👤 TruckDriver</div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                                <span class="facet-tag">emd</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsible-section command-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">⚡</div>
+                            <span>Command</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="data-field">
+                                <span class="field-name">location</span>
+                                <span class="field-type">string</span>
+                            </div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                                <span class="facet-tag">emd</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsible-section handler-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">🔧</div>
+                            <span>Handler</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="data-field">
+                                <span class="field-name">Name</span>
+                                <span class="field-type">SetLocationHandler</span>
+                            </div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsible-section event-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">📢</div>
+                            <span>Event: LocationSet</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="data-field">
+                                <span class="field-name">location</span>
+                                <span class="field-type">string</span>
+                            </div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                                <span class="facet-tag">emd</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="gwt-toggle-btn" onclick="toggleGWT(this)">
+                    <span>🔒</span>
+                    <span>Hide GWT Rules</span>
+                </button>
+
+                <div class="gwt-section collapsible-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">🎯</div>
+                            <span>GWT Rules</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="gwt-block">
+                                <div class="gwt-title">Rule: SetLocation</div>
+                                <div class="gwt-rule">
+                                    <span class="gwt-label">Given</span>
+                                    <span class="gwt-value">[AppOpened]</span>
+                                </div>
+                                <div class="gwt-rule">
+                                    <span class="gwt-label">When</span>
+                                    <span class="gwt-value">SetLocation</span>
+                                </div>
+                                <div class="gwt-rule">
+                                    <span class="gwt-label">Then</span>
+                                    <span class="gwt-value">LocationSet</span>
+                                </div>
+                                <div class="gwt-description">App has been opened, driver provides location.</div>
+                            </div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                                <span class="facet-tag">emd</span>
+                                <span class="facet-tag">gwt</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slice 3: CurrentLocation (View Slice) -->
+        <div class="slice-column view-slice" data-slice-id="019644a1-b1a0-7000-8000-000000000400">
+            <div class="slice-header">
+                <div class="slice-type-badge">View Slice</div>
+                <div class="slice-title">CurrentLocation</div>
+                <div class="slice-description">Provides the current laundromat location for expense entry</div>
+                <div class="slice-id">019644a1-b1a0-7000-8000-000000000400</div>
+            </div>
+
+            <div class="slice-content">
+                <div class="collapsible-section origin-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">📱</div>
+                            <span>Origin: No Screen</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="swimlane-tag">👤 None</div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsible-section projector-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">🔭</div>
+                            <span>Projector</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="data-field">
+                                <span class="field-name">Name</span>
+                                <span class="field-type">CurrentLocationProjector</span>
+                            </div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsible-section view-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">👁️</div>
+                            <span>View</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="data-field">
+                                <span class="field-name">location</span>
+                                <span class="field-type">string</span>
+                            </div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                                <span class="facet-tag">emd</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="gwt-toggle-btn" onclick="toggleGWT(this)">
+                    <span>🔒</span>
+                    <span>Hide GWT Rules</span>
+                </button>
+
+                <div class="gwt-section collapsible-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">🎯</div>
+                            <span>GWT Rules</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="gwt-block">
+                                <div class="gwt-title">Rule: LocationAvailable</div>
+                                <div class="gwt-rule">
+                                    <span class="gwt-label">Given</span>
+                                    <span class="gwt-value">[LocationSet]</span>
+                                </div>
+                                <div class="gwt-rule">
+                                    <span class="gwt-label">Then</span>
+                                    <span class="gwt-value">CurrentLocation</span>
+                                </div>
+                                <div class="gwt-description">Location has been set, provide it for expense entry.</div>
+                            </div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                                <span class="facet-tag">emd</span>
+                                <span class="facet-tag">gwt</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slice 4: LogExpense (Command Slice) -->
+        <div class="slice-column command-slice" data-slice-id="019644a1-b1a0-7000-8000-000000000500">
+            <div class="slice-header">
+                <div class="slice-type-badge">Command Slice</div>
+                <div class="slice-title">LogExpense</div>
+                <div class="slice-description">Truck driver logs a laundry expense</div>
+                <div class="slice-id">019644a1-b1a0-7000-8000-000000000500</div>
+            </div>
+
+            <div class="slice-content">
+                <div class="collapsible-section origin-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">💰</div>
+                            <span>Origin: Expense Entry</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="screen-snapshot">
+                                <div class="screen-placeholder">
+                                    <div class="icon">💰</div>
+                                    <span>expense-entry-screen.png</span>
+                                </div>
+                                <button class="view-btn" onclick="openModal('Expense Entry Screen', 'expense-entry-screen.png')">View</button>
+                            </div>
+                            <div class="swimlane-tag">👤 TruckDriver</div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                                <span class="facet-tag">emd</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsible-section command-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">⚡</div>
+                            <span>Command</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="data-field">
+                                <span class="field-name">machineType</span>
+                                <span class="field-type">string</span>
+                            </div>
+                            <div class="data-field">
+                                <span class="field-name">quantity</span>
+                                <span class="field-type">int</span>
+                            </div>
+                            <div class="data-field">
+                                <span class="field-name">pricePerMachine</span>
+                                <span class="field-type">decimal</span>
+                            </div>
+                            <div class="data-field">
+                                <span class="field-name">paymentMethod</span>
+                                <span class="field-type">string</span>
+                            </div>
+                            <div class="data-field">
+                                <span class="field-name">location</span>
+                                <span class="field-type">string</span>
+                            </div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                                <span class="facet-tag">emd</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsible-section handler-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">🔧</div>
+                            <span>Handler</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="data-field">
+                                <span class="field-name">Name</span>
+                                <span class="field-type">LogExpenseHandler</span>
+                            </div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsible-section event-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">📢</div>
+                            <span>Event: LaundryExpenseLogged</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="data-field">
+                                <span class="field-name">expenseId</span>
+                                <span class="field-type">guid</span>
+                            </div>
+                            <div class="data-field">
+                                <span class="field-name">machineType</span>
+                                <span class="field-type">string</span>
+                            </div>
+                            <div class="data-field">
+                                <span class="field-name">quantity</span>
+                                <span class="field-type">int</span>
+                            </div>
+                            <div class="data-field">
+                                <span class="field-name">pricePerMachine</span>
+                                <span class="field-type">decimal</span>
+                            </div>
+                            <div class="data-field">
+                                <span class="field-name">totalCost</span>
+                                <span class="field-type">decimal</span>
+                            </div>
+                            <div class="data-field">
+                                <span class="field-name">paymentMethod</span>
+                                <span class="field-type">string</span>
+                            </div>
+                            <div class="data-field">
+                                <span class="field-name">location</span>
+                                <span class="field-type">string</span>
+                            </div>
+                            <div class="data-field">
+                                <span class="field-name">loggedAt</span>
+                                <span class="field-type">datetime</span>
+                            </div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                                <span class="facet-tag">emd</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="gwt-toggle-btn" onclick="toggleGWT(this)">
+                    <span>🔒</span>
+                    <span>Hide GWT Rules</span>
+                </button>
+
+                <div class="gwt-section collapsible-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">🎯</div>
+                            <span>GWT Rules</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="gwt-block">
+                                <div class="gwt-title">Rule: LogNewExpense</div>
+                                <div class="gwt-rule">
+                                    <span class="gwt-label">Given</span>
+                                    <span class="gwt-value">[LocationSet]</span>
+                                </div>
+                                <div class="gwt-rule">
+                                    <span class="gwt-label">When</span>
+                                    <span class="gwt-value">LogExpense</span>
+                                </div>
+                                <div class="gwt-rule">
+                                    <span class="gwt-label">Then</span>
+                                    <span class="gwt-value">LaundryExpenseLogged</span>
+                                </div>
+                                <div class="gwt-description">Location must be established. Driver logs expense details.</div>
+                            </div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                                <span class="facet-tag">emd</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slice 5: RecentExpenses (View Slice) -->
+        <div class="slice-column view-slice" data-slice-id="019644a1-b1a0-7000-8000-000000000600">
+            <div class="slice-header">
+                <div class="slice-type-badge">View Slice</div>
+                <div class="slice-title">RecentExpenses</div>
+                <div class="slice-description">Shows recently logged laundry expenses</div>
+                <div class="slice-id">019644a1-b1a0-7000-8000-000000000600</div>
+            </div>
+
+            <div class="slice-content">
+                <div class="collapsible-section origin-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">📱</div>
+                            <span>Origin: No Screen</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="swimlane-tag">👤 None</div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsible-section projector-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">🔭</div>
+                            <span>Projector</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="data-field">
+                                <span class="field-name">Name</span>
+                                <span class="field-type">RecentExpensesProjector</span>
+                            </div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsible-section view-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">👁️</div>
+                            <span>View</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="data-field">
+                                <span class="field-name">expenses</span>
+                                <span class="field-type">list</span>
+                            </div>
+                            <div class="data-field">
+                                <span class="field-name">totalSpent</span>
+                                <span class="field-type">decimal</span>
+                            </div>
+                            <div class="data-field">
+                                <span class="field-name">expenseCount</span>
+                                <span class="field-type">int</span>
+                            </div>
+                            <div class="data-field">
+                                <span class="field-name">location</span>
+                                <span class="field-type">string</span>
+                            </div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                                <span class="facet-tag">emd</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="gwt-toggle-btn" onclick="toggleGWT(this)">
+                    <span>🔒</span>
+                    <span>Hide GWT Rules</span>
+                </button>
+
+                <div class="gwt-section collapsible-section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <div class="section-title">
+                            <div class="section-icon">🎯</div>
+                            <span>GWT Rules</span>
+                        </div>
+                        <div class="toggle-icon">▼</div>
+                    </div>
+                    <div class="section-content">
+                        <div class="section-inner">
+                            <div class="gwt-block">
+                                <div class="gwt-title">Rule: RecentExpensesWithinWindow</div>
+                                <div class="gwt-rule">
+                                    <span class="gwt-label">Given</span>
+                                    <span class="gwt-value">[LaundryExpenseLogged]</span>
+                                </div>
+                                <div class="gwt-rule">
+                                    <span class="gwt-label">When</span>
+                                    <span class="gwt-value">loggedAt within 3 hours</span>
+                                </div>
+                                <div class="gwt-rule">
+                                    <span class="gwt-label">Then</span>
+                                    <span class="gwt-value">RecentExpenses</span>
+                                </div>
+                                <div class="gwt-description">Shows all expenses logged within the last 3 hours.</div>
+                            </div>
+                            <div class="facets-list">
+                                <span class="facet-tag">business</span>
+                                <span class="facet-tag">emd</span>
+                                <span class="facet-tag">gwt</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Global Controls -->
+    <div class="global-controls">
+        <button class="control-btn" onclick="expandAll()">Expand All</button>
+        <button class="control-btn" onclick="collapseAll()">Collapse All</button>
+        <button class="control-btn" onclick="toggleAllGWT()">Toggle GWT</button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-title" id="modal-title">Screen Preview</div>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="screen-placeholder" style="padding: 60px 20px;">
+                    <div class="icon" style="font-size: 80px;">📱</div>
+                    <span style="font-size: 16px; color: var(--text-secondary);">Screen image would load here</span>
+                    <p style="margin-top: 10px; font-size: 13px; color: var(--text-secondary);">File: <span id="modal-filename">screenshot.png</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Switching
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const theme = this.dataset.theme;
+                if (theme === 'default') {
+                    document.body.removeAttribute('data-theme');
+                } else {
+                    document.body.setAttribute('data-theme', theme);
+                }
+            });
+        });
+
+        // Toggle Section Collapse
+        function toggleSection(header) {
+            const section = header.parentElement;
+            section.classList.toggle('collapsed');
+        }
+
+        // Toggle GWT Visibility
+        function toggleGWT(btn) {
+            const sliceColumn = btn.closest('.slice-column');
+            const gwtSection = sliceColumn.querySelector('.gwt-section');
+            const isHidden = gwtSection.style.display === 'none';
+
+            if (isHidden) {
+                gwtSection.style.display = 'block';
+                btn.innerHTML = '<span>🔒</span><span>Hide GWT Rules</span>';
+                btn.classList.remove('hidden-gwt');
+            } else {
+                gwtSection.style.display = 'none';
+                btn.innerHTML = '<span>🔓</span><span>Show GWT Rules</span>';
+                btn.classList.add('hidden-gwt');
+            }
+        }
+
+        // Expand All Sections
+        function expandAll() {
+            document.querySelectorAll('.collapsible-section').forEach(section => {
+                section.classList.remove('collapsed');
+            });
+        }
+
+        // Collapse All Sections
+        function collapseAll() {
+            document.querySelectorAll('.collapsible-section').forEach(section => {
+                section.classList.add('collapsed');
+            });
+        }
+
+        // Toggle All GWT
+        let gwtVisible = true;
+        function toggleAllGWT() {
+            gwtVisible = !gwtVisible;
+            document.querySelectorAll('.gwt-toggle-btn').forEach(btn => {
+                const sliceColumn = btn.closest('.slice-column');
+                const gwtSection = sliceColumn.querySelector('.gwt-section');
+
+                if (gwtVisible) {
+                    gwtSection.style.display = 'block';
+                    btn.innerHTML = '<span>🔒</span><span>Hide GWT Rules</span>';
+                    btn.classList.remove('hidden-gwt');
+                } else {
+                    gwtSection.style.display = 'none';
+                    btn.innerHTML = '<span>🔓</span><span>Show GWT Rules</span>';
+                    btn.classList.add('hidden-gwt');
+                }
+            });
+        }
+
+        // Modal Functions
+        function openModal(title, filename) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-filename').textContent = filename;
+            document.getElementById('modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(event) {
+            if (!event || event.target.id === 'modal') {
+                document.getElementById('modal').classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Initialize - collapse GWT sections by default for cleaner view
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.gwt-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.querySelectorAll('.gwt-toggle-btn').forEach(btn => {
+                btn.innerHTML = '<span>🔓</span><span>Show GWT Rules</span>';
+                btn.classList.add('hidden-gwt');
+            });
+            gwtVisible = false;
+        });
+    </script>
+</body>
+</html>
