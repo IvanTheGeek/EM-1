@@ -29,21 +29,32 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .slice-header {
+        .slice-header-group {
             background-color: var(--slice-header-bg-color);
             margin: -1rem -1rem 1rem -1rem;
-            padding: 1.5rem 1rem 0.5rem 1rem;
             border-bottom: 2px solid #bae6fd;
             border-left: 1px solid #bae6fd;
             border-right: 1px solid #bae6fd;
             border-top-left-radius: 4px;
             border-top-right-radius: 4px;
+            padding-bottom: 0.5rem;
+        }
+
+        .slice-header {
+            padding: 1.5rem 1rem 0.25rem 1rem;
+        }
+
+        .slice-header-description {
+            padding: 0 1rem;
+            font-size: 0.75rem;
+            color: #475569;
+            text-transform: lowercase;
         }
 
         .slice-title {
             margin: 0;
             font-size: 1rem;
-            color: #0c4a6e;
+            color: black;
         }
 
         .slice-type {
@@ -55,14 +66,33 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
+
+        .slice-tag {
+            position: absolute;
+            top: 0.25rem;
+            left: 0.5rem;
+            font-size: 0.6rem;
+            font-weight: 600;
+            background-color: #0284c7;
+            color: #ffffff;
+            padding: 0.1rem 0.5rem;
+            border-radius: 999px;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            line-height: 1.2;
+        }
     </style>
 </head>
 <body id="slice-body">
     <div id="slice-container" class="slice-outer-container">
+        <span id="slice-system-tag" class="slice-tag">LaundryLog</span>
         <span id="slice-label" class="slice-type">Command Slice</span>
-        <header id="slice-header-section" class="slice-header">
-            <h1 id="slice-main-title" class="slice-title">myCommand</h1>
-        </header>
+        <div id="slice-header-container" class="slice-header-group">
+            <header id="slice-header-section" class="slice-header">
+                <h1 id="slice-main-title" class="slice-title">myCommand</h1>
+            </header>
+            <div id="slice-description-label" class="slice-header-description">description</div>
+        </div>
         <div id="slice-body-content" class="slice-content">
             <p id="slice-description-1">This is the initial version of a Slice container.</p>
             <p id="slice-description-2">The border color indicates the current status (currently set to black).</p>
