@@ -1,0 +1,38 @@
+﻿<template id="Slice">
+    <article class="em-slice em-slice--light ${SliceTypeClass}">
+        <header class="em-slice-header">
+            <div class="em-slice-title-group">
+                <span class="em-slice-kind">${SliceType}</span>
+                <h3 class="em-slice-title">${SliceName}</h3>
+            </div>
+            <div class="em-slice-meta">
+                <span class="em-slice-badge">${SystemName}</span>
+                <span class="em-slice-badge">${Swimlane}</span>
+            </div>
+        </header>
+
+        <section class="em-slice-screen">
+            <div class="em-section-label">Screen</div>
+            <button class="em-screen-thumb" type="button" aria-label="Open screen preview">
+                <img class="em-screen-image ${HideSnapshotClass}" src="${SnapshotUrl}" alt="${SliceName} screen snapshot">
+                <span class="em-screen-placeholder ${HideNoSnapshotClass}">No snapshot</span>
+            </button>
+        </section>
+
+        <section class="em-slice-main">
+            <details class="em-panel" open>
+                <summary class="em-panel-summary">Slice details</summary>
+                <div class="em-panel-body">
+                    ${Details}
+                </div>
+            </details>
+
+            <details class="em-panel ${HideGwtClass}">
+                <summary class="em-panel-summary">Given / When / Then</summary>
+                <div class="em-panel-body">
+                    ${Gwt}
+                </div>
+            </details>
+        </section>
+    </article>
+</template>
