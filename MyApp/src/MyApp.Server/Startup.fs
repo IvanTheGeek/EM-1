@@ -57,7 +57,7 @@ let main args =
 #if !SERVER_ONLY
         .AddInteractiveWebAssemblyRenderMode()
 #endif
-        .AddAdditionalAssemblies(typeof<Client.Main.MyApp>.Assembly)
+        .AddAdditionalAssemblies(typeof<Client.Pages.MyApp>.Assembly)
     |> ignore
 
     app.Run()

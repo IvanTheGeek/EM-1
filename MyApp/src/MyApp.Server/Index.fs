@@ -35,9 +35,9 @@ let page = doctypeHtml {
         div {
             attr.id "main"
 #if SERVER_ONLY
-            comp<Client.Main.MyApp> { attr.renderMode RenderMode.InteractiveServer }
+            comp<Client.Pages.MyApp> { attr.renderMode RenderMode.InteractiveServer }
 #else
-            comp<Client.Main.MyApp> { attr.renderMode RenderMode.InteractiveWebAssembly }
+            comp<Client.Pages.MyApp> { attr.renderMode RenderMode.InteractiveWebAssembly }
 #endif
         }
         boleroScript

@@ -11,7 +11,7 @@ module Program =
     let Main args =
         let builder = WebAssemblyHostBuilder.CreateDefault(args)
 #if WASM_ONLY
-        builder.RootComponents.Add<Main.MyApp>("#main")
+        builder.RootComponents.Add<Pages.MyApp>("#main")
 #else
         builder.Services.AddBoleroRemoting(builder.HostEnvironment) |> ignore
 #endif
