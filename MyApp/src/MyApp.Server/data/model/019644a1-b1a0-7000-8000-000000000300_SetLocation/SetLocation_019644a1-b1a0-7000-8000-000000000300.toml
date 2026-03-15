@@ -1,0 +1,48 @@
+﻿# LaundryLog - Set Location Command Slice
+
+[slice]
+id = "019644a1-b1a0-7000-8000-000000000300"
+type = "CommandSlice"
+name = "SetLocation"
+system = "LaundryLog"
+description = "Truck driver provides the laundromat location"
+
+[[origins]]
+id = "019644a1-b1a0-7000-8000-000000000310"
+name = "Get Location Screen"
+swimlane = "TruckDriver"
+snapshot = "get-location-screen.png"
+facets = ["business.emd"]
+
+[command]
+id = "019644a1-b1a0-7000-8000-000000000320"
+name = "SetLocation"
+facets = ["business.emd"]
+fields = [
+    { name = "location", type = "string" },
+]
+
+[handler]
+id = "019644a1-b1a0-7000-8000-000000000330"
+name = "SetLocationHandler"
+facets = ["business"]
+
+[[event]]
+id = "019644a1-b1a0-7000-8000-000000000340"
+name = "LocationSet"
+facets = ["business.emd"]
+fields = [
+    { name = "location", type = "string" },
+]
+
+# GWT rules: all must pass. Each is a validation gate for its facet concern.
+# Failure of any rule = error. Facets control visibility by concern.
+
+[[handler.gwt]]
+id = "019644a1-b1a0-7000-8000-000000000350"
+name = "SetLocation"
+given = ["AppOpened"]
+when = "SetLocation"
+then = "LocationSet"
+facets = ["business.emd.gwt"]
+description = "App has been opened, driver provides location."
