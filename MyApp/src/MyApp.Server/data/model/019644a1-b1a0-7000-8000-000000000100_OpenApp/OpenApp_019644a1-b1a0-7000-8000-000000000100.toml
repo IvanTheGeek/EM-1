@@ -42,5 +42,5 @@ name = "OpenApp"
 given = "Unit"
 when = "OpenApp"
 then = "AppOpened"
-facets = ["business.emd"]
+facets = ["business.emd.gwt"]
 description = "No prior state needed. App opened."
