@@ -70,7 +70,7 @@ dotnet run --project MyApp/src/MyApp.Client/MyApp.Client.fsproj /p:HostingMode=W
 
 All publish commands output to `./publish/` at the repo root (already gitignored).
 
-### WASM + Server (default)
+### WASM Client + Server Backend/Remoting (default)
 
 **Windows:**
 
@@ -116,8 +116,21 @@ dotnet publish MyApp\src\MyApp.Client\MyApp.Client.fsproj -c Release -o publish 
 dotnet publish MyApp/src/MyApp.Client/MyApp.Client.fsproj -c Release -o publish /p:HostingMode=WasmOnly
 ```
 
+###### TIP
+
 The `publish/wwwroot/` folder is a self-contained static site. Serve it with any static file
-host (e.g. `dotnet serve -d publish/wwwroot`, nginx, GitHub Pages, Azure Static Web Apps).
+host (e.g.  publish/wwwroot`, nginx, GitHub Pages, Azure Static Web Apps).
+
+If you use the dotnet server:
+
+```
+dotnet tool install --global dotnet-serve
+```
+
+serve locally with: (from repo root)
+```
+dotnet serve -d publish/wwwroot
+```
 
 ---
 

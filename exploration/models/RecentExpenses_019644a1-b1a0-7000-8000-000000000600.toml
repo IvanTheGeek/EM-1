@@ -1,0 +1,42 @@
+﻿# LaundryLog - Recent Expenses View Slice
+
+[slice]
+id = "019644a1-b1a0-7000-8000-000000000600"
+type = "ViewSlice"
+name = "RecentExpenses"
+system = "LaundryLog"
+description = "Shows recently logged laundry expenses"
+
+[[origins]]
+id = "019644a1-b1a0-7000-8000-000000000610"
+name = "NoScreen"
+swimlane = "None"
+facets = ["business"]
+
+[projector]
+id = "019644a1-b1a0-7000-8000-000000000630"
+name = "RecentExpensesProjector"
+facets = ["business"]
+
+[view]
+id = "019644a1-b1a0-7000-8000-000000000660"
+name = "RecentExpenses"
+facets = ["business.emd"]
+fields = [
+    { name = "expenses", type = "list" },
+    { name = "totalSpent", type = "decimal" },
+    { name = "expenseCount", type = "int" },
+    { name = "location", type = "string" },
+]
+
+# GWT rules: all must pass. Each is a validation gate for its facet concern.
+# Failure of any rule = error. Facets control visibility by concern.
+
+[[projector.gwt]]
+id = "019644a1-b1a0-7000-8000-000000000650"
+name = "RecentExpensesWithinWindow"
+given = ["LaundryExpenseLogged"]
+when = "loggedAt within 3 hours"
+then = "RecentExpenses"
+facets = ["business.emd.gwt"]
+description = "Shows all expenses logged within the last 3 hours."

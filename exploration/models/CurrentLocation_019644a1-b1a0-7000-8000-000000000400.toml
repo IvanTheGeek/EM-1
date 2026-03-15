@@ -1,0 +1,38 @@
+﻿# LaundryLog - Current Location View Slice
+
+[slice]
+id = "019644a1-b1a0-7000-8000-000000000400"
+type = "ViewSlice"
+name = "CurrentLocation"
+system = "LaundryLog"
+description = "Provides the current laundromat location for expense entry"
+
+[[origins]]
+id = "019644a1-b1a0-7000-8000-000000000410"
+name = "NoScreen"
+swimlane = "None"
+facets = ["business"]
+
+[projector]
+id = "019644a1-b1a0-7000-8000-000000000430"
+name = "CurrentLocationProjector"
+facets = ["business"]
+
+[view]
+id = "019644a1-b1a0-7000-8000-000000000460"
+name = "CurrentLocation"
+facets = ["business.emd"]
+fields = [
+    { name = "location", type = "string" },
+]
+
+# GWT rules: all must pass. Each is a validation gate for its facet concern.
+# Failure of any rule = error. Facets control visibility by concern.
+
+[[projector.gwt]]
+id = "019644a1-b1a0-7000-8000-000000000450"
+name = "LocationAvailable"
+given = ["LocationSet"]
+then = "CurrentLocation"
+facets = ["business.emd.gwt"]
+description = "Location has been set, provide it for expense entry."
