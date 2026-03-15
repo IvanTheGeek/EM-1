@@ -16,6 +16,7 @@ type Page =
     | [<EndPoint "/counter">] Counter
     | [<EndPoint "/data">] Data
     | [<EndPoint "/event-modeling">] EventModeling
+    | [<EndPoint "/board">] BoardExperiment
 
 /// The Elmish application's model.
 type Model =
@@ -282,12 +283,14 @@ let view model dispatch =
             menuItem model Counter "Counter"
             menuItem model Data "Download data"
             menuItem model EventModeling "Event Modeling"
+            menuItem model BoardExperiment "Board Experiment"
         })
         .Body(
             cond model.page <| function
             | Home -> homePage model dispatch
             | Counter -> counterPage model dispatch
             | EventModeling -> eventModelingPage model dispatch
+            | BoardExperiment -> EmBoard.boardExperimentPage model dispatch
             | Data ->
                 cond model.signedInAs <| function
                 | Some username -> dataPage model username dispatch

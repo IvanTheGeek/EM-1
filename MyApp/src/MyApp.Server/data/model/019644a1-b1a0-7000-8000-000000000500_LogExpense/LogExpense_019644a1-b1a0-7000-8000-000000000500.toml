@@ -1,0 +1,59 @@
+﻿# LaundryLog - Log Expense Command Slice
+
+[slice]
+id = "019644a1-b1a0-7000-8000-000000000500"
+type = "CommandSlice"
+name = "LogExpense"
+system = "LaundryLog"
+description = "Truck driver logs a laundry expense"
+
+[[origins]]
+id = "019644a1-b1a0-7000-8000-000000000510"
+name = "Expense Entry Screen"
+swimlane = "TruckDriver"
+snapshot = "expense-entry-screen.png"
+facets = ["business.emd"]
+
+[command]
+id = "019644a1-b1a0-7000-8000-000000000520"
+name = "LogExpense"
+facets = ["business.emd"]
+fields = [
+    { name = "machineType", type = "string" },
+    { name = "quantity", type = "int" },
+    { name = "pricePerMachine", type = "decimal" },
+    { name = "paymentMethod", type = "string" },
+    { name = "location", type = "string" },
+]
+
+[handler]
+id = "019644a1-b1a0-7000-8000-000000000530"
+name = "LogExpenseHandler"
+facets = ["business"]
+
+[[event]]
+id = "019644a1-b1a0-7000-8000-000000000540"
+name = "LaundryExpenseLogged"
+facets = ["business.emd"]
+fields = [
+    { name = "expenseId", type = "guid" },
+    { name = "machineType", type = "string" },
+    { name = "quantity", type = "int" },
+    { name = "pricePerMachine", type = "decimal" },
+    { name = "totalCost", type = "decimal" },
+    { name = "paymentMethod", type = "string" },
+    { name = "location", type = "string" },
+    { name = "loggedAt", type = "datetime" },
+]
+
+# GWT rules: all must pass. Each is a validation gate for its facet concern.
+# Failure of any rule = error. Facets control visibility by concern.
+
+[[handler.gwt]]
+id = "019644a1-b1a0-7000-8000-000000000550"
+name = "LogNewExpense"
+given = ["LocationSet"]
+when = "LogExpense"
+then = "LaundryExpenseLogged"
+facets = ["business.emd"]
+description = "Location must be established. Driver logs expense details."
