@@ -66,6 +66,61 @@ dotnet build MyApp/src/MyApp.Client/MyApp.Client.fsproj /p:HostingMode=WasmOnly
 dotnet run --project MyApp/src/MyApp.Client/MyApp.Client.fsproj /p:HostingMode=WasmOnly
 ```
 
+## Publish
+
+All publish commands output to `./publish/` at the repo root (already gitignored).
+
+### WASM + Server (default)
+
+**Windows:**
+
+```
+dotnet publish MyApp\src\MyApp.Server\MyApp.Server.fsproj -c Release -o publish
+```
+
+**Linux / macOS:**
+
+```
+dotnet publish MyApp/src/MyApp.Server/MyApp.Server.fsproj -c Release -o publish
+```
+
+Run with: `dotnet publish/MyApp.Server.dll`
+
+### Server Only
+
+**Windows:**
+
+```
+dotnet publish MyApp\src\MyApp.Server\MyApp.Server.fsproj -c Release -o publish /p:HostingMode=ServerOnly
+```
+
+**Linux / macOS:**
+
+```
+dotnet publish MyApp/src/MyApp.Server/MyApp.Server.fsproj -c Release -o publish /p:HostingMode=ServerOnly
+```
+
+Run with: `dotnet publish/MyApp.Server.dll`
+
+### WASM Only
+
+**Windows:**
+
+```
+dotnet publish MyApp\src\MyApp.Client\MyApp.Client.fsproj -c Release -o publish /p:HostingMode=WasmOnly
+```
+
+**Linux / macOS:**
+
+```
+dotnet publish MyApp/src/MyApp.Client/MyApp.Client.fsproj -c Release -o publish /p:HostingMode=WasmOnly
+```
+
+The `publish/wwwroot/` folder is a self-contained static site. Serve it with any static file
+host (e.g. `dotnet serve -d publish/wwwroot`, nginx, GitHub Pages, Azure Static Web Apps).
+
+---
+
 ## Project Structure
 
 ```
