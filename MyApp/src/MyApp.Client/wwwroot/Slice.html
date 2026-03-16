@@ -93,6 +93,11 @@
             position: relative;
         }
 
+        #command-row-box {
+            background-color: #e0f2fe; /* Sky 100 */
+            border-color: #7dd3fc; /* Sky 300 */
+        }
+
         .inset-box-label {
             position: absolute;
             top: 0.25rem;
@@ -101,10 +106,16 @@
             color: #475569;
         }
 
-        .inset-box-badge-type {
+        .inset-box-badge-group {
             position: absolute;
             top: 0.4rem;
             right: 0.5rem;
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+        }
+
+        .inset-box-badge-type {
             font-size: 0.55rem;
             font-weight: bold;
             background-color: #cbd5e1;
@@ -115,9 +126,6 @@
         }
 
         .inset-box-badge-pill {
-            position: absolute;
-            top: 1.6rem;
-            right: 0.5rem;
             font-size: 0.55rem;
             font-weight: 600;
             background-color: #e0f2fe;
@@ -129,7 +137,7 @@
 
         .inset-box-badge-code {
             position: absolute;
-            top: 3rem;
+            bottom: 0.25rem;
             right: 0.5rem;
             font-size: 0.55rem;
             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -140,25 +148,31 @@
             border-radius: 3px;
         }
 
-        .inset-box-image {
+        .actor-screen-image {
             position: absolute;
-            top: 1.4rem;
+            top: 2rem;
             left: 0.5rem;
-            max-height: calc(100% - 1.6rem);
+            max-height: calc(100% - 3.5rem);
             max-width: 95%;
             object-fit: contain;
         }
 
         .inset-box-blue-rect {
             position: absolute;
-            top: 1rem;
+            top: 2rem;
             left: 0.5rem;
-            background-color: #0284c7;
+            right: 0.5rem;
+            background-color: #0ea5e9; /* Sky 500 */
             color: white;
             padding: 0.4rem 0.8rem;
             border-radius: 1px;
-            font-size: 0.7rem;
+            font-size: 0.85rem;
             font-weight: 500;
+            min-height: 3rem;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            box-sizing: border-box;
         }
     </style>
 </head>
@@ -174,14 +188,18 @@
         </div>
         <div id="actor-row-box" class="slice-inset-box">
             <span id="actor-screen-label" class="inset-box-label">Text Screen Name</span>
-            <span id="actor-screen-badge" class="inset-box-badge-type">SCREEN</span>
-            <span id="actor-type-badge" class="inset-box-badge-pill">TruckDriver</span>
-            <span id="actor-domain-badge" class="inset-box-badge-code">business.emd</span>
-            <img id="actor-screen-image" src="images/Screen.png" alt="Screen Snapshot" class="inset-box-image">
+            <div id="actor-badges-top-right" class="inset-box-badge-group">
+                <span id="actor-type-badge" class="inset-box-badge-pill">TruckDriver</span>
+                <span id="actor-screen-badge" class="inset-box-badge-type">SCREEN</span>
+            </div>
+            <span id="actor-lens-badge" class="inset-box-badge-code">business.emd</span>
+            <img id="actor-screen-image" src="images/Screen.png" alt="Screen Snapshot" class="actor-screen-image">
         </div>
         <div id="command-row-box" class="slice-inset-box">
-            <span id="command-type-badge" class="inset-box-badge-type">COMMAND</span>
-            <span id="command-domain-badge" class="inset-box-badge-code">business.emd</span>
+            <div id="command-badges-top-right" class="inset-box-badge-group">
+                <span id="command-type-badge" class="inset-box-badge-type">COMMAND</span>
+            </div>
+            <span id="command-lens-badge" class="inset-box-badge-code">business.emd</span>
             <div id="command-intent-rect" class="inset-box-blue-rect">LogExpense</div>
         </div>
     </div>
