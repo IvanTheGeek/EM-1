@@ -9,7 +9,7 @@
             --slice-bg-color: #f0f9ff;
             --slice-header-bg-color: #e0f2fe;
             --slice-border-width: 4px;
-            --slice-width: 3in;
+            --slice-width: 2.5in;
         }
 
         body {
@@ -86,10 +86,67 @@
         .slice-inset-box {
             background-color: white;
             border-radius: 8px;
-            height: 5rem;
+            height: 8.75rem;
             margin: 0 0 1rem 0;
             border: 1px solid #bae6fd;
             box-sizing: border-box;
+            position: relative;
+        }
+
+        .actor-screen-name {
+            position: absolute;
+            top: 0.25rem;
+            left: 0.5rem;
+            font-size: 0.65rem;
+            color: #475569;
+        }
+
+        .actor-screen-type {
+            position: absolute;
+            top: 0.4rem;
+            right: 0.5rem;
+            font-size: 0.55rem;
+            font-weight: bold;
+            background-color: #cbd5e1;
+            color: #1e293b;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .actor-badge-pill {
+            position: absolute;
+            top: 1.6rem;
+            right: 0.5rem;
+            font-size: 0.55rem;
+            font-weight: 600;
+            background-color: #e0f2fe;
+            color: #0369a1;
+            padding: 0.1rem 0.5rem;
+            border-radius: 999px;
+            border: 1px solid #bae6fd;
+        }
+
+        .actor-badge-code {
+            position: absolute;
+            top: 3rem;
+            right: 0.5rem;
+            font-size: 0.55rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            background-color: #f1f5f9;
+            color: #475569;
+            padding: 0.1rem 0.3rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .actor-image {
+            position: absolute;
+            top: 1.4rem;
+            left: 0.5rem;
+            max-height: calc(100% - 1.6rem);
+            max-width: 95%;
+            object-fit: contain;
         }
     </style>
 </head>
@@ -103,7 +160,13 @@
             </header>
             <div id="slice-description-label" class="slice-header-description">description</div>
         </div>
-        <div id="slice-data-section" class="slice-inset-box"></div>
+        <div id="actor-row-box" class="slice-inset-box">
+            <span id="actor-screen-label" class="actor-screen-name">Text Screen Name</span>
+            <span id="actor-screen-badge" class="actor-screen-type">SCREEN</span>
+            <span id="actor-type-badge" class="actor-badge-pill">TruckDriver</span>
+            <span id="actor-domain-badge" class="actor-badge-code">business.emd</span>
+            <img id="actor-screen-image" src="images/Screen.png" alt="Screen Snapshot" class="actor-image">
+        </div>
         <div id="slice-body-content" class="slice-content">
             <p id="slice-description-1">This is the initial version of a Slice container.</p>
             <p id="slice-description-2">The border color indicates the current status (currently set to black).</p>
