@@ -106,9 +106,16 @@
             position: relative;
         }
 
-        #command-row-box, #view-command-row-box {
+        #command-row-box {
             background-color: #e0f2fe; /* Sky 100 */
             border-color: #7dd3fc; /* Sky 300 */
+            height: auto;
+            min-height: 8.75rem;
+        }
+
+        #view-readmodel-row-box {
+            background-color: #dcfce7; /* Green 100 */
+            border-color: #86efac; /* Green 300 */
             height: auto;
             min-height: 8.75rem;
         }
@@ -134,7 +141,7 @@
             min-height: 8.75rem;
         }
 
-        #view-actor-row-box {
+        #view-actor-row-box, #view-event-row-box {
             visibility: hidden;
         }
 
@@ -313,7 +320,7 @@
         }
 
         #command-lens-badge, #event-lens-badge, #gwt-lens-badge, #gwt2-lens-badge, #gwt3-lens-badge,
-        #view-command-lens-badge, #view-event-lens-badge, #view-gwt-lens-badge, #view-gwt2-lens-badge, #view-gwt3-lens-badge {
+        #view-readmodel-lens-badge, #view-event-lens-badge, #view-gwt-lens-badge, #view-gwt2-lens-badge, #view-gwt3-lens-badge {
             position: relative;
             bottom: auto;
             right: auto;
@@ -572,16 +579,16 @@ timestamp = 2026-03-15T23:24:00Z</div>
         <span id="view-actor-lens-badge" class="inset-box-badge-code">business.emd</span>
         <img id="view-actor-screen-image" src="images/Screen.png" alt="Screen Snapshot" class="actor-screen-image">
     </div>
-    <div id="view-command-row-box" class="slice-inset-box">
-        <div id="view-command-badges-top-right" class="inset-box-badge-group">
-            <span id="view-command-type-badge" class="inset-box-badge-type">COMMAND</span>
+    <div id="view-readmodel-row-box" class="slice-inset-box">
+        <div id="view-readmodel-badges-top-right" class="inset-box-badge-group">
+            <span id="view-readmodel-type-badge" class="inset-box-badge-type">VIEW</span>
         </div>
-        <div id="view-command-content-wrapper" class="inset-box-content-wrapper">
-            <div id="view-command-intent-rect" class="inset-box-blue-rect">LogExpense</div>
-            <div id="view-command-properties-box" class="inset-box-toml-rect">amount = 42.50
+        <div id="view-readmodel-content-wrapper" class="inset-box-content-wrapper">
+            <div id="view-readmodel-intent-rect" class="inset-box-green-rect">View</div>
+            <div id="view-readmodel-properties-box" class="inset-box-toml-rect-green">amount = 42.50
 category = "Fuel"</div>
         </div>
-        <span id="view-command-lens-badge" class="inset-box-badge-code">business.emd</span>
+        <span id="view-readmodel-lens-badge" class="inset-box-badge-code">business.emd</span>
     </div>
     <div id="view-event-row-box" class="slice-inset-box">
         <div id="view-event-badges-top-right" class="inset-box-badge-group">
