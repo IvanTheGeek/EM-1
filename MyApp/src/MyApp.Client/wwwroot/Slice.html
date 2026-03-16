@@ -93,7 +93,7 @@
             position: relative;
         }
 
-        .actor-screen-name {
+        .inset-box-label {
             position: absolute;
             top: 0.25rem;
             left: 0.5rem;
@@ -101,7 +101,7 @@
             color: #475569;
         }
 
-        .actor-screen-type {
+        .inset-box-badge-type {
             position: absolute;
             top: 0.4rem;
             right: 0.5rem;
@@ -114,7 +114,7 @@
             text-transform: uppercase;
         }
 
-        .actor-badge-pill {
+        .inset-box-badge-pill {
             position: absolute;
             top: 1.6rem;
             right: 0.5rem;
@@ -127,7 +127,7 @@
             border: 1px solid #bae6fd;
         }
 
-        .actor-badge-code {
+        .inset-box-badge-code {
             position: absolute;
             top: 3rem;
             right: 0.5rem;
@@ -140,13 +140,25 @@
             border-radius: 3px;
         }
 
-        .actor-image {
+        .inset-box-image {
             position: absolute;
             top: 1.4rem;
             left: 0.5rem;
             max-height: calc(100% - 1.6rem);
             max-width: 95%;
             object-fit: contain;
+        }
+
+        .inset-box-blue-rect {
+            position: absolute;
+            top: 1rem;
+            left: 0.5rem;
+            background-color: #0284c7;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 1px;
+            font-size: 0.7rem;
+            font-weight: 500;
         }
     </style>
 </head>
@@ -161,15 +173,16 @@
             <div id="slice-description-label" class="slice-header-description">description</div>
         </div>
         <div id="actor-row-box" class="slice-inset-box">
-            <span id="actor-screen-label" class="actor-screen-name">Text Screen Name</span>
-            <span id="actor-screen-badge" class="actor-screen-type">SCREEN</span>
-            <span id="actor-type-badge" class="actor-badge-pill">TruckDriver</span>
-            <span id="actor-domain-badge" class="actor-badge-code">business.emd</span>
-            <img id="actor-screen-image" src="images/Screen.png" alt="Screen Snapshot" class="actor-image">
+            <span id="actor-screen-label" class="inset-box-label">Text Screen Name</span>
+            <span id="actor-screen-badge" class="inset-box-badge-type">SCREEN</span>
+            <span id="actor-type-badge" class="inset-box-badge-pill">TruckDriver</span>
+            <span id="actor-domain-badge" class="inset-box-badge-code">business.emd</span>
+            <img id="actor-screen-image" src="images/Screen.png" alt="Screen Snapshot" class="inset-box-image">
         </div>
-        <div id="slice-body-content" class="slice-content">
-            <p id="slice-description-1">This is the initial version of a Slice container.</p>
-            <p id="slice-description-2">The border color indicates the current status (currently set to black).</p>
+        <div id="command-row-box" class="slice-inset-box">
+            <span id="command-type-badge" class="inset-box-badge-type">COMMAND</span>
+            <span id="command-domain-badge" class="inset-box-badge-code">business.emd</span>
+            <div id="command-intent-rect" class="inset-box-blue-rect">LogExpense</div>
         </div>
     </div>
 </body>
