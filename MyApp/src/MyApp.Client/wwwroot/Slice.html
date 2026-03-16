@@ -14,18 +14,31 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            padding: 2rem;
+            padding: 0;
+            margin: 0;
             background-color: #f8fafc;
         }
 
+        .slices-layout {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: flex-start;
+            gap: 2rem;
+            padding: 2rem;
+            overflow-x: auto;
+            min-height: 100vh;
+        }
+
         .slice-outer-container {
+            flex-shrink: 0;
             position: relative;
             border: var(--slice-border-width) solid var(--slice-status-color);
             border-radius: 8px;
             background-color: var(--slice-bg-color);
             padding: 0.5rem;
             width: var(--slice-width);
-            margin: 0 auto;
+            margin: 0;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
@@ -93,32 +106,36 @@
             position: relative;
         }
 
-        #command-row-box {
+        #command-row-box, #view-command-row-box {
             background-color: #e0f2fe; /* Sky 100 */
             border-color: #7dd3fc; /* Sky 300 */
             height: auto;
             min-height: 8.75rem;
         }
 
-        #event-row-box {
+        #event-row-box, #view-event-row-box {
             background-color: #ffedd5; /* Orange 100 */
             border-color: #fdba74; /* Orange 300 */
             height: auto;
             min-height: 8.75rem;
         }
 
-        #gwt-row-box, #gwt2-row-box {
+        #gwt-row-box, #gwt2-row-box, #view-gwt-row-box, #view-gwt2-row-box {
             background-color: #fef9c3;
             border-color: #fcd34d; /* Amber 300 */
             height: auto;
             min-height: 8.75rem;
         }
 
-        #gwt3-row-box {
+        #gwt3-row-box, #view-gwt3-row-box {
             background-color: #fef9c3;
             border: 3px solid #ff0000;
             height: auto;
             min-height: 8.75rem;
+        }
+
+        #view-actor-row-box {
+            visibility: hidden;
         }
 
         .inset-box-label {
@@ -295,7 +312,8 @@
             background-color: #ea580c; /* Orange 600 */
         }
 
-        #command-lens-badge, #event-lens-badge, #gwt-lens-badge, #gwt2-lens-badge, #gwt3-lens-badge {
+        #command-lens-badge, #event-lens-badge, #gwt-lens-badge, #gwt2-lens-badge, #gwt3-lens-badge,
+        #view-command-lens-badge, #view-event-lens-badge, #view-gwt-lens-badge, #view-gwt2-lens-badge, #view-gwt3-lens-badge {
             position: relative;
             bottom: auto;
             right: auto;
@@ -312,19 +330,29 @@
             box-sizing: border-box;
         }
 
-        #gwt-event-content-wrapper, #gwt2-event-content-wrapper {
+        #gwt-event-content-wrapper, #gwt2-event-content-wrapper,
+        #view-gwt-event-content-wrapper, #view-gwt2-event-content-wrapper {
             border-color: #ff0000; /* Red error border */
         }
 
         #gwt-given-title + #gwt-event-content-wrapper-2,
         #gwt2-given-title + #gwt2-event-content-wrapper-2,
         #gwt3-given-title + #gwt3-event-content-wrapper-2,
+        #view-gwt-given-title + #view-gwt-event-content-wrapper-2,
+        #view-gwt2-given-title + #view-gwt2-event-content-wrapper-2,
+        #view-gwt3-given-title + #view-gwt3-event-content-wrapper-2,
         #gwt-command-title + #gwt-command-content-wrapper,
         #gwt2-command-title + #gwt2-command-content-wrapper,
         #gwt3-command-title + #gwt3-command-content-wrapper,
+        #view-gwt-command-title + #view-gwt-command-content-wrapper,
+        #view-gwt2-command-title + #view-gwt2-command-content-wrapper,
+        #view-gwt3-command-title + #view-gwt3-command-content-wrapper,
         #gwt-then-title + #gwt-then-content-wrapper,
         #gwt2-then-title + #gwt2-then-content-wrapper,
-        #gwt3-then-title + #gwt3-then-content-wrapper {
+        #gwt3-then-title + #gwt3-then-content-wrapper,
+        #view-gwt-then-title + #view-gwt-then-content-wrapper,
+        #view-gwt2-then-title + #view-gwt2-then-content-wrapper,
+        #view-gwt3-then-title + #view-gwt3-then-content-wrapper {
             margin-top: 0;
         }
 
@@ -344,13 +372,19 @@
         /* Show properties only in gwt2-row-box */
         #gwt2-row-box .inset-box-orange-rect,
         #gwt2-row-box .inset-box-blue-rect,
-        #gwt2-row-box .inset-box-green-rect {
+        #gwt2-row-box .inset-box-green-rect,
+        #view-gwt2-row-box .inset-box-orange-rect,
+        #view-gwt2-row-box .inset-box-blue-rect,
+        #view-gwt2-row-box .inset-box-green-rect {
             border-radius: 1px 1px 0 0;
         }
 
         #gwt2-row-box .inset-box-toml-rect-orange,
         #gwt2-row-box .inset-box-toml-rect,
-        #gwt2-row-box .inset-box-toml-rect-green {
+        #gwt2-row-box .inset-box-toml-rect-green,
+        #view-gwt2-row-box .inset-box-toml-rect-orange,
+        #view-gwt2-row-box .inset-box-toml-rect,
+        #view-gwt2-row-box .inset-box-toml-rect-green {
             display: block;
             border-radius: 0 0 1px 1px;
         }
@@ -378,6 +412,7 @@
     </style>
 </head>
 <body id="slice-body">
+<div id="slices-layout" class="slices-layout">
 <div id="command-slice-container" class="slice-outer-container">
     <span id="slice-system-tag" class="slice-tag">LaundryLog</span>
     <span id="slice-label" class="slice-type">Command Slice</span>
@@ -518,6 +553,148 @@ timestamp = 2026-03-15T23:24:00Z</div>
         </div>
         <span id="gwt3-lens-badge" class="inset-box-badge-code">business.emd</span>
     </div>
+</div>
+<div id="view-slice-container" class="slice-outer-container">
+    <span id="view-slice-system-tag" class="slice-tag">LaundryLog</span>
+    <span id="view-slice-label" class="slice-type">View Slice</span>
+    <div id="view-slice-header-container" class="slice-header-group">
+        <header id="view-slice-header-section" class="slice-header">
+            <h1 id="view-slice-main-title" class="slice-title">myView</h1>
+        </header>
+        <div id="view-slice-description-label" class="slice-header-description">description</div>
+    </div>
+    <div id="view-actor-row-box" class="slice-inset-box">
+        <span id="view-actor-screen-label" class="inset-box-label">Text Screen Name</span>
+        <div id="view-actor-badges-top-right" class="inset-box-badge-group">
+            <span id="view-actor-type-badge" class="inset-box-badge-pill">TruckDriver</span>
+            <span id="view-actor-screen-badge" class="inset-box-badge-type">SCREEN</span>
+        </div>
+        <span id="view-actor-lens-badge" class="inset-box-badge-code">business.emd</span>
+        <img id="view-actor-screen-image" src="images/Screen.png" alt="Screen Snapshot" class="actor-screen-image">
+    </div>
+    <div id="view-command-row-box" class="slice-inset-box">
+        <div id="view-command-badges-top-right" class="inset-box-badge-group">
+            <span id="view-command-type-badge" class="inset-box-badge-type">COMMAND</span>
+        </div>
+        <div id="view-command-content-wrapper" class="inset-box-content-wrapper">
+            <div id="view-command-intent-rect" class="inset-box-blue-rect">LogExpense</div>
+            <div id="view-command-properties-box" class="inset-box-toml-rect">amount = 42.50
+category = "Fuel"</div>
+        </div>
+        <span id="view-command-lens-badge" class="inset-box-badge-code">business.emd</span>
+    </div>
+    <div id="view-event-row-box" class="slice-inset-box">
+        <div id="view-event-badges-top-right" class="inset-box-badge-group">
+            <span id="view-event-type-badge" class="inset-box-badge-type">EVENT</span>
+        </div>
+        <div id="view-event-content-wrapper" class="inset-box-content-wrapper">
+            <div id="view-event-intent-rect" class="inset-box-orange-rect">ExpenseLogged</div>
+            <div id="view-event-properties-box" class="inset-box-toml-rect-orange">amount = 42.50
+category = "Fuel"
+timestamp = 2026-03-15T23:24:00Z</div>
+        </div>
+        <span id="view-event-lens-badge" class="inset-box-badge-code">business.emd</span>
+    </div>
+
+    <div id="view-section-divider-gwt" class="section-divider"></div>
+
+    <div id="view-gwt-row-box" class="slice-inset-box">
+        <div id="view-gwt-badges-top-right" class="inset-box-badge-group">
+            <span id="view-gwt-type-badge" class="inset-box-badge-type">GWT</span>
+        </div>
+        <div id="view-gwt-given-title" class="gwt-title-given">GIVEN</div>
+        <div id="view-gwt-event-content-wrapper-2" class="inset-box-content-wrapper gwt-event-wrapper">
+            <div id="view-gwt-event-intent-rect-2" class="inset-box-orange-rect">ExpenseLogged</div>
+            <div id="view-gwt-event-properties-box-2" class="inset-box-toml-rect-orange">amount = 42.50
+category = "Fuel"
+timestamp = 2026-03-15T23:24:00Z</div>
+        </div>
+        <div id="view-gwt-event-content-wrapper" class="inset-box-content-wrapper gwt-event-wrapper">
+            <div id="view-gwt-event-intent-rect" class="inset-box-orange-rect">ExpenseLogged</div>
+            <div id="view-gwt-event-properties-box" class="inset-box-toml-rect-orange">amount = 42.50
+category = "Fuel"
+timestamp = 2026-03-15T23:24:00Z</div>
+        </div>
+        <div id="view-gwt-command-title" class="gwt-title-when">WHEN</div>
+        <div id="view-gwt-command-content-wrapper" class="inset-box-content-wrapper gwt-event-wrapper">
+            <div id="view-gwt-command-intent-rect" class="inset-box-blue-rect">LogExpense</div>
+            <div id="view-gwt-command-properties-box" class="inset-box-toml-rect">amount = 42.50
+category = "Fuel"</div>
+        </div>
+        <div id="view-gwt-then-title" class="gwt-title-then">THEN</div>
+        <div id="view-gwt-then-content-wrapper" class="inset-box-content-wrapper gwt-event-wrapper">
+            <div id="view-gwt-then-intent-rect" class="inset-box-orange-rect">ExpenseLogged</div>
+            <div id="view-gwt-then-properties-box" class="inset-box-toml-rect-orange">amount = 42.50
+category = "Fuel"
+timestamp = 2026-03-15T23:24:00Z</div>
+        </div>
+        <span id="view-gwt-lens-badge" class="inset-box-badge-code">business.emd</span>
+    </div>
+    <div id="view-gwt2-row-box" class="slice-inset-box">
+        <div id="view-gwt2-badges-top-right" class="inset-box-badge-group">
+            <span id="view-gwt2-type-badge" class="inset-box-badge-type">GWT</span>
+        </div>
+        <div id="view-gwt2-given-title" class="gwt-title-given">GIVEN</div>
+        <div id="view-gwt2-event-content-wrapper-2" class="inset-box-content-wrapper gwt-event-wrapper">
+            <div id="view-gwt2-event-intent-rect-2" class="inset-box-orange-rect">ExpenseLogged</div>
+            <div id="view-gwt2-event-properties-box-2" class="inset-box-toml-rect-orange">amount = 42.50
+category = "Fuel"
+timestamp = 2026-03-15T23:24:00Z</div>
+        </div>
+        <div id="view-gwt2-event-content-wrapper" class="inset-box-content-wrapper gwt-event-wrapper">
+            <div id="view-gwt2-event-intent-rect" class="inset-box-orange-rect">ExpenseLogged</div>
+            <div id="view-gwt2-event-properties-box" class="inset-box-toml-rect-orange">amount = 42.50
+category = "Fuel"
+timestamp = 2026-03-15T23:24:00Z</div>
+        </div>
+        <div id="view-gwt2-command-title" class="gwt-title-when">WHEN</div>
+        <div id="view-gwt2-command-content-wrapper" class="inset-box-content-wrapper gwt-event-wrapper">
+            <div id="view-gwt2-command-intent-rect" class="inset-box-blue-rect">LogExpense</div>
+            <div id="view-gwt2-command-properties-box" class="inset-box-toml-rect">amount = 42.50
+category = "Fuel"</div>
+        </div>
+        <div id="view-gwt2-then-title" class="gwt-title-then">THEN</div>
+        <div id="view-gwt2-then-content-wrapper" class="inset-box-content-wrapper gwt-event-wrapper">
+            <div id="view-gwt2-then-intent-rect" class="inset-box-orange-rect">ExpenseLogged</div>
+            <div id="view-gwt2-then-properties-box" class="inset-box-toml-rect-orange">amount = 42.50
+category = "Fuel"
+timestamp = 2026-03-15T23:24:00Z</div>
+        </div>
+        <span id="view-gwt2-lens-badge" class="inset-box-badge-code">business.emd</span>
+    </div>
+    <div id="view-gwt3-row-box" class="slice-inset-box">
+        <div id="view-gwt3-badges-top-right" class="inset-box-badge-group">
+            <span id="view-gwt3-type-badge" class="inset-box-badge-type">GWT</span>
+        </div>
+        <div id="view-gwt3-given-title" class="gwt-title-given">GIVEN</div>
+        <div id="view-gwt3-event-content-wrapper-2" class="inset-box-content-wrapper gwt-event-wrapper">
+            <div id="view-gwt3-event-intent-rect-2" class="inset-box-orange-rect">ExpenseLogged</div>
+            <div id="view-gwt3-event-properties-box-2" class="inset-box-toml-rect-orange">amount = 42.50
+category = "Fuel"
+timestamp = 2026-03-15T23:24:00Z</div>
+        </div>
+        <div id="view-gwt3-event-content-wrapper" class="inset-box-content-wrapper gwt-event-wrapper">
+            <div id="view-gwt3-event-intent-rect" class="inset-box-orange-rect">ExpenseLogged</div>
+            <div id="view-gwt3-event-properties-box" class="inset-box-toml-rect-orange">amount = 42.50
+category = "Fuel"
+timestamp = 2026-03-15T23:24:00Z</div>
+        </div>
+        <div id="view-gwt3-command-title" class="gwt-title-when">WHEN</div>
+        <div id="view-gwt3-command-content-wrapper" class="inset-box-content-wrapper gwt-event-wrapper">
+            <div id="view-gwt3-command-intent-rect" class="inset-box-blue-rect">LogExpense</div>
+            <div id="view-gwt3-command-properties-box" class="inset-box-toml-rect">amount = 42.50
+category = "Fuel"</div>
+        </div>
+        <div id="view-gwt3-then-title" class="gwt-title-then">THEN</div>
+        <div id="view-gwt3-then-content-wrapper" class="inset-box-content-wrapper gwt-event-wrapper">
+            <div id="view-gwt3-then-intent-rect" class="inset-box-orange-rect">ExpenseLogged</div>
+            <div id="view-gwt3-then-properties-box" class="inset-box-toml-rect-orange">amount = 42.50
+category = "Fuel"
+timestamp = 2026-03-15T23:24:00Z</div>
+        </div>
+        <span id="view-gwt3-lens-badge" class="inset-box-badge-code">business.emd</span>
+    </div>
+</div>
 </div>
 </body>
 </html>
