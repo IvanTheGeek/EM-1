@@ -96,6 +96,15 @@
         #command-row-box {
             background-color: #e0f2fe; /* Sky 100 */
             border-color: #7dd3fc; /* Sky 300 */
+            height: auto;
+            min-height: 8.75rem;
+        }
+
+        #event-row-box {
+            background-color: #ffedd5; /* Orange 100 */
+            border-color: #fdba74; /* Orange 300 */
+            height: auto;
+            min-height: 8.75rem;
         }
 
         .inset-box-label {
@@ -158,14 +167,11 @@
         }
 
         .inset-box-blue-rect {
-            position: absolute;
-            top: 2rem;
-            left: 0.5rem;
-            right: 0.5rem;
+            margin: 2rem 0.5rem 0 0.5rem;
             background-color: #0ea5e9; /* Sky 500 */
             color: white;
             padding: 0.4rem 0.8rem;
-            border-radius: 1px;
+            border-radius: 1px 1px 0 0;
             font-size: 0.85rem;
             font-weight: 500;
             min-height: 3rem;
@@ -173,6 +179,57 @@
             align-items: flex-start;
             justify-content: flex-start;
             box-sizing: border-box;
+        }
+
+        .inset-box-toml-rect {
+            margin: 0 0.5rem 0.5rem 0.5rem;
+            background-color: #bae6fd; /* Sky 200 */
+            color: #0369a1; /* Sky 700 */
+            padding: 0.4rem 0.8rem;
+            border-radius: 0 0 1px 1px;
+            font-size: 0.75rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            white-space: pre-wrap;
+            min-height: 1.5rem;
+            box-sizing: border-box;
+        }
+
+        .inset-box-orange-rect {
+            margin: 2rem 0.5rem 0 0.5rem;
+            background-color: #f97316; /* Orange 500 */
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 1px 1px 0 0;
+            font-size: 0.85rem;
+            font-weight: 500;
+            min-height: 3rem;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            box-sizing: border-box;
+        }
+
+        .inset-box-toml-rect-orange {
+            margin: 0 0.5rem 0.5rem 0.5rem;
+            background-color: #fed7aa; /* Orange 200 */
+            color: #c2410c; /* Orange 700 */
+            padding: 0.4rem 0.8rem;
+            border-radius: 0 0 1px 1px;
+            font-size: 0.75rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            white-space: pre-wrap;
+            min-height: 1.5rem;
+            box-sizing: border-box;
+        }
+
+        #command-lens-badge, #event-lens-badge {
+            position: relative;
+            bottom: auto;
+            right: auto;
+            display: block;
+            width: fit-content;
+            margin: 0 0.5rem 0.5rem auto;
+            text-align: right;
         }
     </style>
 </head>
@@ -199,8 +256,20 @@
             <div id="command-badges-top-right" class="inset-box-badge-group">
                 <span id="command-type-badge" class="inset-box-badge-type">COMMAND</span>
             </div>
-            <span id="command-lens-badge" class="inset-box-badge-code">business.emd</span>
             <div id="command-intent-rect" class="inset-box-blue-rect">LogExpense</div>
+            <div id="command-properties-box" class="inset-box-toml-rect">amount = 42.50
+category = "Fuel"</div>
+            <span id="command-lens-badge" class="inset-box-badge-code">business.emd</span>
+        </div>
+        <div id="event-row-box" class="slice-inset-box">
+            <div id="event-badges-top-right" class="inset-box-badge-group">
+                <span id="event-type-badge" class="inset-box-badge-type">EVENT</span>
+            </div>
+            <div id="event-intent-rect" class="inset-box-orange-rect">ExpenseLogged</div>
+            <div id="event-properties-box" class="inset-box-toml-rect-orange">amount = 42.50
+category = "Fuel"
+timestamp = 2026-03-15T23:24:00Z</div>
+            <span id="event-lens-badge" class="inset-box-badge-code">business.emd</span>
         </div>
     </div>
 </body>
