@@ -107,6 +107,13 @@
             min-height: 8.75rem;
         }
 
+        #gwt-row-box {
+            background-color: #fef9c3;
+            border-color: #86efac; /* Green 300 */
+            height: auto;
+            min-height: 8.75rem;
+        }
+
         .inset-box-label {
             position: absolute;
             top: 0.25rem;
@@ -155,6 +162,13 @@
             padding: 0.1rem 0.3rem;
             border: 1px solid #cbd5e1;
             border-radius: 3px;
+        }
+
+        .inset-box-content-wrapper {
+            padding: 0;
+            border: none;
+            background: transparent;
+            margin: 0;
         }
 
         .actor-screen-image {
@@ -222,7 +236,48 @@
             box-sizing: border-box;
         }
 
-        #command-lens-badge, #event-lens-badge {
+        .inset-box-green-rect {
+            margin: 2rem 0.5rem 0 0.5rem;
+            background-color: #22c55e; /* Green 500 */
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 1px 1px 0 0;
+            font-size: 0.85rem;
+            font-weight: 500;
+            min-height: 3rem;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            box-sizing: border-box;
+        }
+
+        .inset-box-toml-rect-green {
+            margin: 0 0.5rem 0.5rem 0.5rem;
+            background-color: #bbf7d0; /* Green 200 */
+            color: #15803d; /* Green 700 */
+            padding: 0.4rem 0.8rem;
+            border-radius: 0 0 1px 1px;
+            font-size: 0.75rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            white-space: pre-wrap;
+            min-height: 1.5rem;
+            box-sizing: border-box;
+        }
+
+        .gwt-title-block {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: bold;
+            background-color: #f97316; /* Orange 500 */
+            color: white;
+            padding: 0.15rem 0.5rem;
+            border-radius: 2px;
+            margin: 0.5rem 0.5rem 0 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        #command-lens-badge, #event-lens-badge, #gwt-lens-badge {
             position: relative;
             bottom: auto;
             right: auto;
@@ -231,46 +286,78 @@
             margin: 0 0.5rem 0.5rem auto;
             text-align: right;
         }
+
+        #gwt-event-content-wrapper {
+            border: 10px solid #ff0000; /* Red error border */
+            margin: 0.5rem;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        #gwt-event-content-wrapper .inset-box-orange-rect,
+        #gwt-event-content-wrapper .inset-box-toml-rect-orange {
+            margin: 0;
+        }
     </style>
 </head>
 <body id="slice-body">
-    <div id="slice-container" class="slice-outer-container">
-        <span id="slice-system-tag" class="slice-tag">LaundryLog</span>
-        <span id="slice-label" class="slice-type">Command Slice</span>
-        <div id="slice-header-container" class="slice-header-group">
-            <header id="slice-header-section" class="slice-header">
-                <h1 id="slice-main-title" class="slice-title">myCommand</h1>
-            </header>
-            <div id="slice-description-label" class="slice-header-description">description</div>
+<div id="slice-container" class="slice-outer-container">
+    <span id="slice-system-tag" class="slice-tag">LaundryLog</span>
+    <span id="slice-label" class="slice-type">Command Slice</span>
+    <div id="slice-header-container" class="slice-header-group">
+        <header id="slice-header-section" class="slice-header">
+            <h1 id="slice-main-title" class="slice-title">myCommand</h1>
+        </header>
+        <div id="slice-description-label" class="slice-header-description">description</div>
+    </div>
+    <div id="actor-row-box" class="slice-inset-box">
+        <span id="actor-screen-label" class="inset-box-label">Text Screen Name</span>
+        <div id="actor-badges-top-right" class="inset-box-badge-group">
+            <span id="actor-type-badge" class="inset-box-badge-pill">TruckDriver</span>
+            <span id="actor-screen-badge" class="inset-box-badge-type">SCREEN</span>
         </div>
-        <div id="actor-row-box" class="slice-inset-box">
-            <span id="actor-screen-label" class="inset-box-label">Text Screen Name</span>
-            <div id="actor-badges-top-right" class="inset-box-badge-group">
-                <span id="actor-type-badge" class="inset-box-badge-pill">TruckDriver</span>
-                <span id="actor-screen-badge" class="inset-box-badge-type">SCREEN</span>
-            </div>
-            <span id="actor-lens-badge" class="inset-box-badge-code">business.emd</span>
-            <img id="actor-screen-image" src="images/Screen.png" alt="Screen Snapshot" class="actor-screen-image">
+        <span id="actor-lens-badge" class="inset-box-badge-code">business.emd</span>
+        <img id="actor-screen-image" src="images/Screen.png" alt="Screen Snapshot" class="actor-screen-image">
+    </div>
+    <div id="command-row-box" class="slice-inset-box">
+        <div id="command-badges-top-right" class="inset-box-badge-group">
+            <span id="command-type-badge" class="inset-box-badge-type">COMMAND</span>
         </div>
-        <div id="command-row-box" class="slice-inset-box">
-            <div id="command-badges-top-right" class="inset-box-badge-group">
-                <span id="command-type-badge" class="inset-box-badge-type">COMMAND</span>
-            </div>
+        <div id="command-content-wrapper" class="inset-box-content-wrapper">
             <div id="command-intent-rect" class="inset-box-blue-rect">LogExpense</div>
             <div id="command-properties-box" class="inset-box-toml-rect">amount = 42.50
-category = "Fuel"</div>
-            <span id="command-lens-badge" class="inset-box-badge-code">business.emd</span>
-        </div>
-        <div id="event-row-box" class="slice-inset-box">
-            <div id="event-badges-top-right" class="inset-box-badge-group">
-                <span id="event-type-badge" class="inset-box-badge-type">EVENT</span>
+                category = "Fuel"
             </div>
+        </div>
+        <span id="command-lens-badge" class="inset-box-badge-code">business.emd</span>
+    </div>
+    <div id="event-row-box" class="slice-inset-box">
+        <div id="event-badges-top-right" class="inset-box-badge-group">
+            <span id="event-type-badge" class="inset-box-badge-type">EVENT</span>
+        </div>
+        <div id="event-content-wrapper" class="inset-box-content-wrapper">
             <div id="event-intent-rect" class="inset-box-orange-rect">ExpenseLogged</div>
             <div id="event-properties-box" class="inset-box-toml-rect-orange">amount = 42.50
-category = "Fuel"
-timestamp = 2026-03-15T23:24:00Z</div>
-            <span id="event-lens-badge" class="inset-box-badge-code">business.emd</span>
+                category = "Fuel"
+                timestamp = 2026-03-15T23:24:00Z
+            </div>
         </div>
+        <span id="event-lens-badge" class="inset-box-badge-code">business.emd</span>
     </div>
+    <div id="gwt-row-box" class="slice-inset-box">
+        <div id="gwt-badges-top-right" class="inset-box-badge-group">
+            <span id="gwt-type-badge" class="inset-box-badge-type">GWT</span>
+        </div>
+        <div id="gwt-given-title" class="gwt-title-block">GIVEN</div>
+        <div id="gwt-event-content-wrapper" class="inset-box-content-wrapper">
+            <div id="gwt-event-intent-rect" class="inset-box-orange-rect">ExpenseLogged</div>
+            <div id="gwt-event-properties-box" class="inset-box-toml-rect-orange">amount = 42.50
+                category = "Fuel"
+                timestamp = 2026-03-15T23:24:00Z
+            </div>
+        </div>
+        <span id="gwt-lens-badge" class="inset-box-badge-code">business.emd</span>
+    </div>
+</div>
 </body>
 </html>
