@@ -128,6 +128,26 @@ dotnet publish MyApp\src\MyApp.Client\MyApp.Client.fsproj -c Release -o publish 
 dotnet publish MyApp/src/MyApp.Client/MyApp.Client.fsproj -c Release -o publish -p:HostingMode=WasmOnly
 ```
 
+### Clean Publish (recommended — avoids version-mismatch errors)
+
+**Windows CMD:**
+
+```cmd
+rmdir /s /q publish && dotnet publish MyApp\src\MyApp.Client\MyApp.Client.fsproj -c Release -o publish /p:HostingMode=WasmOnly
+```
+
+**PowerShell:**
+
+```powershell
+rm -rf publish/; dotnet publish MyApp/src/MyApp.Client/MyApp.Client.fsproj -c Release -o publish -p:HostingMode=WasmOnly
+```
+
+**Linux / macOS:**
+
+```bash
+rm -rf publish/ && dotnet publish MyApp/src/MyApp.Client/MyApp.Client.fsproj -c Release -o publish -p:HostingMode=WasmOnly
+```
+
 ###### TIP
 
 The `publish/wwwroot/` folder is a self-contained static site. Serve it with any static file
