@@ -12,7 +12,8 @@ open System
 // - Event Modeling
 // - UI
 // - accounting
-// - archives
+// - knowledge
+// - archive (TOML files) 
 //
 // Instead, it models the smallest useful truth layer:
 // - identities
@@ -144,6 +145,13 @@ type NodeKind =
 // Source and Target are directional.
 // Direction matters because many meanings depend on orientation.
 //
+// Example:
+// A ──Projects──► B
+//
+// is not the same as
+//
+// B ──Projects──► A
+//
 
 type Relation =
     { Id: RelationId
@@ -187,6 +195,7 @@ type Node =
 // no rendering data,
 // no framework-specific concerns.
 //
+// Those belong in outer layers.
 
 type Graph =
     { Id: GraphId
@@ -204,6 +213,7 @@ type Graph =
 // Instead of letting bad states silently enter the graph,
 // we model failures as data.
 //
+// This keeps the core honest and testable.
 
 type GraphError =
     | EmptyName
@@ -362,6 +372,9 @@ module Graph =
 // - a new valid graph
 // - an explicit error
 //
+// This separation is intentional.
+// It protects the core from becoming polluted
+// by one methodology, tool, or presentation format.
 
 [<RequireQualifiedAccess>]
 module GraphOps =
