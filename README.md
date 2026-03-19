@@ -169,22 +169,52 @@ dotnet serve -d publish/wwwroot
 ## Project Structure
 
 ```
-MyApp/
-├── MyApp.sln
-└── src/
-    ├── MyApp.Client/          # Blazor/Bolero client (F#)
-    │   ├── Main.fs            # Domain types, Messages, Effects, update
-    │   ├── Pages.fs           # Page views, routing, MyApp component
-    │   ├── em-board.fs        # Board experiment page
-    │   ├── Startup.fs         # WASM bootstrap
-    │   └── wwwroot/
-    │       ├── main.html      # Bolero HTML templates
-    │       └── em-board.html  # Board template
-    │
-    └── MyApp.Server/          # ASP.NET Core server
-        ├── ModelService.fs    # Remote service: serves TOML model files
-        ├── Index.fs           # Server-rendered page shell
-        ├── Startup.fs         # Server configuration
-        └── data/
-            └── model/         # TOML event model specifications
+EM-1/
+├── global.json                        # SDK version pin (.NET 9)
+├── README.md
+├── MyApp/
+│   ├── MyApp.sln
+│   ├── global.json                    # Solution-level SDK pin
+│   └── src/
+│       ├── MyApp.Client/              # Blazor/Bolero WASM client (F#)
+│       │   ├── MyApp.Client.fsproj
+│       │   ├── Main.fs                # Domain types, Messages, Effects, update
+│       │   ├── Pages.fs               # Page views, routing, MyApp component
+│       │   ├── em-board.fs            # Board experiment page
+│       │   ├── Startup.fs             # WASM bootstrap
+│       │   ├── MyApp.bolero.css       # Bolero component styles
+│       │   ├── Properties/
+│       │   │   └── launchSettings.json
+│       │   └── wwwroot/
+│       │       ├── index.html         # App entry point
+│       │       ├── main.html          # Bolero HTML templates
+│       │       ├── em-board.html      # Board template
+│       │       ├── Slice.html         # Slice template
+│       │       ├── 404.html
+│       │       ├── favicon.ico
+│       │       ├── staticwebapp.config.json  # Azure SWA routing config
+│       │       ├── _redirects         # Netlify/SWA redirect rules
+│       │       ├── css/
+│       │       │   ├── bulma.min.css
+│       │       │   └── index.css
+│       │       ├── images/
+│       │       │   ├── Screen.png
+│       │       │   └── NoScreen.png
+│       │       └── data/
+│       │           └── model/         # TOML model files (copied from Server at build)
+│       │
+│       ├── MyApp.Server/              # ASP.NET Core server (F#)
+│       │   ├── MyApp.Server.fsproj
+│       │   ├── ModelService.fs        # Remote service: serves TOML model files
+│       │   ├── Index.fs               # Server-rendered page shell
+│       │   ├── Startup.fs             # Server configuration
+│       │   ├── Properties/
+│       │   │   └── launchSettings.json
+│       │   └── data/
+│       │       ├── open-app.toml      # Top-level model file
+│       │       └── model/             # TOML event model specifications (source of truth)
+│       │
+│       └── NEXUS/                     # Shared core library (F#)
+│           ├── NEXUS.fsproj
+│           └── Core.fs                # Universal substrate / shared domain types
 ```
