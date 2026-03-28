@@ -66,7 +66,7 @@ type GraphId = private GraphId of Guid
 module Id =
 
     let private newGuidV7 () =
-        Guid.CreateVersion7()
+        Guid.NewGuid() // Guid.CreateVersion7() is .NET 9+
 
     let newNodeId () =
         NodeId (newGuidV7())
