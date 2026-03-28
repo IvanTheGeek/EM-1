@@ -8,11 +8,11 @@ open System
 //
 // NEXUS.Core is the universal substrate.
 //
-// It does NOT model one specific domain such as:
+// It does NOT model one specific lens such as:
 // - Event Modeling
 // - UI
 // - accounting
-// - knowledge 
+// - knowledge
 // - archive (TOML files) 
 //
 // Instead, it models the smallest useful truth layer:
@@ -42,14 +42,14 @@ open System
 // Identity is foundational.
 // Every node, relation, and graph must have a stable identity.
 //
-// UUIDv7 is the intended default strategy for minting IDs.
+// UUIDv7 is the default minting strategy.
 // Why UUIDv7?
 // - globally unique
-// - sortable by creation order
-// - friendly to append-oriented and timeline-aware systems
+// - naturally sortable by minting order
+// - useful for timeline-aware and append-oriented systems
 //
 // Important:
-// UUIDv7 ordering reflects ID minting order,
+// UUIDv7 ordering reflects ID creation order,
 // NOT necessarily domain/business time.
 // If domain time matters, model it explicitly elsewhere.
 //
@@ -58,9 +58,29 @@ open System
 // - treating raw Guid as interchangeable everywhere
 //
 
-type RelationId = private RelationId of Guid
 type NodeId = private NodeId of Guid
+type RelationId = private RelationId of Guid
 type GraphId = private GraphId of Guid
+
+[<RequireQualifiedAccess>]
+module Id =
+
+    let private newGuidV7 () =
+        Guid.CreateVersion7()
+
+    let newNodeId () =
+        NodeId (newGuidV7())
+
+    let newRelationId () =
+        RelationId (newGuidV7())
+
+    let newGraphId () =
+        GraphId (newGuidV7())
+
+    let valueOfNodeId (NodeId value) = value
+    let valueOfRelationId (RelationId value) = value
+    let valueOfGraphId (GraphId value) = value
+
 
 
 // ======================================================
@@ -91,6 +111,7 @@ type RelationKind =
     | Refines      // More specific, evolved, or narrowed form
 
 
+
 // ======================================================
 // NODE SEMANTICS
 // ======================================================
@@ -112,6 +133,7 @@ type NodeKind =
     | Record       // A captured fact or documented item
     | Artifact     // A concrete output, file, screen, report, etc.
     | Lens         // A shaping interpretation over the graph
+
 
 
 // ======================================================
@@ -138,6 +160,7 @@ type Relation =
       Target: NodeId }
 
 
+
 // ======================================================
 // CORE NODE STRUCTURE
 // ======================================================
@@ -157,6 +180,7 @@ type Node =
       Name: string }
 
 
+
 // ======================================================
 // GRAPH
 // ======================================================
@@ -172,12 +196,12 @@ type Node =
 // no framework-specific concerns.
 //
 // Those belong in outer layers.
-//
 
 type Graph =
     { Id: GraphId
       Nodes: Map<NodeId, Node>
       Relations: Map<RelationId, Relation> }
+
 
 
 // ======================================================
@@ -190,7 +214,6 @@ type Graph =
 // we model failures as data.
 //
 // This keeps the core honest and testable.
-//
 
 type GraphError =
     | EmptyName
@@ -198,31 +221,221 @@ type GraphError =
     | MissingSourceNode of NodeId
     | MissingTargetNode of NodeId
     | InvalidSelfRelation of RelationKind * NodeId
+    | DuplicateRelation of RelationKind * NodeId * NodeId
+    | InvalidRelation of RelationKind * NodeKind * NodeKind
+
+
+[<AutoOpen>]
+module private InternalBuilders =
+    type ResultBuilder() =
+        member _.Return(x) = Ok x
+        member _.ReturnFrom(m: Result<'T, 'E>) = m
+        member _.Bind(m, f) = Result.bind f m
+        member _.Zero() = Ok ()
+        member _.Combine(m, f) = Result.bind f m
+        member _.Delay(f) = f
+        member _.Run(f) = f()
+
+    let result = ResultBuilder()
+
 
 
 // ======================================================
-// HUMAN CONTEXT
+// PRIVATE HELPERS
+// ======================================================
+
+[<RequireQualifiedAccess>]
+module private Validation =
+
+    let normalizeName (name: string) =
+        name.Trim()
+
+    let requireNonEmptyName name =
+        let normalized = normalizeName name
+        if String.IsNullOrWhiteSpace normalized then
+            Error EmptyName
+        else
+            Ok normalized
+
+    let nodeNameExists name (graph: Graph) =
+        graph.Nodes
+        |> Map.exists (fun _ node -> String.Equals(node.Name, name, StringComparison.OrdinalIgnoreCase))
+
+    let relationExists kind sourceId targetId (graph: Graph) =
+        graph.Relations
+        |> Map.exists (fun _ relation ->
+            relation.Kind = kind
+            && relation.Source = sourceId
+            && relation.Target = targetId)
+
+    let tryFindNode nodeId (graph: Graph) =
+        Map.tryFind nodeId graph.Nodes
+
+    let requireNodeExists missingError nodeId (graph: Graph) =
+        match tryFindNode nodeId graph with
+        | Some node -> Ok node
+        | None -> Error (missingError nodeId)
+
+    let allowSelfRelation kind =
+        match kind with
+        | Relates
+        | References -> true
+        | Contains
+        | Transforms
+        | Projects
+        | Influences
+        | Precedes
+        | Refines -> false
+
+    let isRelationAllowed sourceKind targetKind relationKind =
+        match relationKind, sourceKind, targetKind with
+        | Relates, _, _ -> true
+        | References, _, _ -> true
+
+        | Contains, Thing, Thing -> true
+        | Contains, Concept, Concept -> true
+        | Contains, Artifact, Artifact -> true
+
+        | Transforms, Thing, Thing -> true
+        | Transforms, State, State -> true
+        | Transforms, Record, Record -> true
+
+        | Projects, Record, Artifact -> true
+        | Projects, Concept, Artifact -> true
+        | Projects, Lens, Artifact -> true
+
+        | Influences, Artifact, Role -> true
+        | Influences, Record, Role -> true
+        | Influences, Concept, Role -> true
+
+        | Precedes, State, State -> true
+        | Precedes, Record, Record -> true
+        | Precedes, Artifact, Artifact -> true
+
+        | Refines, Concept, Concept -> true
+        | Refines, Lens, Lens -> true
+        | Refines, Artifact, Artifact -> true
+
+        | _ -> false
+
+
+
+// ======================================================
+// CONSTRUCTORS
 // ======================================================
 //
-// How this maps to the larger NEXUS idea:
+// Smart constructors centralize creation rules.
+// This is where "invalid states harder to reach" begins.
 //
-// - The graph is truth
-// - Lenses are interpretations over the graph
-// - Artifacts are outputs shaped from the graph
+
+[<RequireQualifiedAccess>]
+module Node =
+
+    let create kind name : Result<Node, GraphError> =
+        result {
+            let! validName = Validation.requireNonEmptyName name
+            return
+                { Id = Id.newNodeId()
+                  Kind = kind
+                  Name = validName }
+        }
+
+[<RequireQualifiedAccess>]
+module Relation =
+
+    let create kind sourceId targetId : Result<Relation, GraphError> =
+        if sourceId = targetId && not (Validation.allowSelfRelation kind) then
+            Error (InvalidSelfRelation (kind, sourceId))
+        else
+            Ok
+                { Id = Id.newRelationId()
+                  Kind = kind
+                  Source = sourceId
+                  Target = targetId }
+
+[<RequireQualifiedAccess>]
+module Graph =
+
+    let empty () : Graph =
+        { Id = Id.newGraphId()
+          Nodes = Map.empty
+          Relations = Map.empty }
+
+
+
+// ======================================================
+// GRAPH OPERATIONS
+// ======================================================
 //
-// So:
-//
-// - Event Modeling is not the core graph
-//   It is a lens over the core graph
-//
-// - A UI is not the core graph
-//   It is a lens over the core graph
-//
-// - A TOML archive is not the core graph
-//   It is a lens over the core graph
+// These functions operate on the truth graph.
+// They remain pure and return either:
+// - a new valid graph
+// - an explicit error
 //
 // This separation is intentional.
 // It protects the core from becoming polluted
 // by one methodology, tool, or presentation format.
-//
-// ======================================================
+
+[<RequireQualifiedAccess>]
+module GraphOps =
+
+    let addNode (node: Node) (graph: Graph) : Result<Graph, GraphError> =
+        if Validation.nodeNameExists node.Name graph then
+            Error (DuplicateNodeName node.Name)
+        else
+            Ok
+                { graph with
+                    Nodes = graph.Nodes |> Map.add node.Id node }
+
+    let addRelation (relation: Relation) (graph: Graph) : Result<Graph, GraphError> =
+        result {
+            let! sourceNode =
+                Validation.requireNodeExists MissingSourceNode relation.Source graph
+
+            let! targetNode =
+                Validation.requireNodeExists MissingTargetNode relation.Target graph
+
+            if Validation.relationExists relation.Kind relation.Source relation.Target graph then
+                return! Error (DuplicateRelation (relation.Kind, relation.Source, relation.Target))
+
+            if not (Validation.isRelationAllowed sourceNode.Kind targetNode.Kind relation.Kind) then
+                return! Error (InvalidRelation (relation.Kind, sourceNode.Kind, targetNode.Kind))
+
+            return
+                { graph with
+                    Relations = graph.Relations |> Map.add relation.Id relation }
+        }
+
+    let tryFindNode (nodeId: NodeId) (graph: Graph) : Node option =
+        graph.Nodes |> Map.tryFind nodeId
+
+    let tryFindRelation (relationId: RelationId) (graph: Graph) : Relation option =
+        graph.Relations |> Map.tryFind relationId
+
+    let outgoingRelations (nodeId: NodeId) (graph: Graph) : Relation list =
+        graph.Relations
+        |> Map.values
+        |> Seq.filter (fun relation -> relation.Source = nodeId)
+        |> Seq.toList
+
+    let incomingRelations (nodeId: NodeId) (graph: Graph) : Relation list =
+        graph.Relations
+        |> Map.values
+        |> Seq.filter (fun relation -> relation.Target = nodeId)
+        |> Seq.toList
+
+    let connectedNodes (nodeId: NodeId) (graph: Graph) : Node list =
+        let relatedIds =
+            seq {
+                for relation in graph.Relations.Values do
+                    if relation.Source = nodeId then yield relation.Target
+                    if relation.Target = nodeId then yield relation.Source
+            }
+            |> Seq.distinct
+
+        relatedIds
+        |> Seq.choose (fun id -> tryFindNode id graph)
+        |> Seq.toList
+
+    let nodeCount (graph: Graph) = graph.Nodes.Count
+    let relationCount (graph: Graph) = graph.Relations.Count
